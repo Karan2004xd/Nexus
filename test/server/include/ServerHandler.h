@@ -14,6 +14,11 @@
 class ServerHandler {
 public:
   ServerHandler(int port, const std::string &ip_address);
+
+  void start_data_listener();
+  void send_data(const std::string &response);
+
+  void print_data(int bytes_read);
   ~ServerHandler();
 
 private:
@@ -24,7 +29,7 @@ private:
 
   static const int BUFFER_SIZE = 30720;
   char buffer[BUFFER_SIZE];
-  std::ostringstream oss;
+  std::stringstream oss;
   std::string ip_address;
 
   struct sockaddr_in MainSocketAddress;
