@@ -67,7 +67,7 @@ void ServerHandler::start_data_listener() {
     while (true) {
       int bytes_read = read(connection, buffer, sizeof(buffer) - 1);
       if (bytes_read > 0) {
-        /* print_data(bytes_read); */
+        print_data(bytes_read);
         SourcesHandler sourcesHandler {buffer};
         send_data(sourcesHandler.get_response());
         std::cout << sourcesHandler.get_stored_data("username") << std::endl;

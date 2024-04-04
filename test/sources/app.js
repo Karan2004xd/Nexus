@@ -1,7 +1,7 @@
 console.log("Hello World");
 const btn = document.getElementById('btn');
 const inputField = document.querySelector('form');
-const submitButton = inputField.querySelector('button');
+// const submitButton = inputField.querySelector('button');
 // console.log(inputField);
 
 btn.addEventListener('click', () => {
