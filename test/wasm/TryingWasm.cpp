@@ -13,7 +13,7 @@
 #endif
 
 // binding and function defining cannot co-exist
-// if want to use for functions that don't bass the bind flag in compilation
+// if want to use for functions that don't add the bind flag in compilation
 EXTERN EMSCRIPTEN_KEEPALIVE int findSquare2(int a) {
   return a * a;
 }

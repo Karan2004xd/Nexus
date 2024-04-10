@@ -25,8 +25,8 @@ function run_wasm() {
 //   result.textContent = obj.findCube(+a);
 // }
 
-function calling_header_file_classes() {
-  let obj = new Module.TestClass();
-}
+// function calling_header_file_classes() {
+//   let obj = new Module.TestClass();
+// }
 
-getSquareBtn.addEventListener('click', calling_header_file_classes);
+getSquareBtn.addEventListener('click', run_wasm);
