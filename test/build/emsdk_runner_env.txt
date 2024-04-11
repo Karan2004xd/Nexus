@@ -1,0 +1,2 @@
+ROOT_DIR=wasm
+TARGET_FILE=hello.js

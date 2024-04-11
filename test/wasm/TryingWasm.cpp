@@ -1,10 +1,14 @@
 #include <iostream>
 #include <emscripten.h>
-#include "TestClass.h"
+/* #include "TestClass.h" */
 
 // required for binding classes
 /* #include <emscripten/bind.h> */ 
 /* using namespace emscripten; */
+
+// A SERVER IS A MUST FOR WASM TO WORK
+// a simple hhtp server can be started using 
+//  python -m http.server
 
 #ifdef __cplusplus
 #define EXTERN extern "C"

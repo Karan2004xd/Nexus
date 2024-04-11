@@ -23,6 +23,9 @@ main_file=""      # main_file for which the script has to be run
 root_dir=""       # root directory where the main_file is present and the code will be generated here itself
 emsdk_dir=""      # main directory in which the emscripten sources are installed
 
+env_file="emsdk_runner_env.txt"       # file where the variable for default root_dir and others are stored
+env_vars=()
+
 check_flag=false  # just a flag used by functions
 
 # generated logs message
@@ -102,6 +105,18 @@ run_emsdk() {
   fi
 }
 
+create_env_variables() {
+  echo -e "ROOT_DIR=${root_dir}\nHEADER_FILE=${header_file}\nTARGET_FILE=${target_file}" > ${env_file}
+}
+
+set_local_variables_using_env() {
+  # IFS='='
+  for line in $(cat ${env_file})
+  do
+    echo -e "${line}\n"
+  done
+}
+
 while getopts "i:r:" execute; do
   main_file=$(echo $OPTARG)
   case "$execute" in
@@ -110,6 +125,8 @@ while getopts "i:r:" execute; do
       ;;
     r)
       run_emsdk "$main_file"
+      # Start working on the script feature to be added
+      # set_local_variables_using_env
       ;;
     \?)
       echo "Invalid Input"
