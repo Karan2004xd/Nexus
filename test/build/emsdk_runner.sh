@@ -87,59 +87,69 @@ generate_using_emsdk() {
   $(${emsdk_exec} ${header_file} "${root_dir}/${main_file}" -o ${target_file})
 }
 
-# main function
-run_emsdk() {
-  main_file="$1"
-
-  read -p "Enter the name of the directory (where emscripten file is to be executed): " root_dir
-  read -p "Enter the target file name (app.js for example): " target_file
-  read -p "Enter the header_file to be entered (if needed or else leave blank): " header_file
-
-  # -z header_file returns true if the string is empty
-  if [ ! -z $header_file ]; then
-    header_file="--${header_file}"
-  fi
-
-  # -n header_file returns false if string is not empty
-  if [ -n $root_dir ]; then
-    dir_to_exec=$(cd .. && pwd)
-    dir_to_exec+="/${root_dir}"
-    root_dir=${dir_to_exec}
-
-    # -d checks if the root_dir specified by the user, actually exists or not
-    # returns true if it does and false otherwise
-    if [ -d $root_dir ]; then
-      print_log "Directory found"
-      check_for_correct_binaries
-      if [ $check_flag = true ]; then
-        set_emsdk_dir
-        generate_using_emsdk
-        print_log "Emscripten executed successfully"
-      fi
-    else
-      print_log "${root_dir} is not a directory"
-    fi
-  fi
-}
-
 create_env_variables() {
   echo -e "ROOT_DIR=${root_dir}\nHEADER_FILE=${header_file}\nTARGET_FILE=${target_file}" > ${env_file}
 }
 
 set_local_variables_using_env() {
-  # IFS='='
   if [ ! -f ${env_file} ]; then
-    run_emsdk "$1"
-    create_env_variables
+    print_log "${env_file} was not found. Please run the script with -r flag to generate the file"
+    exit 1
   fi
 
-  # for line in $(cat ${env_file})
-  # do
-  #   echo -e "${line}\n"
-  # done
+  for line in $(cat ${env_file})
+  do
+    env_name=$(echo ${line} | cut -d '=' -f1)
+    env_value=$(echo ${line} | cut -d '=' -f2)
+
+    if [ "$env_name" = "ROOT_DIR" ]; then
+      root_dir="${env_value}"
+    elif [ "$env_name" = "HEADER_FILE" ]; then
+      header_file="${env_value}"
+    elif [ "$env_name" = "TARGET_FILE" ]; then
+      target_file="${env_value}"
+    fi
+  done
 }
 
-while getopts "i:r:" execute; do
+get_user_input() {
+  read -p "Enter the name of the directory (where emscripten file is to be executed): " root_dir
+  read -p "Enter the target file name (app.js for example): " target_file
+  read -p "Enter the header_file to be entered (if needed or else leave blank): " header_file
+  
+  # -z header_file returns true if the string is empty
+  if [ ! -z $header_file ]; then
+    header_file="--${header_file}"
+  fi
+
+  # -n root_dir returns false if string is not empty
+  if [ -n $root_dir ]; then
+    dir_to_exec=$(cd .. && pwd)
+    dir_to_exec+="/${root_dir}"
+    root_dir=${dir_to_exec}
+  fi
+}
+
+# main function
+run_emsdk() {
+  main_file="$1"
+
+  # -d checks if the root_dir specified by the user, actually exists or not
+  # returns true if it does and false otherwise
+  if [ -d $root_dir ]; then
+    print_log "Directory found"
+    check_for_correct_binaries
+    if [ $check_flag = true ]; then
+      set_emsdk_dir
+      generate_using_emsdk
+      print_log "Emscripten executed successfully"
+    fi
+  else
+    print_log "${root_dir} is not a directory"
+  fi
+}
+
+while getopts "i:r:d:" execute; do
   main_file=$(echo $OPTARG)
 
   case "$execute" in
@@ -147,8 +157,13 @@ while getopts "i:r:" execute; do
       download_and_install_emsdk "$main_file"
       ;;
     r)
+      get_user_input
+      create_env_variables
       run_emsdk "$main_file"
-      # set_local_variables_using_env "$main_file"
+      ;;
+    d)
+      set_local_variables_using_env
+      run_emsdk "$main_file"
       ;;
     \?)
       echo "Invalid Input"

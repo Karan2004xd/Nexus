@@ -1,10 +1,10 @@
 #include <iostream>
 #include <emscripten.h>
-/* #include "TestClass.h" */
+#include "TestClass.h"
 
 // required for binding classes
-/* #include <emscripten/bind.h> */ 
-/* using namespace emscripten; */
+#include <emscripten/bind.h> 
+using namespace emscripten;
 
 // A SERVER IS A MUST FOR WASM TO WORK
 // a simple hhtp server can be started using 
@@ -18,9 +18,9 @@
 
 // binding and function defining cannot co-exist
 // if want to use for functions that don't add the bind flag in compilation
-EXTERN EMSCRIPTEN_KEEPALIVE int findSquare2(int a) {
-  return a * a;
-}
+/* EXTERN EMSCRIPTEN_KEEPALIVE int findSquare2(int a) { */
+/*   return a * a; */
+/* } */
 
 
 /* class TryingWasm { */
@@ -89,7 +89,8 @@ EXTERN EMSCRIPTEN_KEEPALIVE int findSquare2(int a) {
 
 // calling classes from header files
 
-/* EMSCRIPTEN_BINDINGS (TestClass) { */
-/*   class_<TestClass>("TestClass") */
-/*     .constructor(); */
-/* } */
+EMSCRIPTEN_BINDINGS (TestClass) {
+  class_<TestClass>("TestClass")
+    .constructor()
+    .function("findSquare", &TestClass::findSquare);
+}
