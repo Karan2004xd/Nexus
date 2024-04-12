@@ -1,20 +1,39 @@
 #!/bin/bash
 
+# generated logs message
+print_log() {
+  msg="$1"
+  echo -e "\n------- ${msg} -------\n"
+}
+
 # donwloads emscripten
 download_and_install_emsdk() {
-  git clone https://github.com/emscripten-core/emsdk.git
-  cd emsdk
+  path="$1"
+  if [ -d ${path} ]; then
+    cd ${path}
 
-  git pull
+    if [ -d "emsdk" ]; then
+      print_log "emsdk is already installed in the current directory"
+      exit 0
+    fi
+    print_log "Installing emsdk at path: $(pwd)"
 
-  # Download and install the latest SDK tools.
-  ./emsdk install latest
+    git clone https://github.com/emscripten-core/emsdk.git
+    cd emsdk
 
-  # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
-  ./emsdk activate latest
+    git pull
 
-  # Activate PATH and other environment variables in the current terminal
-  source ./emsdk_env.sh
+    # Download and install the latest SDK tools.
+    ./emsdk install latest
+
+    # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
+    ./emsdk activate latest
+
+    # Activate PATH and other environment variables in the current terminal
+    source ./emsdk_env.sh
+  else
+    print_log "${path} not found"
+  fi
 }
 
 target_file=""    # file in which the assembly target code is generated like javascript file
@@ -28,27 +47,22 @@ env_vars=()
 
 check_flag=false  # just a flag used by functions
 
-# generated logs message
-print_log() {
-  msg="$1"
-  echo -e "\n------- ${msg} -------\n"
-}
-
 # sets the path where the emsdk directory is installed
 set_emsdk_dir() {
-  temp_emsdk_dir=$(cd ${root_dir} && cd .. && cd build)
-  temp_emsdk_dir+="emsdk/upstream/emscripten"
+  temp_emsdk_dir=$(cd ${root_dir} && cd .. && cd build && pwd)
+  temp_emsdk_dir+="/emsdk/upstream/emscripten"
   if [ -d $emsdk_dir ]; then
     emsdk_dir=${temp_emsdk_dir}
   else
-    print_log "${temp_emsdk_dir} directory was not found"
+    print_log "${temp_emsdk_dir} directory was not found\nRun emsdk_runner.sh -i (for installing)"
+    exit 1
   fi
 }
 
 # checks whether the main_file actually exists in the root_dir
 check_for_correct_binaries() {
   for i in $(ls ${root_dir}); do
-    if [ $i = $main_file ]; then
+    if [ $i = ${main_file} ]; then
       check_flag=true
       break
     fi
@@ -65,7 +79,10 @@ check_for_correct_binaries() {
 # executed the empscripten script after all the checks
 generate_using_emsdk() {
   emsdk_exec="${emsdk_dir}/emcc"
-  echo "${emsdk_exec} ${header_file} ${main_file} -o ${target_file}"
+  cd .. && cd ${root_dir}
+  
+  print_log "Genereating emscripten files in $(pwd)"
+  echo "Command: ${emsdk_exec} ${header_file} ${main_file} -o ${target_file}"
 
   $(${emsdk_exec} ${header_file} "${root_dir}/${main_file}" -o ${target_file})
 }
@@ -111,28 +128,33 @@ create_env_variables() {
 
 set_local_variables_using_env() {
   # IFS='='
-  for line in $(cat ${env_file})
-  do
-    echo -e "${line}\n"
-  done
+  if [ ! -f ${env_file} ]; then
+    run_emsdk "$1"
+    create_env_variables
+  fi
+
+  # for line in $(cat ${env_file})
+  # do
+  #   echo -e "${line}\n"
+  # done
 }
 
 while getopts "i:r:" execute; do
   main_file=$(echo $OPTARG)
+
   case "$execute" in
     i)
       download_and_install_emsdk "$main_file"
       ;;
     r)
       run_emsdk "$main_file"
-      # Start working on the script feature to be added
-      # set_local_variables_using_env
+      # set_local_variables_using_env "$main_file"
       ;;
     \?)
       echo "Invalid Input"
       print_log "Allowed input flags"
-      echo "-i : for installed in the emscripten packages (in the current directory)"
-      echo "-r {filename} : for running the script for the filename specified"
+      echo "-i {relative path} : for installed in the emscripten packages"
+      echo "-r {filename} : for running the script for the filename specified (for current directory enter '.')"
       ;;
   esac
 done
