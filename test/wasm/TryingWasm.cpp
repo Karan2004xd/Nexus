@@ -1,6 +1,6 @@
 #include <iostream>
-#include <emscripten.h>
 #include "TestClass.h"
+#include <emscripten.h>
 
 // required for binding classes
 #include <emscripten/bind.h> 
@@ -16,8 +16,6 @@ using namespace emscripten;
 #define EXTERN
 #endif
 
-// binding and function defining cannot co-exist
-// if want to use for functions that don't add the bind flag in compilation
 /* EXTERN EMSCRIPTEN_KEEPALIVE int findSquare2(int a) { */
 /*   return a * a; */
 /* } */
@@ -44,7 +42,6 @@ using namespace emscripten;
 /*     .constructor<int>() */
 /*     .function("findSquare", &TryingWasm::findSquare); */
 /* } */
-
 // Very Scalable as you can see
 /* class BaseClass { */
 /* public: */
@@ -88,9 +85,15 @@ using namespace emscripten;
 /* } */
 
 // calling classes from header files
-
 EMSCRIPTEN_BINDINGS (TestClass) {
   class_<TestClass>("TestClass")
     .constructor()
-    .function("findSquare", &TestClass::findSquare);
+    .function("findSquare", &TestClass::findSquare)
+    .function("findFactorial", &TestClass::findFactorial);
+    
 }
+
+/* int main() { */
+/*   TestClass t; */
+/*   std::cout << t.findFactorial(5) << std::endl; */
+/* } */

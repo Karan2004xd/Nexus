@@ -28,7 +28,8 @@ let exports;
 function calling_header_file_classes() {
   const a = document.querySelector('#a').value;
   let obj = new Module.TestClass();
-  console.log(obj.findSquare(+a))
+  console.log(obj);
+  result.textContent = obj.findFactorial(+a);
 }
 
 getSquareBtn.addEventListener('click', calling_header_file_classes);
