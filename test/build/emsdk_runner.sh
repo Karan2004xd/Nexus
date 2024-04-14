@@ -168,8 +168,9 @@ while getopts "i:r:d:" execute; do
     \?)
       echo "Invalid Input"
       print_log "Allowed input flags"
-      echo "-i {relative path} : for installed in the emscripten packages"
-      echo "-r {filename} : for running the script for the filename specified (for current directory enter '.')"
+      echo "-i {relative path} : for installed in the emscripten packages (for current directory enter '.')"
+      echo "-r {filename} : for running the script for the single filename specified and override the previously used info"
+      echo "-d {filename} : for running the single file with previously used path and headers and flags"
       ;;
   esac
 done
