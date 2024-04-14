@@ -149,7 +149,50 @@ run_emsdk() {
   fi
 }
 
-while getopts "i:r:d:" execute; do
+# script for multiple_files
+
+cpp_directory_names=()
+cpp_file_names=()
+
+build_dir=""
+build_dir_name=""
+root_dir_name=""
+
+set_directories() {
+  temp_root_path="$1"
+  temp_build_path="$2"
+
+  if [ -d $temp_root_path ] && [ -d $temp_build_path ]; then
+    root_dir=$(cd $temp_root_path && pwd)
+    build_dir=$(cd $temp_build_path && pwd)
+
+    # set root_dir_name, build_dir_name
+
+    print_log "Found root directory : $root_dir"
+    print_log "Found build directory : $build_dir"
+  else
+    print_log "${temp_root_path} is not a directory"
+    exit 1
+  fi
+}
+
+read_directories_names() {
+  cd "${root_dir}"
+  for dir in $(ls); do
+    if [ -d $dir ] && [ $dir != $build_dir ]; then
+      echo "$dir"
+      cpp_directory_names+=("$dir")
+    fi
+  done
+}
+
+run_emsdk_for_multiple_files() {
+  set_directories "$1" "$2"
+  read_directories_names
+}
+
+
+while getopts "i:r:d:b p " execute; do
   main_file=$(echo $OPTARG)
 
   case "$execute" in
@@ -164,6 +207,13 @@ while getopts "i:r:d:" execute; do
     d)
       set_local_variables_using_env
       run_emsdk "$main_file"
+      ;;
+    b)
+      read -p "Path to the project root directory (relative or absolute): " root_path
+      read -p "Path to the build directory or directory containing cmake build files (relative or absolute): " build_path
+      run_emsdk_for_multiple_files "${root_path}" "${build_path}"
+      ;;
+    p)
       ;;
     \?)
       echo "Invalid Input"
