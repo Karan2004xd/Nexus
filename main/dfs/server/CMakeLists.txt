@@ -9,6 +9,7 @@ set(DEFAULT_HOST "localhost" PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}
   "./src/ServerHandler.cpp"
+  "./src/Server.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")
