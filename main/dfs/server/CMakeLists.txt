@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
 project(server)
 
-find_package(Boost REQUIRED COMPONENTS system log asio beast)
+find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME}
+set(DEFAULT_PORT "8080" PARENT_SCOPE)
+set(DEFAULT_HOST "localhost" PARENT_SCOPE)
 
+add_library(${PROJECT_NAME}
+  "./src/ServerHandler.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")
-target_link_libraries(${PROJECT_NAME} PRIVATE boost)
