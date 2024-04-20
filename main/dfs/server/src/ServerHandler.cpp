@@ -1,4 +1,5 @@
 #include "../include/ServerHandler.hpp"
+#include "../../data/include/Data.hpp"
 
 ServerHandler::ServerHandler() {
   logging::core::get()->set_logging_enabled(true);
@@ -66,7 +67,8 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
 
   if (request.method() == http::verb::post) {
     path = previousPath;
-    // Implement logic for data from here
+    /* std::cout << std::string(request.body()) << std::endl; */
+    Data data {request.body()};
   } else {
     if (requestTarget == "/") {
       path = pathToInterfaces + "/index.html";
@@ -92,7 +94,6 @@ void ServerHandler::startListening() {
     BOOST_LOG_TRIVIAL(info) << "Reading data now...";
 
     while (true) {
-
       beast::flat_buffer buffer;
       http::request<http::string_body> request;
       http::read(socket, buffer, request);
@@ -100,6 +101,6 @@ void ServerHandler::startListening() {
       handleRequest(request);
     }
   } catch (std::exception &e) {
-    BOOST_LOG_TRIVIAL(fatal) << e.what();
+    BOOST_LOG_TRIVIAL(fatal) << "Exception: " << e.what();
   }
 }
