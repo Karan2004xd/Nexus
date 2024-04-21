@@ -2,10 +2,6 @@
 #include "../../../constants.h"
 #include <boost/algorithm/string/trim.hpp>
 
-Data::Data(const std::string &rawData) {
-  filterData(rawData);
-}
-
 void Data::setFileName(const std::string &fileName) {
   if (!fileName.empty()) {
     this->fileName = fileName;
@@ -57,4 +53,9 @@ void Data::filterData(const std::string &rawData) {
 
   setFileName(tempFileName);
   setFileMainBodyInfo(tempMainBody);
+}
+
+Data::Data(const std::string &rawData) {
+  filterData(rawData);
+  DataChunker::chunkData(getMainBody(), getContentLength());
 }
