@@ -14,5 +14,6 @@ private:
   int chunkNumber;
   size_t chunkSize;
   std::string chunkName;
+  std::string chunkId;
 };
 #endif // CHUNK_HPP
