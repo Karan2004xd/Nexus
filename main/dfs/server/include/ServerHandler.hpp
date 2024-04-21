@@ -3,19 +3,13 @@
 
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string>
-#include <fstream>
-#include <iostream>
 
 #include "../../../constants.h"
 
 namespace net = boost::asio;
 namespace beast = boost::beast;
 namespace http = beast::http;
-namespace logging = boost::log;
 
 using tcp = net::ip::tcp;
 

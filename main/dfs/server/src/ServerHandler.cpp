@@ -1,5 +1,13 @@
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <iostream>
+#include <fstream>
+
 #include "../include/ServerHandler.hpp"
 #include "../../data/include/Data.hpp"
+
+namespace logging = boost::log;
 
 ServerHandler::ServerHandler() {
   logging::core::get()->set_logging_enabled(true);

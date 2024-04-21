@@ -1,14 +1,7 @@
 #ifndef DATA_HPP
 #define DATA_HPP
 
-/* ------WebKitFormBoundaryTbXFHVZBpFKPz18f */
-/* Content-Disposition: form-data; name="uploaded_file"; filename="leetcode.cpp" */
-/* Content-Type: text/x-c++src */
-
 #include <string>
-#include <boost/algorithm/string/trim.hpp>
-#include <iostream>
-#include "../../../constants.h"
 
 class Data {
 public:

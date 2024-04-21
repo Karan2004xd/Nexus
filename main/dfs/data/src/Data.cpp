@@ -1,4 +1,6 @@
 #include "../include/Data.hpp"
+#include "../../../constants.h"
+#include <boost/algorithm/string/trim.hpp>
 
 Data::Data(const std::string &rawData) {
   filterData(rawData);
