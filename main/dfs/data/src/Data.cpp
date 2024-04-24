@@ -1,10 +1,17 @@
 #include "../include/Data.hpp"
 #include "../../../constants.h"
 #include <boost/algorithm/string/trim.hpp>
+#include <iostream>
 
 void Data::setFileName(const std::string &fileName) {
   if (!fileName.empty()) {
     this->fileName = fileName;
+  }
+}
+
+void Data::setContentType(const std::string &contentType) {
+  if (!contentType.empty()) {
+    this->contentType = contentType;
   }
 }
 
@@ -49,13 +56,20 @@ std::string Data::findMainBody(const std::string &rawData) {
 
 void Data::filterData(const std::string &rawData) {
   std::string tempFileName = findVariableValue(std::string(FILENAME), rawData);
+  /* std::string tempContentType = findVariableValue(std::string(CONTENT_TYPE), rawData); */
   std::string tempMainBody = findMainBody(rawData);
 
   setFileName(tempFileName);
+  /* setContentType(tempContentType); */
   setFileMainBodyInfo(tempMainBody);
 }
 
 Data::Data(const std::string &rawData) {
+  std::cout << rawData << std::endl;
   filterData(rawData);
-  DataChunker::chunkData(getMainBody(), getContentLength());
+  std::cout << "FileName: " << getFileName()
+            << "\nContent-Type: " << getContentType()
+            << "\nMain Body: \n" << getMainBody()
+            << std::endl;
+  DataChunker::chunkData(getMainBody(), getContentLength(), getContentType());
 }

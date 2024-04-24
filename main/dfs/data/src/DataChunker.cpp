@@ -17,7 +17,7 @@ void DataChunker::setDefaultChunkRatio(int MainDataSize) {
   }
 }
 
-size_t findChunkSize(const std::string &chunk) {
+size_t DataChunker::findChunkSize(const std::string &chunk) {
   size_t baseSize = sizeof(std::string);
   size_t memoryAllocationSize = chunk.capacity() * sizeof(char);
   return baseSize + memoryAllocationSize;
@@ -41,17 +41,18 @@ void DataChunker::setChunks() {
   }
 }
 
-std::vector<std::unique_ptr<Chunk>> DataChunker::getChunks() {
-  return this->chunks;
-}
+/* std::vector<std::unique_ptr<Chunk>> DataChunker::getChunks() { */
+/*   return this->chunks; */
+/* } */
 
-void DataChunker::setMainData(const std::string &mainData) {
+void DataChunker::setMainData(const std::string &mainData, const std::string &contentType) {
   this->MainData = mainData;
+  this->contentType = contentType;
 }
 
-void DataChunker::chunkData(const std::string &mainData, int mainDataLength) {
+void DataChunker::chunkData(const std::string &mainData, int mainDataLength, const std::string &contentType) {
   setDefaultChunkRatio(mainDataLength);
-  setMainData(mainData);
+  setMainData(mainData, contentType);
   setChunks();
 }
 

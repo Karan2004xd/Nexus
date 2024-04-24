@@ -4,6 +4,7 @@
 
 class Chunk {
 public:
+  Chunk() {}
   Chunk(int chunkNumber, size_t chunkSize, const std::string &chunkName)
     : chunkNumber(chunkNumber), chunkSize(chunkSize), chunkName(chunkName) {}
 
