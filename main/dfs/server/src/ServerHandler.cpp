@@ -5,7 +5,8 @@
 #include <fstream>
 
 #include "../include/ServerHandler.hpp"
-#include "../../data/include/Data.hpp"
+#include "../../data/include/Content.hpp"
+#include "../../data/include/DataChunker.hpp"
 
 namespace logging = boost::log;
 
@@ -75,8 +76,16 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
 
   if (request.method() == http::verb::post) {
     path = previousPath;
-    /* std::cout << std::string(request.body()) << std::endl; */
-    Data data {request.body()};
+    Data::Content content {request.body()};
+    Data::DataChunker chunker {content};
+
+    /* for (const auto &chunk : chunker.getChunks()) { */
+      /* std::cout << chunk->getChunkContent() << "\n" << std::endl; */
+      /* std::cout << chunk->decryptChunkData() << std::endl; */
+      /* std::cout << chunk->getChunkContent() << std::endl; */
+    /* } */
+
+    // Work on the decryption problem
   } else {
     if (requestTarget == "/") {
       path = pathToInterfaces + "/index.html";
@@ -95,10 +104,10 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
 }
 
 void ServerHandler::startListening() {
-  BOOST_LOG_TRIVIAL(info) << "Server is active";
+  BOOST_LOG_TRIVIAL(info) << "Server is active Running at port " << DEFAULT_PORT;
   try {
     acceptor.accept(socket);
-    BOOST_LOG_TRIVIAL(info) << "Socket connected: Running at port " << DEFAULT_PORT;
+    BOOST_LOG_TRIVIAL(info) << "Socket connected: ";
     BOOST_LOG_TRIVIAL(info) << "Reading data now...";
 
     while (true) {

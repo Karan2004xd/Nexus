@@ -1,5 +1,8 @@
 #include "../include/DataChunker.hpp"
+#include "../include/Content.hpp"
 #include <cmath>
+
+using namespace Data;
 
 void DataChunker::setDefaultChunkRatio(int MainDataSize) {
   this->MainDataSize = MainDataSize;
@@ -37,22 +40,20 @@ void DataChunker::setChunks() {
     }
     std::string chunk = MainData.substr(dataStartPos, dataEndPos - dataStartPos);
     size_t chunkSize = findChunkSize(chunk);
-    chunks.push_back(std::make_unique<Chunk>(chunkNumber, chunkSize, chunk));
+    chunks.push_back(std::make_unique<Chunk>(chunk, chunkSize));
   }
 }
 
-/* std::vector<std::unique_ptr<Chunk>> DataChunker::getChunks() { */
-/*   return this->chunks; */
-/* } */
-
-void DataChunker::setMainData(const std::string &mainData, const std::string &contentType) {
-  this->MainData = mainData;
-  this->contentType = contentType;
+const std::vector<std::unique_ptr<Chunk>> &DataChunker::getChunks() {
+  return this->chunks;
 }
 
-void DataChunker::chunkData(const std::string &mainData, int mainDataLength, const std::string &contentType) {
-  setDefaultChunkRatio(mainDataLength);
-  setMainData(mainData, contentType);
+void DataChunker::setMainData(const std::string &mainData, int contentLength) {
+  this->MainData = mainData;
+  setDefaultChunkRatio(contentLength);
+}
+
+DataChunker::DataChunker(const Content &content) {
+  setMainData(content.getMainBody(), content.getContentLength());
   setChunks();
 }
-

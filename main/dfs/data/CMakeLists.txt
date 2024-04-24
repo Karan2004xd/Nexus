@@ -6,9 +6,10 @@ set(FILENAME "filename" PARENT_SCOPE)
 set(CONTENT_TYPE "Content-Type" PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}
-  "./src/Data.cpp"
+  "./src/Content.cpp"
   "./src/DataChunker.cpp"
   "./src/Chunk.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")
+target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp)

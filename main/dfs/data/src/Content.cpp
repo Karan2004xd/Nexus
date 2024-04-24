@@ -1,34 +1,36 @@
-#include "../include/Data.hpp"
-#include "../../../constants.h"
+#include "../include/Content.hpp"
 #include <boost/algorithm/string/trim.hpp>
-#include <iostream>
 
-void Data::setFileName(const std::string &fileName) {
+using namespace Data;
+
+void Content::setFileName(const std::string &fileName) {
   if (!fileName.empty()) {
     this->fileName = fileName;
   }
 }
 
-void Data::setContentType(const std::string &contentType) {
+void Content::setContentType(const std::string &contentType) {
   if (!contentType.empty()) {
     this->contentType = contentType;
   }
 }
 
-void Data::setFileMainBodyInfo(const std::string &mainBody) {
+void Content::setFileMainBodyInfo(const std::string &mainBody) {
   if (!mainBody.empty()) {
     this->mainBody = mainBody;
     this->contentLength = mainBody.length();
   }
 }
 
-std::string Data::findVariableValue(const std::string &variableName, const std::string &rawData) {
+std::string Content::findVariableValue(const std::string &variableName, 
+                                    const std::string &rawData,
+                                    char delimeter = '"') {
   size_t indexOfVar = rawData.find(variableName);
   std::string resultValue = {};
 
   if (indexOfVar != std::string::npos) {
     int resultIndex = indexOfVar + variableName.length() + 2;
-    while (rawData[resultIndex] != '"') {
+    while (rawData[resultIndex] != delimeter) {
       resultValue += rawData[resultIndex];
       resultIndex++;
     }
@@ -36,7 +38,7 @@ std::string Data::findVariableValue(const std::string &variableName, const std::
   return resultValue;
 }
 
-std::string Data::findMainBody(const std::string &rawData) {
+std::string Content::findMainBody(const std::string &rawData) {
   size_t contentTypePos = rawData.find(std::string(CONTENT_TYPE));
   std::string resultValue = {};
   
@@ -54,22 +56,16 @@ std::string Data::findMainBody(const std::string &rawData) {
   return resultValue;
 }
 
-void Data::filterData(const std::string &rawData) {
+void Content::filterData(const std::string &rawData) {
   std::string tempFileName = findVariableValue(std::string(FILENAME), rawData);
-  /* std::string tempContentType = findVariableValue(std::string(CONTENT_TYPE), rawData); */
+  std::string tempContentType = findVariableValue(std::string(CONTENT_TYPE), rawData, '\r');
   std::string tempMainBody = findMainBody(rawData);
 
   setFileName(tempFileName);
-  /* setContentType(tempContentType); */
+  setContentType(tempContentType);
   setFileMainBodyInfo(tempMainBody);
 }
 
-Data::Data(const std::string &rawData) {
-  std::cout << rawData << std::endl;
+Content::Content(const std::string &rawData) {
   filterData(rawData);
-  std::cout << "FileName: " << getFileName()
-            << "\nContent-Type: " << getContentType()
-            << "\nMain Body: \n" << getMainBody()
-            << std::endl;
-  DataChunker::chunkData(getMainBody(), getContentLength(), getContentType());
 }
