@@ -79,13 +79,9 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
     Data::Content content {request.body()};
     Data::DataChunker chunker {content};
 
-    /* for (const auto &chunk : chunker.getChunks()) { */
-      /* std::cout << chunk->getChunkContent() << "\n" << std::endl; */
-      /* std::cout << chunk->decryptChunkData() << std::endl; */
-      /* std::cout << chunk->getChunkContent() << std::endl; */
-    /* } */
+    for (const auto &chunk : chunker.getChunks()) {
+    }
 
-    // Work on the decryption problem
   } else {
     if (requestTarget == "/") {
       path = pathToInterfaces + "/index.html";

@@ -11,19 +11,16 @@ public:
   const std::string getChunkName() { return this->chunkName; }
 
   const std::string getChunkContent() { return this->chunkContent; }
-  const std::string getChunkId() { return this->chunkId; }
-  std::string decryptChunkData();
+  void decryptChunkData(const std::string &);
 
 private:
   size_t chunkSize;
   std::string chunkName;
-
-  std::string chunkId;
   std::string chunkContent;
 
   const size_t DEFAULT_CHUNK_ID_SIZE = 16;
 
-  void generateChunkId();
-  void encryptChunkData();
+  std::string generateChunkId();
+  void encryptChunkData(const std::string &);
 };
 #endif // CHUNK_HPP

@@ -4,15 +4,15 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/modes.h>
-#include <iostream>
 
 Chunk::Chunk(const std::string &chunkContent, size_t chunkSize)
   : chunkContent(chunkContent), chunkSize(chunkSize) {
-  generateChunkId();
-  encryptChunkData();
+  std::string chunkId = generateChunkId();
+  encryptChunkData(chunkId);
+  // Implement a database api for storing the chunkId
 }
 
-void Chunk::generateChunkId() {
+std::string Chunk::generateChunkId() {
   CryptoPP::AutoSeededRandomPool rng;
   CryptoPP::SecByteBlock id {DEFAULT_CHUNK_ID_SIZE};
   rng.GenerateBlock(id, DEFAULT_CHUNK_ID_SIZE);
@@ -22,11 +22,10 @@ void Chunk::generateChunkId() {
   encoder.Put(id, DEFAULT_CHUNK_ID_SIZE);
   encoder.MessageEnd();
 
-  std::cout << tempChunkId << std::endl;
-  this->chunkId = tempChunkId;
+  return tempChunkId;
 }
 
-void Chunk::encryptChunkData() {
+void Chunk::encryptChunkData(const std::string &chunkId) {
   std::string tempEncryptedData;
 
   CryptoPP::AES::Encryption aesEncryption {reinterpret_cast<const unsigned char *>(chunkId.data()),
@@ -42,15 +41,15 @@ void Chunk::encryptChunkData() {
   this->chunkContent = tempEncryptedData;
 }
 
-std::string Chunk::decryptChunkData() {
+void Chunk::decryptChunkData(const std::string &chunkId) {
   std::string tempDecryptedData;
-  CryptoPP::AES::Decryption aesDecryption {reinterpret_cast<const unsigned char *>(this->chunkId.data()),
+  CryptoPP::AES::Decryption aesDecryption {reinterpret_cast<const unsigned char *>(chunkId.data()),
                                            CryptoPP::AES::DEFAULT_KEYLENGTH};
-  CryptoPP::CBC_CTS_Mode_ExternalCipher::Decryption cbcDecryptor {aesDecryption,
-                                                      reinterpret_cast<const unsigned char *>(this->chunkId.data())};
+  CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryptor {aesDecryption,
+                                                      reinterpret_cast<const unsigned char *>(chunkId.data())};
   CryptoPP::StringSource ss {this->chunkContent,
                              true,
                              new CryptoPP::StreamTransformationFilter {cbcDecryptor,
                                                                        new CryptoPP::StringSink{tempDecryptedData}}};
-  return tempDecryptedData;
+  this->chunkContent = tempDecryptedData;
 }
