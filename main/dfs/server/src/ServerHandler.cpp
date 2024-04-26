@@ -79,8 +79,8 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
     Data::Content content {request.body()};
     Data::DataChunker chunker {content};
 
-    for (const auto &chunk : chunker.getChunks()) {
-    }
+    /* for (const auto &chunk : chunker.getChunks()) { */
+    /* } */
 
   } else {
     if (requestTarget == "/") {

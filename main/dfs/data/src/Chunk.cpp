@@ -8,7 +8,13 @@
 Chunk::Chunk(const std::string &chunkContent, size_t chunkSize)
   : chunkContent(chunkContent), chunkSize(chunkSize) {
   std::string chunkId = generateChunkId();
+
   encryptChunkData(chunkId);
+  /* std::cout << "Encrypted Text: " << this->chunkContent << std::endl; */
+
+  /* decryptChunkData(chunkId); */
+  /* std::cout << "Decrypted Text: " << this->chunkContent << std::endl; */
+  /* std::cout << "\n"; */
   // Implement a database api for storing the chunkId
 }
 
