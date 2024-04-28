@@ -8,14 +8,12 @@ public:
   Chunk(const std::string &, size_t chunkSize);
 
   const size_t getChunkSize() { return this->chunkSize; }
-  const std::string getChunkName() { return this->chunkName; }
 
   const std::string getChunkContent() { return this->chunkContent; }
   void decryptChunkData(const std::string &);
 
 private:
   size_t chunkSize;
-  std::string chunkName;
   std::string chunkContent;
 
   const size_t DEFAULT_CHUNK_ID_SIZE = 16;
