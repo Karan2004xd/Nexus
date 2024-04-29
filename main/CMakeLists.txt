@@ -6,8 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory("./dfs/server")
 add_subdirectory("./dfs/data")
+add_subdirectory("./dfs/database")
+
 configure_file("./constants.h.in" ${CMAKE_SOURCE_DIR}/constants.h @ONLY)
 
 add_executable(${PROJECT_NAME} "./app.cpp")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE server)
+target_link_libraries(${PROJECT_NAME} PRIVATE server database)

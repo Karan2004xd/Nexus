@@ -1,4 +1,5 @@
 #include "../include/DatabaseHandler.hpp"
+#include <iostream>
 
 void DatabaseHandler::checkConnection() {
   if (connection == nullptr) {
@@ -19,4 +20,8 @@ void DatabaseHandler::mysqlConnectionSetup() {
   } else {
     std::cout << "Connected to database" << std::endl;
   }
+}
+
+DatabaseHandler::~DatabaseHandler() {
+  mysql_close(connection);
 }

@@ -2,14 +2,22 @@
 #define DATABASE_HANDLER_HPP
 #include "../../../variables.h"
 #include <mysql/mysql.h>
-#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 class DatabaseHandler {
 protected:
-  static void checkConnection();
+  void checkConnection();
 
+  void storeData(const std::string &);
+
+  std::unordered_map<int, std::vector<std::string>> getDataByRow();
+  std::unordered_map<int, std::vector<std::string>> getDataByColumn();
+
+  ~DatabaseHandler();
 private:
-  static void mysqlConnectionSetup();
+  void mysqlConnectionSetup();
 
   struct ConnectionDetails {
     const char *server = SERVER;
@@ -18,6 +26,6 @@ private:
     const char *password = PASSWORD;
   };
 
-  static MYSQL *connection;
+  MYSQL *connection {nullptr};
 };
 #endif // DATABASE_HANDLER_HPP
