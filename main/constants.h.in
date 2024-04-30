@@ -12,4 +12,6 @@
 #define FILENAME "@FILENAME@"
 #define CONTENT_TYPE "@CONTENT_TYPE@"
 
+#define QUERIES_DIR "@QUERIES_DIR@"
+
 #endif // CONSTANTS_H_IN

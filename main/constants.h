@@ -12,4 +12,6 @@
 #define FILENAME "filename"
 #define CONTENT_TYPE "Content-Type"
 
+#define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/dfs/database/queries"
+
 #endif // CONSTANTS_H_IN
