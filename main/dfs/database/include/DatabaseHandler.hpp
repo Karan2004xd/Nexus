@@ -8,13 +8,14 @@
 #include <vector>
 
 class DatabaseHandler {
-protected:
+public:
   void checkConnection();
 
   void storeData(const std::string &);
 
   std::unordered_map<int, std::vector<std::string>> getDataByRow(const std::string &);
   std::unordered_map<int, std::vector<std::string>> getDataByColumn(const std::string &);
+  void printData(std::unordered_map<int, std::vector<std::string>> &);
 
   ~DatabaseHandler();
 private:
@@ -28,6 +29,6 @@ private:
   };
 
   MYSQL *connection {nullptr};
-  MYSQL_RES *executeQuery(const char *sqlQuery);
+  MYSQL_RES *executeQuery(const std::string &);
 };
 #endif // DATABASE_HANDLER_HPP

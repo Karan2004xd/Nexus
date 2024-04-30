@@ -2,7 +2,7 @@
 #define METADATA_HPP
 #include "Database.hpp"
 
-class Database::Metadata : protected DatabaseHandler {
+class Database::Metadata : public DatabaseHandler {
 public:
   Metadata();
 private:
