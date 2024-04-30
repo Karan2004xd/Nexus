@@ -1,6 +1,3 @@
--- Command to backup data : mariadb-dump -u <username> -p <database name> > <filename>.sql
--- Command to source the data : source <path to the backup file>.sql (inside the mysql cli)
-
 -- MariaDB dump 10.19-11.3.2-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: nexus
@@ -22,15 +19,12 @@
 -- Table structure for table `test`
 --
 
-DROP DATABASE IF EXISTS `nexus`;
-CREATE DATABASE `nexus`;
-USE `nexus`;
-
 DROP TABLE IF EXISTS `test`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test` (
-  `name` varchar(30) DEFAULT NULL
+  `name` varchar(30) DEFAULT NULL,
+  `id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -41,9 +35,10 @@ CREATE TABLE `test` (
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
 INSERT INTO `test` VALUES
-('karan'),
-('user'),
-('user1');
+('karan',1),
+('user',2),
+('user1',3),
+('user2',4);
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-27 13:14:55
+-- Dump completed on 2024-04-30 13:55:09
