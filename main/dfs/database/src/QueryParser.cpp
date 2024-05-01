@@ -1,4 +1,5 @@
 #include "../include/QueryParser.hpp"
+#include <algorithm>
 #include <sstream>
 
 void QueryParser::checkFile(const std::string &filePath) {
@@ -11,14 +12,27 @@ void QueryParser::checkFile(const std::string &filePath) {
   }
 }
 
+bool QueryParser::checkForCorrentVarCount() {
+  int numOfOpening = std::count(fileContent.begin(), fileContent.end(), '{');
+  int numOfClosing = std::count(fileContent.begin(), fileContent.end(), '}');
+
+  return numOfOpening == numOfClosing;
+}
+
 bool QueryParser::checkForDataInSyntax() { 
-  size_t pos = fileContent.find("$");
-  while (pos < std::string::npos) {
-    if (fileContent[pos + 1] != '{' && fileContent[pos + 2] != '}') {
-      return false;
+  if (checkForCorrentVarCount()) {
+    size_t pos = fileContent.find("$");
+    if (fileContent[pos + 1] == '{') {
+      for (int i = pos + 2; i < fileContent.length(); i++) {
+        if (fileContent[i] == ' ' || fileContent[i] == ',') {
+          return false;
+        } else if (fileContent[i] == '}') {
+          // start working from here
+        }
+      }
     }
-    pos += 3;
-    pos += fileContent.substr(pos, fileContent.length() - pos).find("$");
+  } else {
+    return false;
   }
   return true;
 }

@@ -13,5 +13,6 @@ private:
   void checkFile(const std::string &);
 
   bool checkForDataInSyntax();
+  bool checkForCorrentVarCount();
 };
 #endif // QUERY_PARSER_HPP
