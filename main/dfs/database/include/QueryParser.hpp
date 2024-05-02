@@ -7,12 +7,12 @@
 class QueryParser : protected JsonDataHandler {
 public:
   void parseJsonData(std::string &);
-  std::vector<std::string> getParameterNames();
 
 private:
   std::string encodedJsonData;
   decodedJson parsedJsonData;
 
+  void setData(decodedJson &);
   void parseQueryFile(const std::string &);
 
   std::fstream file;

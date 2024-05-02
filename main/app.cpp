@@ -1,4 +1,5 @@
 /* #include "./dfs/server/include/Server.hpp" */
+#include "constants.h"
 #include "dfs/database/include/QueryParser.hpp"
 #include "dfs/database/include/DatabaseHandler.hpp"
 #include "dfs/database/include/JsonStringBuilder.hpp"
@@ -13,16 +14,19 @@ int main() {
   /* metaData.printData(result); */
   /* std::cout << result[2][0] << std::endl; */
 
-  /* QueryParser qp; */
+  QueryParser qp;
   /* Database::DatabaseHandler db; */
   /* auto result = db.getDataByRow("SELECT * FROM test"); */
   /* db.printData(result); */
   /* db.storeData("INSERT INTO test (name, id) VALUES ('user3', 5)"); */
 
   Database::JsonStringBuilder builder;
-  builder.singleData("name", "karan").listOfData("someIds", std::vector<std::string> {"1", "2", "3"}).build();
+  builder.singleData("file", std::string(QUERIES_DIR) + "/test/example_query.sql")
+         .build();
   auto result = builder.str();
   std::cout << result << std::endl;
+
+  qp.parseJsonData(result);
 
   /* JsonDataHandler json; */
   /* auto encodedJson = json.encodeStringToJson(result); */

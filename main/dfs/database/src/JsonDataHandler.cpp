@@ -38,8 +38,6 @@ JsonDataHandler::decodedJson JsonDataHandler::decodeJsonToString(std::string &js
 
     if (itr->value.IsString()) {
       resultDecodedJson[itr->name.GetString()] = itr->value.GetString();
-    } else if (itr->value.IsArray()) {
-      resultDecodedJson[itr->name.GetString()] = getListValues(itr->value.GetArray());
     }
   }
   return resultDecodedJson;
