@@ -1,5 +1,8 @@
 #include "../include/DatabaseHandler.hpp"
+#include "../include/JsonStringBuilder.hpp"
 #include <iostream>
+
+using namespace Database;
 
 void DatabaseHandler::checkConnection() {
   if (connection == nullptr) {
@@ -32,7 +35,7 @@ MYSQL_RES *DatabaseHandler::executeQuery(const std::string &sqlQuery) {
   return result;
 }
 
-void DatabaseHandler::storeData(const std::string &query) {
+void DatabaseHandler::storeData() {
   executeQuery(query);
   // need to start working from here
 }
@@ -51,7 +54,7 @@ void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>
   }
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const std::string &query) {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow() {
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
 
@@ -69,7 +72,7 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(
   return rowData;
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const std::string &query) {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn() {
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
   
@@ -87,6 +90,11 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColu
     }
   }
   return columnData;
+}
+
+DatabaseHandler::DatabaseHandler(const JsonStringBuilder &builder) {
+  this->query = builder.str();
+  checkConnection();
 }
 
 DatabaseHandler::~DatabaseHandler() {

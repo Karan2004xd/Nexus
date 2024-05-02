@@ -1,11 +1,20 @@
 #ifndef QUERY_PARSER_HPP
 #define QUERY_PARSER_HPP
+
+#include "JsonDataHandler.hpp"
 #include <fstream>
 
-class QueryParser {
+class QueryParser : protected JsonDataHandler {
 public:
-  void parseQueryFile(const std::string &);
+  void parseJsonData(std::string &);
+  std::vector<std::string> getParameterNames();
+
 private:
+  std::string encodedJsonData;
+  decodedJson parsedJsonData;
+
+  void parseQueryFile(const std::string &);
+
   std::fstream file;
   bool isFileOpen = false;
   std::string fileContent;

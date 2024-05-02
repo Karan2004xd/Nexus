@@ -1,8 +1,10 @@
 #ifndef DATABASE_HPP
 #define DATABASE_HPP
-#include "DatabaseHandler.hpp"
+
+#include "../../../variables.h"
 
 namespace Database {
-  class Metadata;
+  class JsonStringBuilder;
+  class DatabaseHandler;
 }
 #endif // DATABASE_HPP
