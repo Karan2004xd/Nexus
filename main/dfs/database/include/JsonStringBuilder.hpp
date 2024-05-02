@@ -12,6 +12,7 @@ public:
   JsonStringBuilder &singleData(const std::string &, const std::string &);
   /* JsonStringBuilder &listOfData(const std::string &, const std::vector<std::string> &); */
   void build();
+  void clear();
 
   std::string str() const { return jsonData.str(); }
 private:

@@ -11,11 +11,12 @@
 
 class Database::DatabaseHandler : protected QueryParser {
 public:
-  DatabaseHandler(const JsonStringBuilder &);
-  void storeData();
+  DatabaseHandler();
 
-  std::unordered_map<int, std::vector<std::string>> getDataByRow();
-  std::unordered_map<int, std::vector<std::string>> getDataByColumn();
+  void updateData(const JsonStringBuilder &);
+
+  std::unordered_map<int, std::vector<std::string>> getDataByRow(const JsonStringBuilder &);
+  std::unordered_map<int, std::vector<std::string>> getDataByColumn(const JsonStringBuilder &);
   void printData(std::unordered_map<int, std::vector<std::string>> &);
 
   ~DatabaseHandler();
@@ -24,6 +25,8 @@ private:
 
   void mysqlConnectionSetup();
   void checkConnection();
+
+  void setQuery(const JsonStringBuilder &);
 
   struct ConnectionDetails {
     const char *server = SERVER;

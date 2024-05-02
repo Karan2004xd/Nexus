@@ -3,74 +3,94 @@
 #include <sstream>
 
 void QueryParser::checkFile(const std::string &filePath) {
+  if (file.is_open()) {
+    file.close();
+  }
   file.open(filePath);
 
   if (!file.is_open()) {
     throw std::runtime_error(filePath + " was not found");
-  } else {
-    isFileOpen = true;
-  }
+  } 
 }
 
-/* bool QueryParser::checkForCorrentVarCount() { */
-/*   int numOfOpening = std::count(fileContent.begin(), fileContent.end(), '{'); */
-/*   int numOfClosing = std::count(fileContent.begin(), fileContent.end(), '}'); */
-
-/*   return numOfOpening == numOfClosing; */
-/* } */
-
-/* bool QueryParser::checkForDataInSyntax() { */ 
-/*   if (checkForCorrentVarCount()) { */
-/*     size_t pos = fileContent.find("$"); */
-/*     while (pos < std::string::npos) { */
-/*       if (fileContent[pos + 1] == '{') { */
-/*         for (int i = pos + 2; i < fileContent.length(); i++) { */
-/*           if (fileContent[i] == ' ' || fileContent[i] == ',') { */
-/*             return false; */
-/*           } else if (fileContent[i] == '}') { */
-/*             pos = fileContent.substr(i + 1, fileContent.length() - i - 1).find('$'); */
-/*             break; */
-/*           } */
-/*         } */
-/*       } */
-/*     } */
-/*   } else { */
-/*     return false; */
-/*   } */
-/*   return true; */
-/* } */
-
 bool QueryParser::checkForDataInSyntax() {
-  for (const auto &key : parsedJsonData) {
-    if (key.first != "file") {
-      size_t pos = fileContent.find(key.first);
-      std::cout << pos << std::endl;
+  size_t pos = fileContent.find('$');
 
-      if (pos != std::string::npos &&
-          fileContent[pos - 1] == '{' &&
-          fileContent[pos + key.first.length()] == '}' &&
-          fileContent[pos - 2] == '$') {
-        continue;
+  while (pos < std::string::npos) {
+    if (fileContent[pos + 1] == '{') {
+
+      std::string param;
+      for (int i = pos + 2; i < fileContent.length(); i++) {
+        if (std::isalpha(fileContent[i]) != 0) {
+          param += fileContent[i];
+        } else if (fileContent[i] == '}') {
+          break;
+        } else {
+          return false;
+        }
+      }
+      
+      if (parsedJsonData.find(param) != parsedJsonData.end()) {
+        size_t currentPos = pos + param.length() + 3;
+
+        std::string tempFileContent = fileContent.substr(currentPos, fileContent.length() - currentPos);
+        pos = tempFileContent.find('$');
+
+        if (pos != std::string::npos) {
+          pos = fileContent.length() - (tempFileContent.length() - pos);
+        }
       } else {
         return false;
       }
+    } else {
+      return false;
     }
   }
   return true;
 }
 
-void QueryParser::parseQueryFile(const std::string &fileName) {
-  if (!isFileOpen) checkFile(fileName);
-  std::ostringstream oss;
-  oss << file.rdbuf();
+void QueryParser::injectDataIntoFile() {
+  size_t pos = fileContent.find('$');
+  std::string firstHalfContent = fileContent.substr(0, pos);
+  std::string secondHalfContent = fileContent.substr(pos + 1, fileContent.length() - pos);
 
-  fileContent = oss.str();
+  fileContent = firstHalfContent;
+  for (int i = 0; i < secondHalfContent.length(); i++) {
+    if (secondHalfContent[i] == '{') {
+      std::string param;
+      i++;
+
+      while (secondHalfContent[i] != '}') {
+        param += secondHalfContent[i];
+        i++;
+      }
+      fileContent += parsedJsonData[param];
+    } else if (secondHalfContent[i] != '$') {
+      fileContent += secondHalfContent[i];
+    }
+  }
+}
+
+void QueryParser::readFile() {
+  std::string line;
+  fileContent.clear();
+
+  while (std::getline(file, line)) {
+    if (line.find("--") == std::string::npos) {
+      fileContent += line;
+    }
+  }
+}
+
+void QueryParser::parseQueryFile(const std::string &fileName) {
+  checkFile(fileName);
+  readFile();
+
   if (parsedJsonData.size() > 1) {
     if (checkForDataInSyntax()) {
-      std::cout << "That works" << std::endl;
-      // start working from here
-      
-    } else throw std::runtime_error("Incorrect data injection syntax");
+      injectDataIntoFile();
+
+    } else throw std::runtime_error("Incorrect data injection \nQuery : " + fileContent);
   }
 }
 

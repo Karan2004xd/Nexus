@@ -28,16 +28,19 @@ MYSQL_RES *DatabaseHandler::executeQuery(const std::string &sqlQuery) {
   int runQuery = mysql_query(connection, sqlQuery.c_str());
   MYSQL_RES *result {nullptr};
   if (runQuery) {
-    throw std::runtime_error("Mysql Query Error: " + std::string(mysql_error(connection)));
+    throw std::runtime_error("Mysql Query Error: " + std::string(mysql_error(connection)) +
+                             "\nQuery: " + sqlQuery);
   } else {
     result = mysql_use_result(connection);
   }
   return result;
 }
 
-void DatabaseHandler::storeData() {
+void DatabaseHandler::updateData(const JsonStringBuilder &builder) {
+  setQuery(builder);
   executeQuery(query);
-  // need to start working from here
+
+  std::cout << "\nData Updated Successfully" << std::endl;
 }
 
 void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>> &data) {
@@ -54,7 +57,9 @@ void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>
   }
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow() {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const JsonStringBuilder &builder) {
+  setQuery(builder);
+
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
 
@@ -72,7 +77,9 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(
   return rowData;
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn() {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const JsonStringBuilder &builder) {
+  setQuery(builder);
+
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
   
@@ -92,8 +99,14 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColu
   return columnData;
 }
 
-DatabaseHandler::DatabaseHandler(const JsonStringBuilder &builder) {
-  this->query = builder.str();
+void DatabaseHandler::setQuery(const JsonStringBuilder &builder) {
+  std::string rawJsonData = builder.str();
+
+  QueryParser::parseJsonData(rawJsonData);
+  this->query = QueryParser::getParsedQuery();
+}
+
+DatabaseHandler::DatabaseHandler() {
   checkConnection();
 }
 
