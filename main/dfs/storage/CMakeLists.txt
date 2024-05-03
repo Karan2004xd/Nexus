@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
 project("storage")
 
-find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
 set(SERVICE_COMPONENTS s3)
+find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
+
+set(SECRET_ACCESS_KEY "SECRET_ACCESS_KEY" PARENT_SCOPE)
+set(ACCESS_KEY_ID "ACCESS_KEY_ID" PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}
-  "./src/ConnectorApi.cpp"
+  "./src/AwsHandler.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")

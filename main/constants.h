@@ -14,4 +14,7 @@
 
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/dfs/database/queries"
 
+#define ACCESS_KEY_ID "ACCESS_KEY_ID"
+#define SECRET_ACCESS_KEY "SECRET_ACCESS_KEY"
+
 #endif // CONSTANTS_H_IN

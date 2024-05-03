@@ -1,6 +1,6 @@
 /* #include "./dfs/server/include/Server.hpp" */
-#include "constants.h"
 #include "dfs/database/include/DatabaseHandler.hpp"
+#include "dfs/storage/include/AwsHandler.hpp"
 #include "dfs/utility/include/JsonStringBuilder.hpp"
 
 int main() {
@@ -22,5 +22,6 @@ int main() {
 
   /* auto resultTwo = db.getDataByRow(builder); */
   /* db.printData(resultTwo); */
+  Storage::AwsHandler handler;
   return 0;
 }

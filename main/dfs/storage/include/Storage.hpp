@@ -2,7 +2,6 @@
 #define STORAGE_HPP
 
 namespace Storage {
-  class ConnectorApi;
-  class Data;
+  class AwsHandler;
 }
 #endif // STORAGE_HPP

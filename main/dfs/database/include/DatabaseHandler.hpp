@@ -32,7 +32,7 @@ private:
   void setQuery(const Utility::JsonStringBuilder &);
 
   struct ConnectionDetails {
-    const char *server = SERVER;
+    const char *server = D_SERVER;
     const char *database = DATABASE;
     const char *username = USERNAME;
     const char *password = PASSWORD;
