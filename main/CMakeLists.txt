@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory("./dfs/server")
 add_subdirectory("./dfs/data")
 add_subdirectory("./dfs/database")
+add_subdirectory("./dfs/storage")
 
 configure_file("./constants.h.in" ${CMAKE_SOURCE_DIR}/constants.h @ONLY)
 

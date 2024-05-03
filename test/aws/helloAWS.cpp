@@ -5,10 +5,7 @@
 #include <aws/core/auth/AWSCredentialsProviderChain.h>
 #include <aws/core/auth/STSCredentialsProvider.h>
 
-#include "../../main/variables.h"
-#include <cstdlib>
 #include <iostream>
-#include <string>
 
 using namespace Aws;
 using namespace Aws::Auth;
