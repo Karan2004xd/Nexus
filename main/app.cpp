@@ -1,21 +1,18 @@
 /* #include "./dfs/server/include/Server.hpp" */
 #include "constants.h"
 #include "dfs/database/include/DatabaseHandler.hpp"
-#include "dfs/database/include/JsonStringBuilder.hpp"
-#include <iostream>
+#include "dfs/utility/include/JsonStringBuilder.hpp"
 
 int main() {
   /* Server server; */
   /* server.start(); */
 
-  /* Database::Metadata metaData; */
-  /* auto result = metaData.getDataByRow("SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'test'"); */
-
   /* Database::DatabaseHandler db; */
-  /* Database::JsonStringBuilder builder; */
+  /* Utility::JsonStringBuilder builder; */
 
   /* builder.singleData("file", std::string(QUERIES_DIR) + "/test/example_query.sql") */
   /*        .singleData("name", "user12") */
+  /*        .singleData("id", "12") */
   /*        .build(); */
 
   /* db.updateData(builder); */

@@ -1,10 +1,10 @@
 #ifndef QUERY_PARSER_HPP
 #define QUERY_PARSER_HPP
 
-#include "JsonDataHandler.hpp"
+#include "../../utility/include/JsonDataHandler.hpp"
 #include <fstream>
 
-class QueryParser : protected JsonDataHandler {
+class QueryParser : protected Utility::JsonDataHandler {
 protected:
   void parseJsonData(std::string &);
   std::string getParsedQuery() { return this->fileContent; }

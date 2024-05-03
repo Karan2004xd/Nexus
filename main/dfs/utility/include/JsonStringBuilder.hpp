@@ -1,11 +1,11 @@
 #ifndef JSON_STRING_BUILDER_HPP
 #define JSON_STRING_BUILDER_HPP
 
-#include "Database.hpp"
+#include "Utility.hpp"
 #include <sstream>
 #include <string>
 
-class Database::JsonStringBuilder {
+class Utility::JsonStringBuilder {
 public:
   JsonStringBuilder();
 

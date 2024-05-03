@@ -1,6 +1,4 @@
 #include "../include/QueryParser.hpp"
-#include <iostream>
-#include <sstream>
 
 void QueryParser::checkFile(const std::string &filePath) {
   if (file.is_open()) {

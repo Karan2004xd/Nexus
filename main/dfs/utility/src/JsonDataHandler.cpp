@@ -2,6 +2,8 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
+using namespace Utility;
+
 void JsonDataHandler::parseDocument(rapidjson::Document &document, 
                                     const std::string &data) {
   if (document.Parse(data.c_str()).HasParseError()) {

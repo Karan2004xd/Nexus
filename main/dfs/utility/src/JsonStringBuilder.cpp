@@ -1,6 +1,6 @@
 #include "../include/JsonStringBuilder.hpp"
 
-using namespace Database;
+using namespace Utility;
 
 JsonStringBuilder::JsonStringBuilder() {
   jsonData << "{";

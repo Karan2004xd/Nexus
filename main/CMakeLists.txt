@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory("./dfs/server")
 add_subdirectory("./dfs/data")
+add_subdirectory("./dfs/utility")
 add_subdirectory("./dfs/database")
 add_subdirectory("./dfs/storage")
 

@@ -1,5 +1,4 @@
 #include "../include/DatabaseHandler.hpp"
-#include "../include/JsonStringBuilder.hpp"
 #include <iostream>
 
 using namespace Database;
@@ -36,7 +35,7 @@ MYSQL_RES *DatabaseHandler::executeQuery(const std::string &sqlQuery) {
   return result;
 }
 
-void DatabaseHandler::updateData(const JsonStringBuilder &builder) {
+void DatabaseHandler::updateData(const Utility::JsonStringBuilder &builder) {
   setQuery(builder);
   executeQuery(query);
 
@@ -57,7 +56,7 @@ void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>
   }
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const JsonStringBuilder &builder) {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const Utility::JsonStringBuilder &builder) {
   setQuery(builder);
 
   MYSQL_ROW row;
@@ -77,7 +76,7 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(
   return rowData;
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const JsonStringBuilder &builder) {
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const Utility::JsonStringBuilder &builder) {
   setQuery(builder);
 
   MYSQL_ROW row;
@@ -99,7 +98,7 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColu
   return columnData;
 }
 
-void DatabaseHandler::setQuery(const JsonStringBuilder &builder) {
+void DatabaseHandler::setQuery(const Utility::JsonStringBuilder &builder) {
   std::string rawJsonData = builder.str();
 
   QueryParser::parseJsonData(rawJsonData);
