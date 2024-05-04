@@ -76,12 +76,13 @@ int main() {
 
   {
     Aws::S3::S3ClientConfiguration config;
+
     /* std::string name = std::string(Aws::Region::AP_SOUTH_1); */
     /* std::cout << name << std::endl; */
+
     config.region = Aws::Region::EU_NORTH_1;
 
     Aws::S3::S3Client s3Client {config};
-
     auto outcome = s3Client.ListBuckets();
 
     if (!outcome.IsSuccess()) {

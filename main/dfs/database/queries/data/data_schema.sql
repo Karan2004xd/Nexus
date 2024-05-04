@@ -1,9 +1,9 @@
-CREATE TABLE Data (
+CREATE TABLE File (
   id INT AUTO_INCREMENT,
   PRIMARY KEY(id),
   name VARCHAR(40) NOT NULL UNIQUE,
   type CHAR(10) NOT NULL,
-  data_created DATE DEFAULT CURRENT_DATE(),
+  date_created DATE DEFAULT CURRENT_DATE(),
   time_created TIME DEFAULT CURRENT_TIME()
 );
 
@@ -12,8 +12,8 @@ CREATE TABLE Chunk (
   PRIMARY KEY(id),
   chunk_key VARCHAR(40) UNIQUE NOT NULL,
   chunk_size INT NOT NULL,
-  bucket_name VARCHAR(40) NOT NULL,
+  bucket_num INT NOT NULL,
   object_key VARCHAR(100) NOT NULL UNIQUE,
-  data_id INT,
-  FOREIGN KEY(data_id) REFERENCES Data(id)
+  file_id INT,
+  FOREIGN KEY(file_id) REFERENCES File(id)
 );

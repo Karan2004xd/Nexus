@@ -1,16 +1,44 @@
 #include "../include/Chunk.hpp"
+#include "../../database/include/DatabaseHandler.hpp"
+#include "../../utility/include/JsonStringBuilder.hpp"
+
 #include <cryptopp/aes.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/modes.h>
+#include <cryptopp/sha.h>
 
-Chunk::Chunk(const std::string &chunkContent, size_t chunkSize)
-  : chunkContent(chunkContent), chunkSize(chunkSize) {
-  std::string chunkId = generateChunkId();
+Chunk::Chunk(const std::string &fileId, const std::string &chunkContent, size_t chunkSize)
+  : chunkContent(chunkContent), chunkSize(chunkSize), fileId(fileId) {
+  
+  Database::DatabaseHandler db;
 
+  chunkId = generateChunkId();
   encryptChunkData(chunkId);
-  // Implement a database api for storing the chunkId
+  
+  Utility::JsonStringBuilder builder;
+  builder.singleData("file", "data/get_single_file_data")
+         .singleData("id", "name")
+         .singleData("name", "id")
+         .singleData("value", fileId)
+         .build();
+
+  auto data = db.getDataByRow(builder);
+  objectKey = data[1][0] + '_' + chunkId;
+  bucketNum = std::to_string(bucketToAssign());
+
+  builder.clear();
+
+  builder.singleData("file", "data/store_chunk")
+         .singleData("chunk_key", chunkId)
+         .singleData("chunk_size", std::to_string(chunkSize))
+         .singleData("bucket_num", bucketNum)
+         .singleData("object_key", objectKey)
+         .singleData("file_id", fileId)
+         .build();
+
+  db.updateData(builder);
 }
 
 std::string Chunk::generateChunkId() {
@@ -53,4 +81,13 @@ void Chunk::decryptChunkData(const std::string &chunkId) {
                              new CryptoPP::StreamTransformationFilter {cbcDecryptor,
                                                                        new CryptoPP::StringSink{tempDecryptedData}}};
   this->chunkContent = tempDecryptedData;
+}
+
+int Chunk::bucketToAssign() {
+  CryptoPP::SHA256 hash;
+  CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+  hash.CalculateDigest(digest, (CryptoPP::byte *) chunkContent.c_str(), chunkContent.length());
+
+  unsigned int hashValue = *((unsigned int *) digest);
+  return hashValue % (NUMBER_OF_BUCKETS - 1);
 }

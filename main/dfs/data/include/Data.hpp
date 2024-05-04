@@ -6,6 +6,7 @@
 namespace Data {
   class Content;
   class DataChunker;
+  class Handler;
 }
 
 #endif // DATA_HPP

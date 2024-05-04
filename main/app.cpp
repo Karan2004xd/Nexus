@@ -1,11 +1,11 @@
-/* #include "./dfs/server/include/Server.hpp" */
-#include "dfs/database/include/DatabaseHandler.hpp"
-#include "dfs/storage/include/AwsHandler.hpp"
-#include "dfs/utility/include/JsonStringBuilder.hpp"
+#include "./dfs/server/include/Server.hpp"
+/* #include "dfs/database/include/DatabaseHandler.hpp" */
+/* #include "dfs/storage/include/AwsHandler.hpp" */
+/* #include "dfs/utility/include/JsonStringBuilder.hpp" */
 
 int main() {
-  /* Server server; */
-  /* server.start(); */
+  Server server;
+  server.start();
 
   /* Database::DatabaseHandler db; */
   /* Utility::JsonStringBuilder builder; */
@@ -22,6 +22,6 @@ int main() {
 
   /* auto resultTwo = db.getDataByRow(builder); */
   /* db.printData(resultTwo); */
-  Storage::AwsHandler handler;
+  /* Storage::AwsHandler handler; */
   return 0;
 }

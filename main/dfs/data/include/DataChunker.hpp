@@ -14,6 +14,8 @@ public:
   const std::vector<std::unique_ptr<Chunk>> &getChunks();
 
 private:
+  std::string fileId;
+
   std::string MainData;
   int MainDataSize;
   std::vector<std::unique_ptr<Chunk>> chunks;
@@ -25,5 +27,6 @@ private:
   void setChunks();
 
   void setMainData(const std::string &, int);
+  void storeFileMetaData(const Content &content);
 };
 #endif // DATA_CHUNKER_HPP

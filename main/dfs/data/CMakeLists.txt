@@ -9,7 +9,8 @@ add_library(${PROJECT_NAME}
   "./src/Content.cpp"
   "./src/DataChunker.cpp"
   "./src/Chunk.cpp"
+  "./src/Handler.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")
-target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp)
+target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp database)

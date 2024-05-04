@@ -1,10 +1,11 @@
 #include "../include/QueryParser.hpp"
+#include "../../../constants.h"
 
 void QueryParser::checkFile(const std::string &filePath) {
   if (file.is_open()) {
     file.close();
   }
-  file.open(filePath);
+  file.open(std::string(QUERIES_DIR) + '/' + filePath + ".sql");
 
   if (!file.is_open()) {
     throw std::runtime_error(filePath + " was not found");
@@ -19,7 +20,7 @@ bool QueryParser::checkForDataInSyntax() {
 
       std::string param;
       for (int i = pos + 2; i < fileContent.length(); i++) {
-        if (std::isalpha(fileContent[i]) != 0) {
+        if (std::isalpha(fileContent[i]) != 0 || fileContent[i] == '_') {
           param += fileContent[i];
         } else if (fileContent[i] == '}') {
           break;

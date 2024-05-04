@@ -7,6 +7,7 @@
 #include "../include/ServerHandler.hpp"
 #include "../../data/include/Content.hpp"
 #include "../../data/include/DataChunker.hpp"
+#include "../../data/include/Handler.hpp"
 
 namespace logging = boost::log;
 
@@ -78,9 +79,9 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
     path = previousPath;
     Data::Content content {request.body()};
     Data::DataChunker chunker {content};
+    Data::Handler handler;
 
-    /* for (const auto &chunk : chunker.getChunks()) { */
-    /* } */
+    handler.storeDataToStorage(chunker);
 
   } else {
     if (requestTarget == "/") {

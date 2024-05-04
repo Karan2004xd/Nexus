@@ -1,3 +1,4 @@
+#include <cryptopp/sha.h>
 #include <iostream>
 #include <cryptopp/aes.h>
 #include <cryptopp/modes.h>
@@ -41,6 +42,15 @@ std::string decryptString(const std::string &encryptedText, const std::string &k
   return decryptedText;
 }
 
+int bucketNum(const std::string &chunk, int numBuckets) {
+  CryptoPP::SHA256 hash;
+  CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+  hash.CalculateDigest(digest, (CryptoPP::byte *) chunk.c_str(), chunk.length());
+
+  unsigned int hashValue = *((unsigned int *) digest);
+  return hashValue % (numBuckets - 1);
+}
+
 int main() {
   size_t keySize = 16;
   std::string randomKey = generateKey(keySize);
@@ -48,6 +58,8 @@ int main() {
   std::string decryptedString = decryptString(encryptedString, randomKey);
   std::cout << "Random Key: " << randomKey << "\n\rEncrypted Text: " << encryptedString << std::endl;
   std::cout << "Decrypted Text: " << decryptedString << std::endl;
+
+  std::cout << bucketNum(encryptedString, 5) << std::endl;
   return 0;
 }
 
