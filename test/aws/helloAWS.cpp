@@ -1,21 +1,28 @@
 #include <aws/core/Aws.h>
 #include <aws/core/Region.h>
-#include <aws/core/auth/AWSCredentials.h>
+
 #include <aws/core/client/ClientConfiguration.h>
 #include <aws/s3/S3ClientConfiguration.h>
-#include <aws/s3/S3ServiceClientModel.h>
+
 #include <aws/sts/STSClient.h>
 #include <aws/s3/S3Client.h>
+
 #include <aws/s3/model/PutObjectRequest.h>
-#include <aws/core/auth/STSCredentialsProvider.h>
+#include <aws/s3/model/DeleteObjectRequest.h>
+#include <aws/s3/model/GetObjectRequest.h>
 
 #include <iostream>
+#include <sstream>
 
 using namespace Aws;
 using namespace Aws::Auth;
 
 const char *bucketName = "nex-test-bucket";
-const char *objectKey = "testObjKey2";
+const char *objectKey = "testObjKey";
+
+// Use Aws cli to configure connection
+// use command : aws configure 
+// and then enter your access key and secret access id
 
 void storeData(const std::string &data, const Aws::S3::S3Client &s3Client) {
   Aws::S3::Model::PutObjectRequest objRequest;
@@ -35,6 +42,33 @@ void storeData(const std::string &data, const Aws::S3::S3Client &s3Client) {
   }
 }
 
+void deleteData(const Aws::S3::S3Client &s3Client) {
+  Aws::S3::Model::DeleteObjectRequest request;
+  request.WithKey(objectKey).WithBucket(bucketName);
+  Aws::S3::Model::DeleteObjectOutcome outcome = s3Client.DeleteObject(request);
+
+  if (outcome.IsSuccess()) {
+    std::cout << "Successfully deleted object" << std::endl;
+  } else {
+    std::cerr << "Failed to delete the object: " << outcome.GetError() << std::endl;
+  }
+}
+
+void getData(const Aws::S3::S3Client &s3Client) {
+  std::stringstream oss;
+  Aws::S3::Model::GetObjectRequest request;
+  request.SetBucket(bucketName);
+  request.SetKey(objectKey);
+
+  Aws::S3::Model::GetObjectOutcome outcome = s3Client.GetObject(request);
+  if (outcome.IsSuccess()) {
+    oss << outcome.GetResult().GetBody().rdbuf();
+    std::cout << oss.str() << std::endl;
+  } else {
+    std::cerr << "Failed to get the object data: " << outcome.GetError() << std::endl;
+  }
+}
+
 int main() {
   Aws::SDKOptions options;
   Aws::InitAPI(options);
@@ -42,6 +76,8 @@ int main() {
 
   {
     Aws::S3::S3ClientConfiguration config;
+    /* std::string name = std::string(Aws::Region::AP_SOUTH_1); */
+    /* std::cout << name << std::endl; */
     config.region = Aws::Region::EU_NORTH_1;
 
     Aws::S3::S3Client s3Client {config};
@@ -59,7 +95,9 @@ int main() {
         std::cout << bucket.GetName() << std::endl;
       }
 
-      storeData("Hello World again", s3Client);
+      /* storeData("Hello World again", s3Client); */
+      /* deleteData(s3Client); */
+      /* getData(s3Client); */
     }
   }
   Aws::ShutdownAPI(options);
