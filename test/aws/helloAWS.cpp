@@ -15,9 +15,9 @@ using namespace Aws;
 using namespace Aws::Auth;
 
 const char *bucketName = "nex-test-bucket";
-const char *objectKey = "testObjKey";
+const char *objectKey = "testObjKey2";
 
-void storeData(const std::string &data) {
+void storeData(const std::string &data, const Aws::S3::S3Client &s3Client) {
   Aws::S3::Model::PutObjectRequest objRequest;
   objRequest.SetBucket(bucketName);
   objRequest.SetKey(objectKey);
@@ -26,10 +26,6 @@ void storeData(const std::string &data) {
   *dataStream << data;
   objRequest.SetBody(dataStream);
 
-  Aws::Client::ClientConfiguration config;
-  config.region = Aws::Region::EU_NORTH_1;
-
-  Aws::S3::S3Client s3Client {config};
 
   auto putObjectOutcome = s3Client.PutObject(objRequest);
   if (putObjectOutcome.IsSuccess()) {
@@ -45,8 +41,10 @@ int main() {
   int result = 0;
 
   {
-    Aws::Auth::AWSCredentials credentials {std::getenv("ACCESS_KEY_ID"), std::getenv("SECRET_ACCESS_KEY")};
-    Aws::S3::S3Client s3Client {credentials};
+    Aws::S3::S3ClientConfiguration config;
+    config.region = Aws::Region::EU_NORTH_1;
+
+    Aws::S3::S3Client s3Client {config};
 
     auto outcome = s3Client.ListBuckets();
 
@@ -61,8 +59,7 @@ int main() {
         std::cout << bucket.GetName() << std::endl;
       }
 
-      storeData("Hello World");
-      // need to figure some wa hree
+      storeData("Hello World again", s3Client);
     }
   }
   Aws::ShutdownAPI(options);
