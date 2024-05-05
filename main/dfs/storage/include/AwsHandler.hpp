@@ -23,7 +23,6 @@ public:
   ~AwsHandler();
 private:
   Aws::S3::S3ClientConfiguration config;
-  Aws::S3::S3Client s3Client;
   Aws::SDKOptions options;
 
   enum StorageRegions {
@@ -36,8 +35,7 @@ private:
   };
 
   std::string getBucketName(int);
-  void setRegion(int);
-  void setS3Client();
+  Aws::S3::S3Client getS3Client(int = -1);
 
   void backupData(const std::string &, const std::string &);
 

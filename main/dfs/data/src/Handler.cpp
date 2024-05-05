@@ -9,8 +9,7 @@ Handler::Handler() {
 }
 
 void Handler::storeDataToStorage(Data::DataChunker &dataChunker) {
-  auto chunks = dataChunker.getChunks();
-  for (const auto &chunk : chunks) {
+  for (const auto &chunk : dataChunker.getChunks()) {
     int bucketNumber = std::stoi(chunk->getBucketNum());
     std::string objectKey = chunk->getObjectKey();
     std::string data = chunk->getChunkContent();

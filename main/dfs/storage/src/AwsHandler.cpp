@@ -11,7 +11,7 @@ using namespace Storage;
 void AwsHandler::setupAwsConnection() {
   Aws::InitAPI(options);
   
-  s3Client = Aws::S3::S3Client {config};
+  auto s3Client = getS3Client();
   auto outCome = s3Client.ListBuckets();
 
   if (outCome.IsSuccess()) {
@@ -47,7 +47,7 @@ std::string AwsHandler::getBucketName(int bucketNumber) {
   return result;
 }
 
-void AwsHandler::setRegion(int bucketNumber) {
+Aws::S3::S3Client AwsHandler::getS3Client(int bucketNumber) {
   switch (regions[bucketNumber]) {
     case StorageRegions::MAIN_US_EAST_1:
       config.region = Aws::Region::US_EAST_1;
@@ -68,10 +68,7 @@ void AwsHandler::setRegion(int bucketNumber) {
       config.region = Aws::Region::EU_WEST_2;
       break;
   }
-}
-
-void AwsHandler::setS3Client() {
-  this->s3Client = Aws::S3::S3Client {this->config};
+  return {config};
 }
 
 void AwsHandler::backupData(const std::string &objectKey,
@@ -79,8 +76,7 @@ void AwsHandler::backupData(const std::string &objectKey,
   const int bucketNumber = 5;
   std::string bucketName = getBucketName(bucketNumber);
 
-  setRegion(bucketNumber);
-  setS3Client();
+  auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::PutObjectRequest request;
   request.SetBucket(bucketName);
@@ -103,9 +99,7 @@ void AwsHandler::storeData(int bucketNumber,
                            const std::string &objectKey,
                            const std::string &data) {
   std::string bucketName = getBucketName(bucketNumber);
-
-  setRegion(bucketNumber);
-  setS3Client();
+  auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::PutObjectRequest request;
   request.SetBucket(bucketName);
@@ -129,8 +123,7 @@ void AwsHandler::deleteData(int bucketNumber,
                             const std::string &objectKey) {
   std::string bucketName = getBucketName(bucketNumber);
 
-  setRegion(bucketNumber);
-  setS3Client();
+  auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::DeleteObjectRequest request;
   request.WithKey(objectKey).WithKey(bucketName);
@@ -148,8 +141,7 @@ std::string AwsHandler::getData(int bucketNumber, const std::string &objectKey) 
   std::ostringstream oss;
   std::string bucketName = getBucketName(bucketNumber);
 
-  setRegion(bucketNumber);
-  setS3Client();
+  auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::GetObjectRequest request;
   request.SetBucket(bucketName);
@@ -167,6 +159,7 @@ std::string AwsHandler::getData(int bucketNumber, const std::string &objectKey) 
 }
 
 AwsHandler::AwsHandler() {
+  std::cout << "Reached" << std::endl;
   setupAwsConnection();
   regions = {
     {0, StorageRegions::MAIN_US_EAST_1},

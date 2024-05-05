@@ -77,11 +77,11 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
 
   if (request.method() == http::verb::post) {
     path = previousPath;
-    Data::Content content {request.body()};
-    Data::DataChunker chunker {content};
+    /* Data::Content content {request.body()}; */
+    /* Data::DataChunker chunker {content}; */
     Data::Handler handler;
 
-    handler.storeDataToStorage(chunker);
+    /* handler.storeDataToStorage(chunker); */
 
   } else {
     if (requestTarget == "/") {

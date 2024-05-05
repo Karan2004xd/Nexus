@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project("storage")
+project(storage)
 
 set(SERVICE_COMPONENTS s3)
 find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
@@ -17,5 +17,4 @@ add_library(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")
-target_link_libraries(${PROJECT_NAME}
-        ${AWSSDK_LINK_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${AWSSDK_LINK_LIBRARIES})
