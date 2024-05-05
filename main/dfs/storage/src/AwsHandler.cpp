@@ -1,5 +1,7 @@
 #include "../include/AwsHandler.hpp"
 #include "../../../constants.h"
+#include <aws/s3/S3ClientConfiguration.h>
+
 #include <aws/s3/S3ServiceClientModel.h>
 #include <aws/s3/model/DeleteObjectRequest.h>
 #include <aws/s3/model/GetObjectRequest.h>
@@ -7,6 +9,8 @@
 #include <sstream>
 
 using namespace Storage;
+using namespace Aws;
+using namespace Aws::Auth;
 
 void AwsHandler::setupAwsConnection() {
   Aws::InitAPI(options);
@@ -48,6 +52,7 @@ std::string AwsHandler::getBucketName(int bucketNumber) {
 }
 
 Aws::S3::S3Client AwsHandler::getS3Client(int bucketNumber) {
+  Aws::S3::S3ClientConfiguration config;
   switch (regions[bucketNumber]) {
     case StorageRegions::MAIN_US_EAST_1:
       config.region = Aws::Region::US_EAST_1;
@@ -68,6 +73,7 @@ Aws::S3::S3Client AwsHandler::getS3Client(int bucketNumber) {
       config.region = Aws::Region::EU_WEST_2;
       break;
   }
+  /* std::cout << config.region << std::endl; */
   return {config};
 }
 
@@ -98,7 +104,11 @@ void AwsHandler::backupData(const std::string &objectKey,
 void AwsHandler::storeData(int bucketNumber,
                            const std::string &objectKey,
                            const std::string &data) {
+
+  /* std::cout << bucketNumber << std::endl; */
   std::string bucketName = getBucketName(bucketNumber);
+  /* std::cout << bucketName << std::endl; */
+
   auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::PutObjectRequest request;
@@ -122,11 +132,11 @@ void AwsHandler::storeData(int bucketNumber,
 void AwsHandler::deleteData(int bucketNumber,
                             const std::string &objectKey) {
   std::string bucketName = getBucketName(bucketNumber);
-
+  
   auto s3Client = getS3Client(bucketNumber);
 
   Aws::S3::Model::DeleteObjectRequest request;
-  request.WithKey(objectKey).WithKey(bucketName);
+  request.WithKey(objectKey).WithBucket(bucketName);
   Aws::S3::Model::DeleteObjectOutcome outcome = s3Client.DeleteObject(request);
   
   if (outcome.IsSuccess()) {
@@ -159,7 +169,6 @@ std::string AwsHandler::getData(int bucketNumber, const std::string &objectKey) 
 }
 
 AwsHandler::AwsHandler() {
-  std::cout << "Reached" << std::endl;
   setupAwsConnection();
   regions = {
     {0, StorageRegions::MAIN_US_EAST_1},

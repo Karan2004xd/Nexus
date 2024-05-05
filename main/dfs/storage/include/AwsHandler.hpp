@@ -2,15 +2,10 @@
 #define AWS_HANDLER_HPP
 
 #include <aws/core/Aws.h>
-#include <aws/core/Region.h>
-
 #include <aws/s3/S3Client.h>
-#include <aws/s3/S3ClientConfiguration.h>
-
 #include "Storage.hpp"
 
-using namespace Aws;
-using namespace Aws::Auth;
+// DON'T USE OR DECLARE ANY OTHER API'S BEFORE USING InitApi for Aws
 
 class Storage::AwsHandler {
 public:
@@ -22,7 +17,6 @@ public:
 
   ~AwsHandler();
 private:
-  Aws::S3::S3ClientConfiguration config;
   Aws::SDKOptions options;
 
   enum StorageRegions {

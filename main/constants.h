@@ -14,11 +14,11 @@
 
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/dfs/database/queries"
 
-#define BUCKET_MAIN_AP_SOUTH_1 "MAIN_AP_SOUTH_1"
-#define BUCKET_MAIN_AP_SOUTHEAST_1 "MAIN_AP_SOUTHEAST_1"
-#define BUCKET_MAIN_US_EAST_1_BUCKET "MAIN_US_EAST_1_BUCKET"
-#define BUCKET_MAIN_US_EAST_2_BUCKET "MAIN_US_EAST_2_BUCKET"
-#define BUCKET_MAIN_EU_NORTH_1 "MAIN_EU_NORTH_1"
+#define BUCKET_MAIN_AP_SOUTH_1 "main-ap-south-1"
+#define BUCKET_MAIN_AP_SOUTHEAST_1 "main-ap-southeast-1"
+#define BUCKET_MAIN_US_EAST_1_BUCKET "main-us-east-1-bucket"
+#define BUCKET_MAIN_US_EAST_2_BUCKET "main-us-east-2-bucket"
+#define BUCKET_MAIN_EU_NORTH_1 "main-eu-north-1"
 
-#define BUCKET_BACKUP_EU_WEST_2 "BACKUP_EU_WEST_2"
+#define BUCKET_BACKUP_EU_WEST_2 "backup-eu-west-2"
 #endif // CONSTANTS_H_IN

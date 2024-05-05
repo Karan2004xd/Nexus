@@ -17,7 +17,7 @@
 using namespace Aws;
 using namespace Aws::Auth;
 
-const char *bucketName = "nex-test-bucket";
+const char *bucketName = "main-ap-south-1";
 const char *objectKey = "testObjKey";
 
 // Use Aws cli to configure connection
@@ -80,7 +80,7 @@ int main() {
     /* std::string name = std::string(Aws::Region::AP_SOUTH_1); */
     /* std::cout << name << std::endl; */
 
-    config.region = Aws::Region::EU_NORTH_1;
+    config.region = Aws::Region::AP_SOUTH_1;
 
     Aws::S3::S3Client s3Client {config};
     auto outcome = s3Client.ListBuckets();

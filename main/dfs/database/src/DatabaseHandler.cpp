@@ -35,29 +35,27 @@ MYSQL_RES *DatabaseHandler::executeQuery(const std::string &sqlQuery) {
   return result;
 }
 
-void DatabaseHandler::updateData(const Utility::JsonStringBuilder &builder) {
-  setQuery(builder);
-  executeQuery(query);
+void DatabaseHandler::setQuery(const Utility::JsonStringBuilder &builder) {
+  std::string rawJsonData = builder.str();
+
+  QueryParser::parseJsonData(rawJsonData);
+  this->query = QueryParser::getParsedQuery();
+}
+
+void DatabaseHandler::setQuery(std::string &query) {
+  QueryParser::parseJsonData(query);
+  this->query = QueryParser::getParsedQuery();
+}
+
+void DatabaseHandler::updateData(std::string &query) { 
+  setQuery(query);
+  executeQuery(this->query);
 
   std::cout << "\nData Updated Successfully" << std::endl;
 }
 
-void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>> &data) {
-  if (data.size() > 0) {
-    std::cout << "\nPrinting data...\n" << std::endl;
-    for (const auto &dataStream : data) {
-      for (const auto &data : dataStream.second) {
-        std::cout << data << "\t";
-      }
-      std::cout << "\n";
-    }
-  } else {
-    std::cout << "The data set provided is empty" << std::endl;
-  }
-}
-
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const Utility::JsonStringBuilder &builder) {
-  setQuery(builder);
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(std::string &data) {
+  setQuery(data);
 
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
@@ -74,10 +72,11 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(
     rowNum++;
   }
   return rowData;
+
 }
 
-std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const Utility::JsonStringBuilder &builder) {
-  setQuery(builder);
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(std::string &data) {
+  setQuery(data);
 
   MYSQL_ROW row;
   MYSQL_RES *result = executeQuery(query);
@@ -98,11 +97,47 @@ std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColu
   return columnData;
 }
 
-void DatabaseHandler::setQuery(const Utility::JsonStringBuilder &builder) {
-  std::string rawJsonData = builder.str();
+void DatabaseHandler::updateData(const Utility::JsonStringBuilder &builder) {
+  std::string data = builder.str();
+  updateData(data);
+}
 
-  QueryParser::parseJsonData(rawJsonData);
-  this->query = QueryParser::getParsedQuery();
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const Utility::JsonStringBuilder &builder) {
+  std::string data = builder.str();
+  return getDataByRow(data);
+}
+
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const Utility::JsonStringBuilder &builder) {
+  std::string data = builder.str();
+  return getDataByColumn(data);
+}
+
+void DatabaseHandler::updateData(const std::unique_ptr<Utility::JsonStringBuilder> &builder) {
+  std::string data = builder->str();
+  updateData(data);
+}
+
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByRow(const std::unique_ptr<Utility::JsonStringBuilder> &builder) {
+  std::string data = builder->str();
+  return getDataByRow(data);
+}
+std::unordered_map<int, std::vector<std::string>> DatabaseHandler::getDataByColumn(const std::unique_ptr<Utility::JsonStringBuilder> &builder) {
+  std::string data = builder->str();
+  return getDataByColumn(data);
+}
+
+void DatabaseHandler::printData(std::unordered_map<int, std::vector<std::string>> &data) {
+  if (data.size() > 0) {
+    std::cout << "\nPrinting data...\n" << std::endl;
+    for (const auto &dataStream : data) {
+      for (const auto &data : dataStream.second) {
+        std::cout << data << "\t";
+      }
+      std::cout << "\n";
+    }
+  } else {
+    std::cout << "The data set provided is empty" << std::endl;
+  }
 }
 
 DatabaseHandler::DatabaseHandler() {

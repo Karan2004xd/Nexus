@@ -6,6 +6,7 @@ class Chunk {
 public:
   Chunk() = delete; 
   Chunk(const std::string &, const std::string &, size_t);
+  Chunk(const std::string &, const std::string &);
 
   const size_t getChunkSize() { return this->chunkSize; }
   const std::string getChunkContent() { return this->chunkContent; }
@@ -13,8 +14,6 @@ public:
 
   const std::string getBucketNum() { return this->bucketNum; }
   const std::string getObjectKey() { return this->objectKey; }
-
-  void decryptChunkData(const std::string &);
 
 private:
   size_t chunkSize;
@@ -30,6 +29,7 @@ private:
 
   std::string generateChunkId();
   void encryptChunkData(const std::string &);
+  void decryptChunkData();
   int bucketToAssign();
 };
 #endif // CHUNK_HPP

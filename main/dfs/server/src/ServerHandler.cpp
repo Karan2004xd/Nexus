@@ -81,7 +81,7 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
     /* Data::DataChunker chunker {content}; */
     Data::Handler handler;
 
-    /* handler.storeDataToStorage(chunker); */
+    handler.deleteDataFromStorage("nexus.txt");
 
   } else {
     if (requestTarget == "/") {

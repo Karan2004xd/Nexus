@@ -9,6 +9,11 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/sha.h>
 
+Chunk::Chunk(const std::string &encryptChunkData, const std::string &chunkId) 
+  : chunkContent(encryptChunkData), chunkId(chunkId) {
+  decryptChunkData();
+}
+
 Chunk::Chunk(const std::string &fileId, const std::string &chunkContent, size_t chunkSize)
   : chunkContent(chunkContent), chunkSize(chunkSize), fileId(fileId) {
   
@@ -70,7 +75,7 @@ void Chunk::encryptChunkData(const std::string &chunkId) {
   this->chunkContent = tempEncryptedData;
 }
 
-void Chunk::decryptChunkData(const std::string &chunkId) {
+void Chunk::decryptChunkData() {
   std::string tempDecryptedData;
   CryptoPP::AES::Decryption aesDecryption {reinterpret_cast<const unsigned char *>(chunkId.data()),
                                            CryptoPP::AES::DEFAULT_KEYLENGTH};
