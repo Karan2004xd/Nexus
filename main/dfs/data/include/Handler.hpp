@@ -4,6 +4,7 @@
 #include "../../utility/include/JsonStringBuilder.hpp"
 #include "../../database/include/DatabaseHandler.hpp"
 
+#include "Chunk.hpp"
 #include "Data.hpp"
 #include <memory>
 
@@ -12,7 +13,7 @@ public:
   Handler();
   void storeDataToStorage(Data::DataChunker &);
   void deleteDataFromStorage(const std::string &);
-  void getDataFromStorge(const std::string &);
+  std::string getDataFromStorge(const std::string &);
 private:
   std::unique_ptr<Storage::AwsHandler> awsHandler;
   std::unique_ptr<Database::DatabaseHandler> db;
@@ -21,5 +22,7 @@ private:
   std::string getFileName(const std::string &);
   void deleteChunkMetaData(const std::string &);
   void deleteFileMetaData(const std::string &);
+
+  std::string getChunksData(std::vector<std::unique_ptr<Chunk>> &);
 };
 #endif // HANDLER_HPP

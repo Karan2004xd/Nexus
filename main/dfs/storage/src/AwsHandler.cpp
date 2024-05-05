@@ -122,7 +122,7 @@ void AwsHandler::storeData(int bucketNumber,
   auto putObjectOutcome = s3Client.PutObject(request);
   if (putObjectOutcome.IsSuccess()) {
     std::cout << "Object uploaded successfully" << std::endl;
-    backupData(objectKey, data);
+    /* backupData(objectKey, data); */
   } else {
     std::cerr << "Failed to upload object to S3: " <<  putObjectOutcome.GetError() << std::endl;
     throw std::runtime_error("AwsHandler Error (storeData)");

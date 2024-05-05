@@ -4,7 +4,8 @@ project(app)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory("./dfs/server")
+# add_subdirectory("./dfs/server")
+add_subdirectory("./dfs/wasm-api")
 add_subdirectory("./dfs/data")
 add_subdirectory("./dfs/utility")
 add_subdirectory("./dfs/database")
@@ -14,5 +15,4 @@ configure_file("./constants.h.in" ${CMAKE_SOURCE_DIR}/constants.h @ONLY)
 
 add_executable(${PROJECT_NAME} "./app.cpp")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE server)
-# target_link_libraries(${PROJECT_NAME} PRIVATE storage)
+target_link_libraries(${PROJECT_NAME} PRIVATE wasm-api)

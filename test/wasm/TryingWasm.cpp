@@ -1,10 +1,10 @@
 #include <iostream>
 #include "TestClass.h"
-#include <emscripten.h>
+/* #include <emscripten.h> */
 
 // required for binding classes
-#include <emscripten/bind.h> 
-using namespace emscripten;
+/* #include <emscripten/bind.h> */ 
+/* using namespace emscripten; */
 
 // A SERVER IS A MUST FOR WASM TO WORK
 // a simple hhtp server can be started using 
@@ -85,13 +85,13 @@ using namespace emscripten;
 /* } */
 
 // calling classes from header files
-EMSCRIPTEN_BINDINGS (TestClass) {
-  class_<TestClass>("TestClass")
-    .constructor()
-    .function("findSquare", &TestClass::findSquare)
-    .function("findFactorial", &TestClass::findFactorial);
+/* EMSCRIPTEN_BINDINGS (TestClass) { */
+/*   class_<TestClass>("TestClass") */
+/*     .constructor() */
+/*     .function("findSquare", &TestClass::findSquare) */
+/*     .function("findFactorial", &TestClass::findFactorial); */
     
-}
+/* } */
 
 /* int main() { */
 /*   TestClass t; */

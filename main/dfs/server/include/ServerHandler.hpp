@@ -3,6 +3,7 @@
 
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
+#include <queue>
 #include <string>
 
 #include "../../../constants.h"
@@ -24,13 +25,14 @@ private:
   tcp::acceptor acceptor {ioContext, {tcp::v4(), DEFAULT_PORT}};
 
   std::string previousPath;
+  std::queue<http::request<http::string_body>> requestQueue;
 
   std::string getRequestTarget(const http::request<http::string_body> &);
   bool endsWith(const std::string &, const std::string &);
   std::string getMimeType(const std::string &);
   std::string readFile(const std::string &);
 
-  void handleRequest(const http::request<http::string_body> &);
+  void handleRequest();
   void handleResponse(const http::request<http::string_body> &, const std::string &);
 };
 #endif // SERVER_HANDLER_HPP

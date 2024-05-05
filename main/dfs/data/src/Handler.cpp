@@ -85,13 +85,22 @@ void Handler::deleteDataFromStorage(const std::string &fileName) {
   }
 }
 
-void Handler::getDataFromStorge(const std::string &fileName) {
+std::string Handler::getChunksData(std::vector<std::unique_ptr<Chunk>> &chunks) {
+  std::string result;
+  for (const auto &chunk : chunks) {
+    result = chunk->getChunkContent() + result;
+  }
+  return result;
+}
+
+std::string Handler::getDataFromStorge(const std::string &fileName) {
   builder->clear();
   builder->singleData("file", "data/get_data_from_storage")
           .singleData("name", fileName)
           .build();
 
   auto data = db->getDataByRow(builder);
+  std::string result;
   if (data.size() > 0) {
     std::vector<std::unique_ptr<Chunk>> chunks;
     for (const auto &rowData : data) {
@@ -102,8 +111,11 @@ void Handler::getDataFromStorge(const std::string &fileName) {
       std::string chunkData = awsHandler->getData(bucketNumber, objectKey);
       chunks.push_back(std::make_unique<Chunk>(chunkData, chunkKey));
     }
+
+    result = getChunksData(chunks);
   } else {
     std::cerr << "Data from the query is empty" << std::endl;
     throw std::runtime_error("Error in Handler (getDataFromStorge)");
   }
+  return result;
 }

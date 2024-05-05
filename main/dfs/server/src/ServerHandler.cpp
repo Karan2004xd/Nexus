@@ -3,6 +3,7 @@
 #include <boost/log/expressions.hpp>
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 #include "../include/ServerHandler.hpp"
 #include "../../data/include/Content.hpp"
@@ -10,9 +11,7 @@
 #include "../../data/include/Handler.hpp"
 
 namespace logging = boost::log;
-
-ServerHandler::ServerHandler() {
-  logging::core::get()->set_logging_enabled(true);
+ServerHandler::ServerHandler() { logging::core::get()->set_logging_enabled(true);
 }
 
 std::string ServerHandler::getRequestTarget(const http::request<http::string_body> &request) {
@@ -69,35 +68,41 @@ void ServerHandler::handleResponse(const http::request<http::string_body> &reque
   BOOST_LOG_TRIVIAL(info) << "Resposne sent";
 }
 
-void ServerHandler::handleRequest(const http::request<http::string_body> &request) {
-  std::string requestTarget = getRequestTarget(request);
+void ServerHandler::handleRequest() {
+  while (!requestQueue.empty()) {
+    http::request<http::string_body> request = requestQueue.front();
+    requestQueue.pop();
 
-  std::string pathToInterfaces = std::string(PATH_TO_INTERFACES);
-  std::string path;
+    std::string requestTarget = getRequestTarget(request);
 
-  if (request.method() == http::verb::post) {
-    path = previousPath;
-    /* Data::Content content {request.body()}; */
-    /* Data::DataChunker chunker {content}; */
-    Data::Handler handler;
+    std::string pathToInterfaces = std::string(PATH_TO_INTERFACES);
+    std::string path;
 
-    handler.deleteDataFromStorage("nexus.txt");
+    if (request.method() == http::verb::post) {
+      /* path = previousPath; */
+      /* Data::Content content {request.body()}; */
+      /* Data::DataChunker chunker {content}; */
+      /* Data::Handler handler; */
 
-  } else {
-    if (requestTarget == "/") {
-      path = pathToInterfaces + "/index.html";
-    } else if (endsWith(requestTarget, ".html")) {
-      path = pathToInterfaces + requestTarget;
-    } else if (endsWith(requestTarget, ".js")) {
-      path = pathToInterfaces + requestTarget;
-    } else if (endsWith(requestTarget, ".css")) {
-      path = pathToInterfaces + requestTarget;;
+      /* auto result = handler.getDataFromStorge("nexus.txt"); */
+      /* std::cout << result << std::endl; */
+
+    } else {
+      if (requestTarget == "/") {
+        path = pathToInterfaces + "/index.html";
+      } else if (endsWith(requestTarget, ".html")) {
+        path = pathToInterfaces + requestTarget;
+      } else if (endsWith(requestTarget, ".js")) {
+        path = pathToInterfaces + requestTarget;
+      } else if (endsWith(requestTarget, ".css")) {
+        path = pathToInterfaces + requestTarget;;
+      }
+      previousPath = path;
     }
-    previousPath = path;
-  }
 
-  BOOST_LOG_TRIVIAL(info) << "Running File from path " << path;
-  handleResponse(request, path);
+    BOOST_LOG_TRIVIAL(info) << "Running File from path " << path;
+    handleResponse(request, path);
+  }
 }
 
 void ServerHandler::startListening() {
@@ -112,7 +117,11 @@ void ServerHandler::startListening() {
       http::request<http::string_body> request;
       http::read(socket, buffer, request);
 
-      handleRequest(request);
+      requestQueue.push(request);
+
+      std::thread([this]() mutable {
+        handleRequest();
+      }).detach();
     }
   } catch (std::exception &e) {
     BOOST_LOG_TRIVIAL(fatal) << "Exception: " << e.what();
