@@ -80,12 +80,6 @@ void ServerHandler::handleRequest() {
 
     if (request.method() == http::verb::post) {
       /* path = previousPath; */
-      /* Data::Content content {request.body()}; */
-      /* Data::DataChunker chunker {content}; */
-      /* Data::Handler handler; */
-
-      /* auto result = handler.getDataFromStorge("nexus.txt"); */
-      /* std::cout << result << std::endl; */
 
     } else {
       if (requestTarget == "/") {

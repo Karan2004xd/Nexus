@@ -8,10 +8,10 @@
 class Dfs {
 public:
   Dfs(); 
-  std::string storeFile();
+  std::string storeFile(const std::string &, const std::string &);
   std::string renameFile();
-  std::string deleteFile();
-  std::string getFile();
+  std::string deleteFile(const std::string &);
+  std::string getFile(const std::string &);
 private:
   std::unique_ptr<Data::Handler> dataHandler;
 };

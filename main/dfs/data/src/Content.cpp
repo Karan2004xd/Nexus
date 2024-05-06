@@ -69,3 +69,14 @@ void Content::filterData(const std::string &rawData) {
 Content::Content(const std::string &rawData) {
   filterData(rawData);
 }
+
+Content::Content(const std::string &rawData, const std::string &fileName) {
+  setFileName(fileName);
+  setFileMainBodyInfo(rawData);
+
+  size_t pos = fileName.find('.');
+  std::string fileType = fileName.substr(pos + 1, fileName.length() - (pos + 1));
+  std::cout << fileType << std::endl;
+
+  setContentType(fileType);
+}

@@ -8,6 +8,7 @@ class Data::Content {
 public:
   Content() = delete;
   Content(const std::string &);
+  Content(const std::string &, const std::string &);
 
   std::string getFileName() const { return this->fileName; }
   int getContentLength() const { return this->contentLength; }

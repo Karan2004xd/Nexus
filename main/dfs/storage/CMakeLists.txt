@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.6)
 project(storage)
 
+set(AWSSDK_DIR "/usr/lib/cmake/AWSSDK")
 set(SERVICE_COMPONENTS s3)
+
 find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
 
 set(BUCKET_MAIN_AP_SOUTH_1 "main-ap-south-1" PARENT_SCOPE)
