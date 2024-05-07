@@ -1,9 +1,9 @@
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
 
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
+/* #include <boost/log/core.hpp> */
+/* #include <boost/log/trivial.hpp> */
+/* #include <boost/log/expressions.hpp> */
 
 #include <fstream>
 #include <iostream>
@@ -11,7 +11,7 @@
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace net = boost::asio;
-namespace logging = boost::log;
+/* namespace logging = boost::log; */
 
 using tcp = net::ip::tcp;
 
@@ -30,7 +30,7 @@ std::string getMimeType(const std::string& path) {
 std::string readFile(const std::string& path) {
   std::ifstream file(path, std::ios::binary);
   if (!file.is_open()) {
-    BOOST_LOG_TRIVIAL(fatal) << "Failed to open file";
+    /* BOOST_LOG_TRIVIAL(fatal) << "Failed to open file"; */
     throw std::runtime_error("Failed to open file: " + path);
   }
   std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
@@ -50,23 +50,25 @@ std::string getRequestTarget(const http::request<http::string_body>& request) {
 
 int main() {
   try {
-    logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::info);
+    /* logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::info); */
     net::io_context io_context;
     tcp::acceptor acceptor(io_context, {tcp::v4(), 8080});
+    std::cout << "Listening for request" << std::endl;
 
     while (true) {
       tcp::socket socket(io_context);
       acceptor.accept(socket);
-      BOOST_LOG_TRIVIAL(info) << "Socket connected";
+      /* BOOST_LOG_TRIVIAL(info) << "Socket connected"; */
 
       beast::flat_buffer buffer;
       http::request<http::string_body> request;
       http::read(socket, buffer, request);
+      std::cout << request.body() << std::endl;
 
-      BOOST_LOG_TRIVIAL(info) << "Data Read";
+      /* BOOST_LOG_TRIVIAL(info) << "Data Read"; */
 
       if (request.method() == http::verb::post) {
-        BOOST_LOG_TRIVIAL(info) << request.body();
+        /* BOOST_LOG_TRIVIAL(info) << request.body(); */
       } else {
         std::string path = "." + getRequestTarget(request);
         if (path == "./") {
