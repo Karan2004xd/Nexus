@@ -3,15 +3,13 @@
 #include <boost/log/expressions.hpp>
 #include <iostream>
 #include <fstream>
-#include <thread>
 
 #include "../include/ServerHandler.hpp"
-#include "../../data/include/Content.hpp"
-#include "../../data/include/DataChunker.hpp"
-#include "../../data/include/Handler.hpp"
+#include "../../../constants.h"
 
 namespace logging = boost::log;
-ServerHandler::ServerHandler() { logging::core::get()->set_logging_enabled(true);
+ServerHandler::ServerHandler() { 
+  logging::core::get()->set_logging_enabled(true);
 }
 
 std::string ServerHandler::getRequestTarget(const http::request<http::string_body> &request) {
@@ -45,7 +43,10 @@ std::string ServerHandler::getMimeType(const std::string &path) {
   return "application/octet_stream"; // Default MIME Type
 }
 
-void ServerHandler::handleResponse(const http::request<http::string_body> &request, const std::string &path) {
+void ServerHandler::handleResponse(const http::request<http::string_body> &request,
+                                   const std::string &path,
+                                   tcp::socket &socket
+                                   ) {
   http::response<http::string_body> response;
   response.version(request.version());
   response.result(http::status::ok);
@@ -68,54 +69,59 @@ void ServerHandler::handleResponse(const http::request<http::string_body> &reque
   BOOST_LOG_TRIVIAL(info) << "Resposne sent";
 }
 
-void ServerHandler::handleRequest() {
-  while (!requestQueue.empty()) {
-    http::request<http::string_body> request = requestQueue.front();
-    requestQueue.pop();
+void ServerHandler::handleRequest(const http::request<http::string_body> &request,
+                                  tcp::socket &socket) {
+  std::string requestTarget = getRequestTarget(request);
 
-    std::string requestTarget = getRequestTarget(request);
+  std::string pathToInterfaces = std::string(PATH_TO_INTERFACES);
+  std::string path;
 
-    std::string pathToInterfaces = std::string(PATH_TO_INTERFACES);
-    std::string path;
+  if (request.method() == http::verb::post) {
+    path = previousPath;
+    auto contentTypeIt = request.find(http::field::content_type);
+    std::string contentType;
 
-    if (request.method() == http::verb::post) {
-      /* path = previousPath; */
-
-    } else {
-      if (requestTarget == "/") {
-        path = pathToInterfaces + "/index.html";
-      } else if (endsWith(requestTarget, ".html")) {
-        path = pathToInterfaces + requestTarget;
-      } else if (endsWith(requestTarget, ".js")) {
-        path = pathToInterfaces + requestTarget;
-      } else if (endsWith(requestTarget, ".css")) {
-        path = pathToInterfaces + requestTarget;;
-      }
-      previousPath = path;
+    if (contentTypeIt != request.end()) {
+      contentType = contentTypeIt->value();
+      std::cout << contentType << std::endl;
+      std::cout << request.body() << std::endl;
     }
+  } else {
+    if (requestTarget == "/") {
+      path = pathToInterfaces + "/index.html";
+    } else if (endsWith(requestTarget, ".html")) {
+      path = pathToInterfaces + requestTarget;
+    } else if (endsWith(requestTarget, ".js")) {
+      path = pathToInterfaces + requestTarget;
+    } else if (endsWith(requestTarget, ".css")) {
+      path = pathToInterfaces + requestTarget;;
+    }
+    previousPath = path;
 
     BOOST_LOG_TRIVIAL(info) << "Running File from path " << path;
-    handleResponse(request, path);
+    handleResponse(request, path, socket);
   }
 }
 
 void ServerHandler::startListening() {
   BOOST_LOG_TRIVIAL(info) << "Server is active Running at port " << DEFAULT_PORT;
   try {
-    acceptor.accept(socket);
+    net::io_context ioContext;
+    tcp::acceptor acceptor {ioContext, {tcp::v4(), DEFAULT_PORT}};
     BOOST_LOG_TRIVIAL(info) << "Socket connected: ";
     BOOST_LOG_TRIVIAL(info) << "Reading data now...";
 
     while (true) {
+      tcp::socket socket {ioContext};
+      acceptor.accept(socket);
+
       beast::flat_buffer buffer;
       http::request<http::string_body> request;
       http::read(socket, buffer, request);
 
-      requestQueue.push(request);
-
-      std::thread([this]() mutable {
-        handleRequest();
-      }).detach();
+      handleRequest(request, socket);
+      /* std::thread([this]() mutable { */
+      /* }).detach(); */
     }
   } catch (std::exception &e) {
     BOOST_LOG_TRIVIAL(fatal) << "Exception: " << e.what();

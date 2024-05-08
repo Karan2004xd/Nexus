@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H_IN
 #define CONSTANTS_H_IN
 
-#define DEFAULT_PORT 8081
+#define DEFAULT_PORT 8080
 #define DEFAULT_HOST "localhost"
 
 #define PATH_TO_INTERFACES "/home/karan/Documents/Code/Nexus/main/dfs/interface"

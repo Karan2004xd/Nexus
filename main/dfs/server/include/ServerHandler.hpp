@@ -3,10 +3,7 @@
 
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
-#include <queue>
 #include <string>
-
-#include "../../../constants.h"
 
 namespace net = boost::asio;
 namespace beast = boost::beast;
@@ -19,20 +16,18 @@ public:
   ServerHandler();
   void startListening();
 private:
-  // Setup connection and some default setting for the server to operate
-  net::io_context ioContext;
-  tcp::socket socket {ioContext};
-  tcp::acceptor acceptor {ioContext, {tcp::v4(), DEFAULT_PORT}};
-
   std::string previousPath;
-  std::queue<http::request<http::string_body>> requestQueue;
 
   std::string getRequestTarget(const http::request<http::string_body> &);
   bool endsWith(const std::string &, const std::string &);
   std::string getMimeType(const std::string &);
   std::string readFile(const std::string &);
 
-  void handleRequest();
-  void handleResponse(const http::request<http::string_body> &, const std::string &);
+  void handleRequest(const http::request<http::string_body> &,
+                     tcp::socket &);
+
+  void handleResponse(const http::request<http::string_body> &,
+                      const std::string &,
+                      tcp::socket &);
 };
 #endif // SERVER_HANDLER_HPP
