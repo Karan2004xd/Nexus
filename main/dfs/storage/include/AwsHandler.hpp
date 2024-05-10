@@ -5,7 +5,7 @@
 #include <aws/s3/S3Client.h>
 #include "Storage.hpp"
 
-// DON'T USE OR DECLARE ANY OTHER API'S BEFORE USING InitApi for Aws
+// DON'T USE OR DECLARE ANY OTHER AWS SDK API'S BEFORE USING InitApi for Aws
 
 class Storage::AwsHandler {
 public:

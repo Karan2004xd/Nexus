@@ -5,6 +5,8 @@
 #include <fstream>
 
 #include "../include/ServerHandler.hpp"
+#include "../../dfs-api/include/Dfs.hpp"
+#include "../../utility/include/JsonStringBuilder.hpp"
 #include "../../../constants.h"
 
 namespace logging = boost::log;
@@ -43,6 +45,47 @@ std::string ServerHandler::getMimeType(const std::string &path) {
   return "application/octet_stream"; // Default MIME Type
 }
 
+std::string ServerHandler::getResponse(decodedJson &parsedJsonData) {
+  std::string requestData = parsedJsonData["request"];
+  std::string responeData;
+
+  Dfs dfs;
+  if (requestData == "put") {
+    responeData = dfs.storeFile(parsedJsonData["data"], parsedJsonData["filename"]);
+  } else if (requestData == "delete") {
+    responeData = dfs.deleteFile(parsedJsonData["filename"]);
+  } else if (requestData == "get") {
+    responeData = dfs.getFile(parsedJsonData["filename"]);
+  }
+  return responeData;
+}
+
+void ServerHandler::handleResponse(const std::string &requestJsonData,
+                                   decodedJson &parsedJsonData,
+                                   tcp::socket &socket,
+                                   unsigned int version) {
+  http::response<http::string_body> response;
+  response.version(version);
+  response.result(http::status::ok);
+  response.set(http::field::server, "Nexus Server");
+  response.set(http::field::content_type, "application/json");
+
+  std::string responseData = getResponse(parsedJsonData);
+
+  Utility::JsonStringBuilder builder;
+  builder.singleData("response", responseData).build();
+  std::string jsonData = builder.str();
+
+  try {
+    response.body() = std::move(jsonData);
+  } catch (const std::exception &e) {
+    response.result(http::status::not_found);
+    response.body() = "404 Not Found";
+  }
+  response.prepare_payload();
+  http::write(socket, response);
+}
+
 void ServerHandler::handleResponse(const http::request<http::string_body> &request,
                                    const std::string &path,
                                    tcp::socket &socket
@@ -79,12 +122,12 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
   if (request.method() == http::verb::post) {
     path = previousPath;
     auto contentTypeIt = request.find(http::field::content_type);
-    std::string contentType;
+    std::string contentType = (contentTypeIt != request.end()) ? contentTypeIt->value() : "";
 
-    if (contentTypeIt != request.end()) {
-      contentType = contentTypeIt->value();
-      std::cout << contentType << std::endl;
-      std::cout << request.body() << std::endl;
+    if (contentType == "application/json") {
+      std::string body = request.body();
+      auto parsedJsonData = decodeJsonToString(body);
+      handleResponse(body, parsedJsonData, socket, request.version());
     }
   } else {
     if (requestTarget == "/") {
@@ -120,8 +163,6 @@ void ServerHandler::startListening() {
       http::read(socket, buffer, request);
 
       handleRequest(request, socket);
-      /* std::thread([this]() mutable { */
-      /* }).detach(); */
     }
   } catch (std::exception &e) {
     BOOST_LOG_TRIVIAL(fatal) << "Exception: " << e.what();

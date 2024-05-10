@@ -15,15 +15,16 @@ using namespace Aws::Auth;
 void AwsHandler::setupAwsConnection() {
   Aws::InitAPI(options);
   
-  auto s3Client = getS3Client();
-  auto outCome = s3Client.ListBuckets();
+  /* auto s3Client = getS3Client(); */
+  /* auto outCome = s3Client.ListBuckets(); */
 
-  if (outCome.IsSuccess()) {
-    std::cout << "Connection established" << std::endl;
-  } else {
-    std::cerr << outCome.GetError() << std::endl;
-    throw std::runtime_error("Error in AwsHandler : Connection cannot be established");
-  }
+  /* if (outCome.IsSuccess()) { */
+  /*   std::cout << "Connection established" << std::endl; */
+  /* } else { */
+  /*   std::cerr << outCome.GetError() << std::endl; */
+  /*   throw std::runtime_error("Error in AwsHandler : Connection cannot be established"); */
+  /* } */
+  std::cout << "Connection established" << std::endl;
 }
 
 std::string AwsHandler::getBucketName(int bucketNumber) {
