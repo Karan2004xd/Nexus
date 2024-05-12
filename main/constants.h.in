@@ -1,0 +1,7 @@
+#ifndef CONSTANTS_H_IN
+#define CONSTANTS_H_IN
+
+#define DEFAULT_PORT @DEFAULT_PORT@
+#define DEFAULT_HOST "@DEFAULT_HOST@"
+
+#endif // CONSTANTS_H_IN
