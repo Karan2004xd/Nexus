@@ -6,7 +6,8 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 set(DEFAULT_PORT "8080" PARENT_SCOPE)
 set(DEFAULT_HOST "localhost" PARENT_SCOPE)
-
+set(POST "post" PARENT_SCOPE)
+set(GET "get" PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}
   "./src/Server.cpp"

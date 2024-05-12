@@ -3,5 +3,7 @@
 
 #define DEFAULT_PORT @DEFAULT_PORT@
 #define DEFAULT_HOST "@DEFAULT_HOST@"
+#define POST "@POST@"
+#define GET "@GET@"
 
 #endif // CONSTANTS_H_IN

@@ -1,12 +1,12 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
+
 #include "../../dfs/include/Nexus.hpp"
 #include "ServerHandler.hpp"
 
-using namespace Nexus;
-
-class Server : protected ServerHandler {
+class Nexus::Server : protected ServerHandler {
 public:
-  static void init();
+  static void run();
 };
+
 #endif // SERVER_HPP

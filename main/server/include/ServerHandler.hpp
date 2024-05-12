@@ -3,6 +3,7 @@
 
 class ServerHandler {
 protected:
-  virtual void startListeningForRequests();
+  static void startListeningForRequests();
+  static void startLogging();
 };
 #endif // SERVER_HANDLER_HPP
