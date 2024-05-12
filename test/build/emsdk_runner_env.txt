@@ -1,3 +1,0 @@
-ROOT_DIR=/home/karan/Documents/Code/Nexus/test/wasm
-HEADER_FILE=--bind
-TARGET_FILE=hello.js
