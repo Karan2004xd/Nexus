@@ -19,14 +19,9 @@ void ConnectionHandler::handleResponse(T1 &socket, unsigned int requestVersion) 
 template <typename T1, typename T2>
 void ConnectionHandler::handleRequest(const T1 &request, T2 &socket) {
   std::string requestTarget = request.target();
-  std::string requestMethod;
+  std::string requestMethod = request.method_string();
 
-  if (request.method() == http::verb::post) {
-    requestMethod = POST;
-  } else if (request.method() == http::verb::get) {
-    requestMethod = GET;
-  }
-  handleResponse(socket, request.version());
+  /* handleResponse(socket, request.version()); */
 }
 
 void ConnectionHandler::startListener() {
