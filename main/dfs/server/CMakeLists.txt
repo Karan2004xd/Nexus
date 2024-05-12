@@ -5,7 +5,7 @@ find_package(Boost REQUIRED COMPONENTS log log_setup)
 
 include_directories(${Boost_INCLUDE_DIRS})
 
-set(DEFAULT_PORT "8080" PARENT_SCOPE)
+set(DEFAULT_PORT "8082" PARENT_SCOPE)
 set(DEFAULT_HOST "localhost" PARENT_SCOPE)
 
 set(PATH_TO_INTERFACES ${CMAKE_SOURCE_DIR}/dfs/interface PARENT_SCOPE)

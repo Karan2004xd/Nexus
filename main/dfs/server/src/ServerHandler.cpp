@@ -130,6 +130,7 @@ void ServerHandler::handleRequest(const http::request<http::string_body> &reques
       handleResponse(body, parsedJsonData, socket, request.version());
     }
   } else {
+
     if (requestTarget == "/") {
       path = pathToInterfaces + "/index.html";
     } else if (endsWith(requestTarget, ".html")) {
