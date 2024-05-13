@@ -1,6 +1,15 @@
 #include "server/include/Server.hpp"
+#include "utils/include/SimpleJsonParser.hpp"
+#include <iostream>
 
 int main() {
-  Nexus::Server::run();
+  auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder()
+    .multipleData("friends", {"John Smith", "James", "Ronald"})
+    .singleData("age", "18")
+    .singleData("name", "user")
+    .getJsonData();
+
+  std::cout << Nexus::Utils::SimpleJsonParser::encodeJson(jsonData) << std::endl;
+  /* Nexus::Server::run(); */
   return 0;
 }
