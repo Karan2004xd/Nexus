@@ -1,4 +1,4 @@
-#include "../include/JsonParserBuilder.hpp"
+#include "../../include/json/JsonParserBuilder.hpp"
 
 template <typename T>
 void JsonParserBuilder::addJsonDataHelper(const std::string &name,

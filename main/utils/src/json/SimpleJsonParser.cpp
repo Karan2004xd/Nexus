@@ -1,4 +1,4 @@
-#include "../include/SimpleJsonParser.hpp"
+#include "../../include/json/SimpleJsonParser.hpp"
 #include <sstream>
 #include <stdexcept>
 

@@ -1,5 +1,5 @@
 #include "server/include/Server.hpp"
-#include "utils/include/SimpleJsonParser.hpp"
+#include "utils/include/json/SimpleJsonParser.hpp"
 #include <iostream>
 
 int main() {

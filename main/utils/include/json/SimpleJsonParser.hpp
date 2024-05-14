@@ -2,7 +2,7 @@
 #define SIMPLE_JSON_PARSER_HPP
 
 #include "JsonParser.hpp"
-#include "../../dfs/include/Nexus.hpp"
+#include "../../../dfs/include/Nexus.hpp"
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
