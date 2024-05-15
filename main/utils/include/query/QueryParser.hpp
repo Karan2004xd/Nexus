@@ -14,7 +14,7 @@ protected:
   typedef std::unordered_map<std::string, std::variant<std::string, std::vector<std::string>>> QueryParams;
   virtual void parseQueryHelper(const std::string &filePath, 
                                 QueryParams &queryParams) = 0;
-  virtual std::string getParsedData() const = 0;
+  virtual const std::string getParsedData() const = 0;
 };
 
 #endif // QUERY_PARSER_HPP

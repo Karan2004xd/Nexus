@@ -7,4 +7,4 @@ set(TEST_QUERIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/queries/test PARENT_SCOPE)
 # add_library(${PROJECT_NAME}
 # )
 
-# target_link_directories(${PROJECT_NAME} PRIVATE "./include")
+target_link_directories(${PROJECT_NAME} PRIVATE "./include")

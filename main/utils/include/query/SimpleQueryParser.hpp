@@ -16,7 +16,7 @@ public:
     return {parserResult};
   }
 
-  std::string getParsedData() const override {
+  const std::string getParsedData() const override {
     return this->query.str();
   }
 
