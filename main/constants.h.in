@@ -6,4 +6,8 @@
 #define POST "@POST@"
 #define GET "@GET@"
 
+// Queries Constants
+#define QUERIES_DIR "@QUERIES_DIR@"
+#define TEST_QUERIES_DIR "@TEST_QUERIES_DIR@"
+
 #endif // CONSTANTS_H_IN

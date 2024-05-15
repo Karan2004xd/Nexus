@@ -6,6 +6,7 @@ namespace Nexus {
   class Server;
   namespace Utils {
     class SimpleJsonParser;
+    class SimpleQueryParser;
   }
 }
 #endif // NEXUX_HPP
