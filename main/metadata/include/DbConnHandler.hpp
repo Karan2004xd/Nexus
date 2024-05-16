@@ -1,11 +1,14 @@
-#ifndef DATABASE_HPP
-#define DATABASE_HPP
+#ifndef DB_CONN_HANDLER_HPP
+#define DB_CONN_HANDLER_HPP
 #include "../../variables.h"
 #include <mysql/mysql.h>
 
-class Database {
+class DbConnHandler {
 protected:
   void checkConnection();
+  void closeConnection();
+
+  MYSQL *connection {nullptr};
 private:
   struct ConnectionDetails {
     const char *server = D_SERVER;
@@ -14,7 +17,6 @@ private:
     const char *password = PASSWORD;
   };
 
-  MYSQL *connection {nullptr};
   void setupConnection();
 };
-#endif // DATABASE_HPP
+#endif // DB_CONN_HANDLER_HPP
