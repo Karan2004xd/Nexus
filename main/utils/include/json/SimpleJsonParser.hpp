@@ -16,6 +16,7 @@ protected:
   JsonDataParams decodeJsonString(std::string &jsonString) override;
 
 public:
+  typedef JsonDataParams JsonDataParams;
   static JsonParserBuilder JsonBuilder() {
     return JsonParser::JsonBuilder();
   }

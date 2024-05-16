@@ -6,6 +6,9 @@
 #define POST "POST"
 #define GET "GET"
 
+#define FILE_NAME "filename"
+#define FILE_CONTENT "content"
+
 // Queries Constants
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
 #define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"

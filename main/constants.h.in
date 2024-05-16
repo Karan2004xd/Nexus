@@ -6,6 +6,9 @@
 #define POST "@POST@"
 #define GET "@GET@"
 
+#define FILE_NAME "@FILE_NAME@"
+#define FILE_CONTENT "@FILE_CONTENT@"
+
 // Queries Constants
 #define QUERIES_DIR "@QUERIES_DIR@"
 #define TEST_QUERIES_DIR "@TEST_QUERIES_DIR@"

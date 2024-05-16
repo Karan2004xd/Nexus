@@ -3,7 +3,16 @@
 #include "utils/include/json/SimpleJsonParser.hpp"
 #include "utils/include/query/SimpleQueryParser.hpp"
 #include "constants.h"
+#include <functional>
 #include <iostream>
+
+const uint64_t spaceSize = 1 << 30;
+
+int getHashValue(const std::string &data, int numBuckets) {
+  std::hash<std::string> strHash;
+  uint64_t hash = strHash(data);
+  return (hash % spaceSize) % numBuckets;
+}
 
 int main() {
   /* auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder() */
@@ -21,6 +30,5 @@ int main() {
   /* metadata.updateData(query); */
   /* auto dbData = metadata.getQueryDataMap(query); */
   /* metadata.printData(dbData); */
-
   return 0;
 }

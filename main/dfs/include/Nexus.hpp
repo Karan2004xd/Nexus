@@ -11,5 +11,11 @@ namespace Nexus {
   }
   
   class MetaData;
+
+  namespace Data {
+    class Cache;
+    class Contents;
+    class Chunker;
+  }
 }
 #endif // NEXUX_HPP
