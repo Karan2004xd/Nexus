@@ -81,10 +81,36 @@ SimpleQueryParser::DataType SimpleQueryParser::getDataType(const std::string &da
   return (checkForNumber(data) ? DataType::NUMBER : DataType::STRING);
 }
 
+void SimpleQueryParser::modifyPositionOfVariables(const size_t fromPos,
+                                                  VariablePos &variablePos,
+                                                  const size_t changeFactor,
+                                                  const PositionChangeType &operationType) {
+  size_t change;
+  switch (operationType) {
+    case PositionChangeType::SUBTRACT:
+      change = -(changeFactor);
+      break;
+    case PositionChangeType::ADD:
+      change = changeFactor;
+      break;
+  }
+
+  int i = 0;
+  for (auto &key : variablePos) {
+    if (i >= fromPos) {
+      key.second.first += change;
+      key.second.second += change;
+    }
+  }
+}
+
 void SimpleQueryParser::injectDataIntoFileContent(VariablePos &variablePos,
                                                   const std::string &fileContent,
                                                   QueryParams &queryParams) {
   std::string resultFileContent = fileContent;
+  const size_t lengthOfFileContent = resultFileContent.length();
+
+  int i = 0;
   for (const auto &key : queryParams) {
     if (key.first != "file") {
       if (variablePos.find(key.first) != variablePos.end()) {
@@ -97,12 +123,22 @@ void SimpleQueryParser::injectDataIntoFileContent(VariablePos &variablePos,
           value = '"' + value + '"';
         }
 
-        std::string varValue = resultFileContent.substr(firstValue + 1, secondValue);
+        std::string varValue = resultFileContent.substr(firstValue, secondValue);
         resultFileContent.replace(firstValue, secondValue, value);
+
+        size_t changeFactor;
+        if (resultFileContent.length() < lengthOfFileContent) {
+          changeFactor = lengthOfFileContent - resultFileContent.length();
+          modifyPositionOfVariables(i, variablePos, changeFactor, PositionChangeType::SUBTRACT);
+        } else if (resultFileContent.length() > lengthOfFileContent) {
+          changeFactor = resultFileContent.length() - lengthOfFileContent;
+          modifyPositionOfVariables(i, variablePos, changeFactor, PositionChangeType::ADD);
+        }
       } else {
         throw std::runtime_error("(SimpleQueryParser) : Variable ( " + key.first + " ) not found, while injecting data");
       }
     }
+    i++;
   }
   setQuery(resultFileContent);
 }

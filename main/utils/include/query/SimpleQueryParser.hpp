@@ -45,6 +45,13 @@ private:
   bool checkForNumber(const std::string &data) const;
   DataType getDataType(const std::string &data) const;
 
+  enum class PositionChangeType { ADD, SUBTRACT };
+
+  void modifyPositionOfVariables(const size_t fromPos,
+                                 VariablePos &variablePos,
+                                 const size_t changeFactor,
+                                 const PositionChangeType &operationType);
+
   void injectDataIntoFileContent(VariablePos &variablePos,
                                  const std::string &fileContent,
                                  QueryParams &queryParams);
