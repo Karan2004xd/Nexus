@@ -1,4 +1,5 @@
-#include "data/include/Chunk.hpp"
+#include "data/include/Chunker.hpp"
+#include "data/include/Contents.hpp"
 #include "metadata/include/MetaData.hpp"
 #include "server/include/Server.hpp"
 #include "utils/include/json/SimpleJsonParser.hpp"
@@ -18,9 +19,9 @@ int getHashValue(const std::string &data, int numBuckets) {
 int main() {
   /* auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder() */
   /*   .singleData("file", "parser_test_query") */
-    /* .singleData("name", "user13") */
-    /* .singleData("id", "13") */
-    /* .getJsonData(); */
+  /*   .singleData("name", "user13") */
+  /*   .singleData("id", "13") */
+  /*   .getJsonData(); */
 
   /* auto query = Nexus::Utils::SimpleQueryParser::parseQuery(TEST_QUERIES_DIR, jsonData); */
   /* std::cout << query.getParsedData() << std::endl; */
@@ -31,8 +32,14 @@ int main() {
   /* std::cout << dbData["id"][dbData["id"].size() - 1] << std::endl; */
   /* metadata.printData(dbData); */
 
-  Chunk chunk {"Hello world", 1};
-  std::cout << chunk.getDecryptedData() << std::endl;
   /* Nexus::Server::run(); */
+  /* Nexus::Data::Contents contents {jsonData}; */
+
+  /* Nexus::Data::Chunker chunker {}; */
+  /* auto chunks = chunker.getChunks(); */
+  /* std::string fileData; */
+  /* for (const auto &chunk : *chunks) { */
+  /*   fileData += chunk->getDecryptedData(); */
+  /* } */
   return 0;
 }

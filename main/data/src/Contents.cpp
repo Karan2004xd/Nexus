@@ -1,5 +1,6 @@
 #include "../include/Contents.hpp"
 #include "../../constants.h"
+#include <iostream>
 
 using namespace Data;
 
@@ -30,7 +31,7 @@ void Contents::setFileLength() {
 void Contents::setFileMemorySize() {
   size_t baseSize = sizeof(std::string);
   size_t memoryAllocSize = this->fileContent.capacity() * sizeof(char);
-  this->fileMemorySize = memoryAllocSize;
+  this->fileMemorySize = memoryAllocSize + baseSize;
 }
 
 void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams) {

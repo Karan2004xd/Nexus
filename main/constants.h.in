@@ -10,6 +10,8 @@
 #define FILE_CONTENT "@FILE_CONTENT@"
 #define CACHE_DIR "@CACHE_DIR@"
 
+#define MAIN_DIR "@MAIN_DIR@"
+
 // Queries Constants
 #define QUERIES_DIR "@QUERIES_DIR@"
 #define TEST_QUERIES_DIR "@TEST_QUERIES_DIR@"

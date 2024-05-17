@@ -10,6 +10,8 @@
 #define FILE_CONTENT "content"
 #define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.cache"
 
+#define MAIN_DIR "/home/karan/Documents/Code/Nexus/main"
+
 // Queries Constants
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
 #define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"

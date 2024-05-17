@@ -11,6 +11,10 @@ const std::string Chunk::getDecryptedData() {
   return decryptData(this->data.first, this->data.second);
 }
 
+const std::string Chunk::getEncryptedData() {
+  return this->data.second;
+}
+
 void Chunk::setRawData(const std::string &fileName) {
   if (!fileName.empty()) {
     this->data = DataEncryptor::encryptData(fileName);
@@ -38,7 +42,7 @@ void Chunk::setObjectKey() {
   std::string chunkKey = this->data.first;
   std::ostringstream oss;
   oss << this->chunkId << "_" << this->fileId << "_"
-      << chunkKey.substr(0, 10);
+      << chunkKey.substr(0, DEFAULT_OBJECT_KEY_SIZE);
 
   this->objectKey = oss.str();
 }
@@ -65,7 +69,16 @@ void Chunk::setupChunk(const std::string &rawChunkData,
   updateMetadata();
 }
 
+void Chunk::setData(const std::string &encryptedData,
+                    const std::string &chunkKey) {
+  this->data = std::make_pair(chunkKey, encryptedData);
+}
+
 Chunk::Chunk(const std::string &rawchunk, const size_t &fileId) {
   this->metaData = std::make_unique<MetaData>();
   setupChunk(rawchunk, fileId);
+}
+
+Chunk::Chunk(const std::string &encryptedData, const std::string &chunkKey) {
+  setData(encryptedData, chunkKey);
 }

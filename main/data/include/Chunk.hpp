@@ -10,9 +10,17 @@ class Chunk : protected DataEncryptor {
 public:
   Chunk() = delete;
   Chunk(const std::string &rawchunk, const size_t &fileId);
+  Chunk(const std::string &encryptedData, const std::string &chunkKey);
+
   const std::string getDecryptedData();
+  const std::string getEncryptedData();
+
 private:
+  const int DEFAULT_OBJECT_KEY_SIZE = 10;
+
   std::unique_ptr<Nexus::MetaData> metaData;
+
+  // (key, data)
   std::pair<std::string, std::string> data;
   std::string objectKey;
 
@@ -25,6 +33,9 @@ private:
   void setChunkId();
   void setObjectKey();
   void updateMetadata();
+
+  void setData(const std::string &encryptedData,
+               const std::string &chunkKey);
 
   void setupChunk(const std::string &rawChunkData,
                   const size_t &fileId);

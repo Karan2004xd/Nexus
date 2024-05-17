@@ -17,5 +17,9 @@ namespace Nexus {
     class Contents;
     class Chunker;
   }
+
+  namespace Storage {
+    class AwsS3;
+  }
 }
 #endif // NEXUX_HPP

@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME}
   "./src/DataEncryptor.cpp"
   "./src/Chunk.cpp"
   "./src/Cache.cpp"
+  "./src/Chunker.cpp"
 )
 
 target_link_directories(${PROJECT_NAME} PRIVATE "./include")
