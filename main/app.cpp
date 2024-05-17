@@ -2,6 +2,7 @@
 #include "data/include/Contents.hpp"
 #include "metadata/include/MetaData.hpp"
 #include "server/include/Server.hpp"
+#include "storage/include/AwsS3.hpp"
 #include "utils/include/json/SimpleJsonParser.hpp"
 #include "utils/include/query/SimpleQueryParser.hpp"
 #include "constants.h"
@@ -35,11 +36,13 @@ int main() {
   /* Nexus::Server::run(); */
   /* Nexus::Data::Contents contents {jsonData}; */
 
-  /* Nexus::Data::Chunker chunker {}; */
-  /* auto chunks = chunker.getChunks(); */
+  Nexus::Data::Chunker chunker {};
+  auto &chunks = chunker.getChunks();
   /* std::string fileData; */
   /* for (const auto &chunk : *chunks) { */
   /*   fileData += chunk->getDecryptedData(); */
   /* } */
+
+  Storage::AwsS3 aws {chunks};
   return 0;
 }

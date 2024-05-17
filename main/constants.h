@@ -17,5 +17,6 @@
 #define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"
 #define DATA_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/data"
 #define CACHE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/cache"
+#define STORAGE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/storage"
 
 #endif // CONSTANTS_H_IN

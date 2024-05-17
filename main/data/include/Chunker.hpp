@@ -10,8 +10,8 @@ public:
   Chunker() {};
   Chunker(const Contents &contents);
 
-  const std::vector<std::unique_ptr<Chunk>> *getChunks();
-  const std::vector<std::unique_ptr<Chunk>> *getChunks(const Contents &contents);
+  const std::vector<std::unique_ptr<Chunk>> &getChunks();
+  const std::vector<std::unique_ptr<Chunk>> &getChunks(const Contents &contents);
 private:
   MetaData metadata;
   std::vector<std::unique_ptr<Chunk>> chunks;

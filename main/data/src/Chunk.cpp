@@ -7,6 +7,14 @@
 
 using namespace Nexus;
 
+Chunk::Chunk(const Chunk &other) {
+  this->chunkId = other.chunkId;
+  this->fileId = other.fileId;
+  this->data = other.data;
+  this->objectKey = other.objectKey;
+  this->metaData = std::make_unique<MetaData>(*other.metaData);
+}
+
 const std::string Chunk::getDecryptedData() {
   return decryptData(this->data.first, this->data.second);
 }

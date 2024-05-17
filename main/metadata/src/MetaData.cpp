@@ -28,3 +28,12 @@ void MetaData::updateData(Nexus::Utils::SimpleQueryParser &queryParser) {
 const MetaData::QueryResultMap MetaData::getQueryDataMap(Utils::SimpleQueryParser &queryParser) {
   return getData(queryParser.getParsedData());
 }
+
+const std::vector<std::string> MetaData::getFieldNames(Utils::SimpleQueryParser &queryParser) {
+  std::vector<std::string> result;
+  auto queryOutput = getQueryDataMap(queryParser);
+  for (const auto &key : queryOutput) {
+    result.push_back(key.first);
+  }
+  return result;
+}

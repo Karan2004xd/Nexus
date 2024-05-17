@@ -20,6 +20,8 @@ public:
     return this->query.str();
   }
 
+  typedef QueryParams QueryParams;
+
 protected:
   SimpleQueryParser() {}
   SimpleQueryParser(const SimpleQueryParser &obj);

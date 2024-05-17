@@ -55,13 +55,13 @@ void Chunker::setupChunker(const Contents &contents) {
   setChunks(contents.getFileContent());
 }
 
-const std::vector<std::unique_ptr<Chunk>> *Chunker::getChunks() {
-  return &this->chunks;
+const std::vector<std::unique_ptr<Chunk>> &Chunker::getChunks() {
+  return this->chunks;
 }
 
-const std::vector<std::unique_ptr<Chunk>> *Chunker::getChunks(const Contents &contents) {
+const std::vector<std::unique_ptr<Chunk>> &Chunker::getChunks(const Contents &contents) {
   setupChunker(contents);
-  return &this->chunks;
+  return this->chunks;
 }
 
 Chunker::Chunker(const Contents &contents) {

@@ -11,6 +11,7 @@ public:
   Chunk() = delete;
   Chunk(const std::string &rawchunk, const size_t &fileId);
   Chunk(const std::string &encryptedData, const std::string &chunkKey);
+  Chunk(const Chunk &other);
 
   const std::string getDecryptedData();
   const std::string getEncryptedData();

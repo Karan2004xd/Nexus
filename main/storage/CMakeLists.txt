@@ -6,6 +6,7 @@ find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
 
 add_library(${PROJECT_NAME}
   "./src/AwsS3.cpp"
+  "./src/StorageBase.cpp"
 )
 
 target_link_directories(${PROJECT_NAME} PRIVATE "./include")
