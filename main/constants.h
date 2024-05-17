@@ -8,9 +8,12 @@
 
 #define FILE_NAME "filename"
 #define FILE_CONTENT "content"
+#define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.cache"
 
 // Queries Constants
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
 #define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"
+#define DATA_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/data"
+#define CACHE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/cache"
 
 #endif // CONSTANTS_H_IN

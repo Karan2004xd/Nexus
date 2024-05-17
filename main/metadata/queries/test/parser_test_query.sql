@@ -1,2 +1,1 @@
-UPDATE test SET id = $id
-WHERE name = $name;
+SELECT * FROM test;

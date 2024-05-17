@@ -67,12 +67,11 @@ SimpleQueryParser::VariablePos SimpleQueryParser::setPositionOfVaraibles(const s
 
 bool SimpleQueryParser::checkForNumber(const std::string &data) const {
   bool result {true};
-  try {
-    std::stoi(data);
-    std::stof(data);
-    std::stod(data);
-  } catch (const std::exception &) {
-    result = false;
+  for (const auto &i : data) {
+    if (!std::isdigit(i)) {
+      result = false;
+      break;
+    }
   }
   return result;
 }
@@ -110,7 +109,7 @@ void SimpleQueryParser::injectDataIntoFileContent(VariablePos &variablePos,
   std::string resultFileContent = fileContent;
   const size_t lengthOfFileContent = resultFileContent.length();
 
-  int i = 0;
+  int i = 1;
   for (const auto &key : queryParams) {
     if (key.first != "file") {
       if (variablePos.find(key.first) != variablePos.end()) {

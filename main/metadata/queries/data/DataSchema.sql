@@ -7,13 +7,22 @@ CREATE TABLE File (
   time_created TIME DEFAULT CURRENT_TIME()
 );
 
+CREATE TABLE Bucket (
+  id INT AUTO_INCREMENT,
+  PRIMARY KEY(id),
+  name VARCHAR(50) NOT NULL,
+  region VARCHAR(60) NOT NULL
+);
+
 CREATE TABLE Chunk (
   id INT AUTO_INCREMENT,
   PRIMARY KEY(id),
   chunk_key VARCHAR(40) UNIQUE NOT NULL,
-  chunk_size INT NOT NULL,
-  bucket_name VARCHAR(40) NOT NULL,
+  primary_bucket_id INT,
+  replicated_bucket_id INT,
   object_key VARCHAR(100) NOT NULL UNIQUE,
   file_id INT,
-  FOREIGN KEY(file_id) REFERENCES File(id)
+  FOREIGN KEY(file_id) REFERENCES File(id),
+  FOREIGN KEY(primary_bucket_id) REFERENCES Bucket(id),
+  FOREIGN KEY(replicated_bucket_id) REFERENCES Bucket(id)
 );
