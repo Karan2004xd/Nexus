@@ -2,6 +2,7 @@
 #define SIMPLE_QUERY_PARSER_HPP
 #include "../../../dfs/include/Nexus.hpp"
 #include "QueryParser.hpp"
+#include <map>
 #include <sstream>
 
 using namespace Nexus;
@@ -32,7 +33,7 @@ protected:
 
 private:
   std::ostringstream query;
-  typedef std::unordered_map<std::string, std::pair<size_t, size_t>> VariablePos;
+  typedef std::map<std::string, std::pair<size_t, size_t>> VariablePos;
 
   void checkFile(const std::string &filePath,
                  const std::string &fileName);

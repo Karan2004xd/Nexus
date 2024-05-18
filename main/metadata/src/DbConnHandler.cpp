@@ -12,9 +12,7 @@ void DbConnHandler::setupConnection() {
 
   if (!conn) {
     throw std::runtime_error("(DbConnHandler) : Connection Error : " + std::string(mysql_error(connection)));
-  } else {
-    std::cout << "Connected" << std::endl;
-  }
+  } 
 }
 
 void DbConnHandler::checkConnection() {

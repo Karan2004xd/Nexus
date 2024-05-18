@@ -1,13 +1,7 @@
 #include "../include/StorageBase.hpp"
 
-std::vector<std::unique_ptr<Chunk>> StorageBase::copyChunks(
-  const std::vector<std::unique_ptr<Chunk>> &original) {
-
-  std::vector<std::unique_ptr<Chunk>> copied;
-  copied.reserve(original.size());
-
+void StorageBase::setChunks(const std::vector<std::unique_ptr<Chunk>> &original) {
   for (const auto &chunk : original) {
-    copied.push_back(std::make_unique<Chunk>(*chunk));
+    this->chunks.push_back(std::make_unique<Chunk>(*chunk->clone()));
   }
-  return copied;
 }

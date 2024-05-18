@@ -12,7 +12,10 @@ Chunk::Chunk(const Chunk &other) {
   this->fileId = other.fileId;
   this->data = other.data;
   this->objectKey = other.objectKey;
-  this->metaData = std::make_unique<MetaData>(*other.metaData);
+}
+
+std::unique_ptr<Chunk> Chunk::clone() {
+  return std::make_unique<Chunk>(*this);
 }
 
 const std::string Chunk::getDecryptedData() {

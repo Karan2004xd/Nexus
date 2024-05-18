@@ -6,23 +6,41 @@
 #include "utils/include/json/SimpleJsonParser.hpp"
 #include "utils/include/query/SimpleQueryParser.hpp"
 #include "constants.h"
-#include <functional>
+#include <chrono>
+#include <fstream>
+#include <future>
 #include <iostream>
+#include <thread>
 
-const uint64_t spaceSize = 1 << 30;
+std::string getFileContent(const std::string &fileName) {
+  std::ostringstream oss;
+  oss << MAIN_DIR << "/" << fileName;
+  std::fstream file {oss.str()};
 
-int getHashValue(const std::string &data, int numBuckets) {
-  std::hash<std::string> strHash;
-  uint64_t hash = strHash(data);
-  return (hash % spaceSize) % numBuckets;
+  if (file.is_open()) {
+    oss.clear();
+    oss << file.rdbuf();
+  } else {
+    throw std::runtime_error("File not opened");
+  }
+  file.close();
+  return oss.str();
 }
+
+/* void backgroundTask(int duration) { */
+/*   std::cout << "Background Task started" << std::endl; */
+/*   std::this_thread::sleep_for(std::chrono::seconds(duration)); */
+/*   std::cout << "Background Task finished" << std::endl; */
+/* } */
 
 int main() {
   /* auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder() */
-  /*   .singleData("file", "parser_test_query") */
-  /*   .singleData("name", "user13") */
-  /*   .singleData("id", "13") */
-  /*   .getJsonData(); */
+    /* .singleData("file", "parser_test_query") */
+    /* .singleData("name", "user13") */
+    /* .singleData("id", "13") */
+    /* .singleData(FILE_NAME, "nexus.txt") */
+    /* .singleData(FILE_CONTENT, getFileContent("nexus.txt")) */
+    /* .getJsonData(); */
 
   /* auto query = Nexus::Utils::SimpleQueryParser::parseQuery(TEST_QUERIES_DIR, jsonData); */
   /* std::cout << query.getParsedData() << std::endl; */
@@ -36,13 +54,14 @@ int main() {
   /* Nexus::Server::run(); */
   /* Nexus::Data::Contents contents {jsonData}; */
 
-  Nexus::Data::Chunker chunker {};
-  auto &chunks = chunker.getChunks();
-  /* std::string fileData; */
-  /* for (const auto &chunk : *chunks) { */
-  /*   fileData += chunk->getDecryptedData(); */
-  /* } */
+  /* Nexus::Data::Chunker chunker {contents}; */
+  /* auto &chunks = chunker.getChunks(); */
 
-  Storage::AwsS3 aws {chunks};
+  /* Storage::AwsS3 aws {chunks}; */
+
+  /* std::future<void> bgFuture = std::async(std::launch::async, backgroundTask, 5); */
+  /* std::cout << "Main thread free to work" << std::endl; */
+  /* std::this_thread::sleep_for(std::chrono::seconds(7)); */
+  /* std::cout << "Main thread work done" << std::endl; */
   return 0;
 }

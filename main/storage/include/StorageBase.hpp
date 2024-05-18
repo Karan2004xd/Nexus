@@ -9,6 +9,7 @@ protected:
   virtual void deleteData(const std::string &identifier) = 0;
 
   std::vector<std::unique_ptr<Chunk>> chunks;
-  std::vector<std::unique_ptr<Chunk>> copyChunks(const std::vector<std::unique_ptr<Chunk>> &original);
+  void setChunks(const std::vector<std::unique_ptr<Chunk>> &original);
+  virtual ~StorageBase() = default;
 };
 #endif // STORAGE_BASE_HPP

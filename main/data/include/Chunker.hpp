@@ -19,7 +19,7 @@ private:
   size_t fileSize;
   size_t fileId;
 
-  const int MAX_CHUNKS = 4;
+  const int MAX_CHUNKS = 3;
 
   void setFileSize(const size_t &fileSize) { this->fileSize = fileSize; }
   void setChunks(const std::string &fileData);

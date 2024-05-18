@@ -15,6 +15,9 @@ public:
 
   const std::string getDecryptedData();
   const std::string getEncryptedData();
+  const std::string getObjectKey() { return this->objectKey; }
+
+  std::unique_ptr<Chunk> clone();
 
 private:
   const int DEFAULT_OBJECT_KEY_SIZE = 10;

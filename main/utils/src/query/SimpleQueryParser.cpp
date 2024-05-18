@@ -1,6 +1,7 @@
 #include "../../include/query/SimpleQueryParser.hpp"
 #include <cctype>
 #include <fstream>
+#include <iostream>
 
 using namespace Utils;
 
@@ -100,6 +101,7 @@ void SimpleQueryParser::modifyPositionOfVariables(const size_t fromPos,
       key.second.first += change;
       key.second.second += change;
     }
+    i++;
   }
 }
 
@@ -125,14 +127,7 @@ void SimpleQueryParser::injectDataIntoFileContent(VariablePos &variablePos,
         std::string varValue = resultFileContent.substr(firstValue, secondValue);
         resultFileContent.replace(firstValue, secondValue, value);
 
-        size_t changeFactor;
-        if (resultFileContent.length() < lengthOfFileContent) {
-          changeFactor = lengthOfFileContent - resultFileContent.length();
-          modifyPositionOfVariables(i, variablePos, changeFactor, PositionChangeType::SUBTRACT);
-        } else if (resultFileContent.length() > lengthOfFileContent) {
-          changeFactor = resultFileContent.length() - lengthOfFileContent;
-          modifyPositionOfVariables(i, variablePos, changeFactor, PositionChangeType::ADD);
-        }
+        variablePos = setPositionOfVaraibles(resultFileContent, queryParams);
       } else {
         throw std::runtime_error("(SimpleQueryParser) : Variable ( " + key.first + " ) not found, while injecting data");
       }
