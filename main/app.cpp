@@ -34,13 +34,13 @@ std::string getFileContent(const std::string &fileName) {
 /* } */
 
 int main() {
-  /* auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder() */
+  auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder()
     /* .singleData("file", "parser_test_query") */
     /* .singleData("name", "user13") */
     /* .singleData("id", "13") */
-    /* .singleData(FILE_NAME, "nexus.txt") */
-    /* .singleData(FILE_CONTENT, getFileContent("nexus.txt")) */
-    /* .getJsonData(); */
+    .singleData(FILE_NAME, "nexus.txt")
+    .singleData(FILE_CONTENT, getFileContent("nexus.txt"))
+    .getJsonData();
 
   /* auto query = Nexus::Utils::SimpleQueryParser::parseQuery(TEST_QUERIES_DIR, jsonData); */
   /* std::cout << query.getParsedData() << std::endl; */
@@ -52,12 +52,12 @@ int main() {
   /* metadata.printData(dbData); */
 
   /* Nexus::Server::run(); */
-  /* Nexus::Data::Contents contents {jsonData}; */
+  Nexus::Data::Contents contents {jsonData};
 
-  /* Nexus::Data::Chunker chunker {contents}; */
-  /* auto &chunks = chunker.getChunks(); */
+  Nexus::Data::Chunker chunker {contents};
+  auto &chunks = chunker.getChunks();
 
-  /* Storage::AwsS3 aws {chunks}; */
+  Storage::AwsS3 aws {chunks};
 
   /* std::future<void> bgFuture = std::async(std::launch::async, backgroundTask, 5); */
   /* std::cout << "Main thread free to work" << std::endl; */
