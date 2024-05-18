@@ -27,12 +27,6 @@ std::string getFileContent(const std::string &fileName) {
   return oss.str();
 }
 
-/* void backgroundTask(int duration) { */
-/*   std::cout << "Background Task started" << std::endl; */
-/*   std::this_thread::sleep_for(std::chrono::seconds(duration)); */
-/*   std::cout << "Background Task finished" << std::endl; */
-/* } */
-
 int main() {
   auto jsonData = Nexus::Utils::SimpleJsonParser::JsonBuilder()
     /* .singleData("file", "parser_test_query") */
@@ -52,16 +46,19 @@ int main() {
   /* metadata.printData(dbData); */
 
   /* Nexus::Server::run(); */
-  Nexus::Data::Contents contents {jsonData};
+  /* Nexus::Data::Contents contents {jsonData}; */
 
-  Nexus::Data::Chunker chunker {contents};
-  auto &chunks = chunker.getChunks();
+  /* Nexus::Data::Chunker chunker {contents}; */
+  /* auto &chunks = chunker.getChunks(); */
 
-  Storage::AwsS3 aws {chunks};
+  Storage::AwsS3 aws;
+  /* aws.storeData(chunks); */
 
-  /* std::future<void> bgFuture = std::async(std::launch::async, backgroundTask, 5); */
-  /* std::cout << "Main thread free to work" << std::endl; */
-  /* std::this_thread::sleep_for(std::chrono::seconds(7)); */
-  /* std::cout << "Main thread work done" << std::endl; */
+  /* auto resultChunks = aws.getData(1); */
+  /* for (const auto &chunk : resultChunks) { */
+  /*   std::cout << "\n"; */
+  /*   std::cout << chunk->getDecryptedData() << std::endl; */
+  /*   std::cout << "\n"; */
+  /* } */
   return 0;
 }
