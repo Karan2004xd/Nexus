@@ -5,8 +5,14 @@
 class StorageBase {
 protected:
   virtual void storeData(const std::vector<std::unique_ptr<Chunk>> &chunks) = 0;
+
   virtual std::vector<std::unique_ptr<Chunk>> getData(const size_t &fileId) = 0;
+  virtual std::vector<std::unique_ptr<Chunk>> getBackupData(const size_t &fileId) = 0;
+
   virtual void deleteData(const size_t &fileId) = 0;
+  virtual void deleteBackupData(const size_t &fileId) = 0;
+
+  virtual void restoreData(const std::vector<std::unique_ptr<Chunk>> &chunks, const size_t &filedId) = 0;
 
   virtual ~StorageBase() = default;
 };

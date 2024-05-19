@@ -39,10 +39,16 @@ DbOperHandler::QueryResultMap DbOperHandler::getData(const std::string &query) {
 
   while ((row = mysql_fetch_row(queryResult)) != NULL) {
     for (int i = 0; i < mysql_num_fields(queryResult); i++) {
-      if (result.find(fields[i]) != result.end()) {
-        result[fields[i]].push_back(row[i]);
+      std::string rowValue;
+      if (row[i] == NULL) {
+        rowValue = "NULL";
       } else {
-        result[fields[i]] = {row[i]};
+        rowValue = row[i];
+      }
+      if (result.find(fields[i]) != result.end()) {
+        result[fields[i]].push_back(rowValue);
+      } else {
+        result[fields[i]] = {rowValue};
       }
     }
   }

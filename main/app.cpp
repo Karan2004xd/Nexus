@@ -6,11 +6,8 @@
 #include "utils/include/json/SimpleJsonParser.hpp"
 #include "utils/include/query/SimpleQueryParser.hpp"
 #include "constants.h"
-#include <chrono>
 #include <fstream>
-#include <future>
 #include <iostream>
-#include <thread>
 
 std::string getFileContent(const std::string &fileName) {
   std::ostringstream oss;
@@ -19,6 +16,7 @@ std::string getFileContent(const std::string &fileName) {
 
   if (file.is_open()) {
     oss.clear();
+    oss.str(std::string{});
     oss << file.rdbuf();
   } else {
     throw std::runtime_error("File not opened");
@@ -37,12 +35,11 @@ int main() {
     .getJsonData();
 
   /* auto query = Nexus::Utils::SimpleQueryParser::parseQuery(TEST_QUERIES_DIR, jsonData); */
-  /* std::cout << query.getParsedData() << std::endl; */
 
   /* Nexus::MetaData metadata; */
   /* metadata.updateData(query); */
   /* auto dbData = metadata.getQueryDataMap(query); */
-  /* std::cout << dbData["id"][dbData["id"].size() - 1] << std::endl; */
+  /* std::cout << dbData["id"][0] << std::endl; */
   /* metadata.printData(dbData); */
 
   /* Nexus::Server::run(); */
@@ -55,10 +52,25 @@ int main() {
   /* aws.storeData(chunks); */
 
   /* auto resultChunks = aws.getData(1); */
+  /* std::string result; */
   /* for (const auto &chunk : resultChunks) { */
-  /*   std::cout << "\n"; */
-  /*   std::cout << chunk->getDecryptedData() << std::endl; */
-  /*   std::cout << "\n"; */
+  /*   result += chunk->getDecryptedData(); */
   /* } */
+
+  /* std::cout << "\n"; */
+  /* std::cout << result << std::endl; */
+  /* std::cout << "\n"; */
+
+  /* aws.deleteData(1); */
+  /* auto restoredChunks = aws.getBackupData(1); */
+  /* std::string result; */
+  /* for (const auto &chunk : restoredChunks) { */
+  /*   result += chunk->getDecryptedData(); */
+  /* } */
+  /* std::cout << "\n"; */
+  /* std::cout << result << std::endl; */
+  /* std::cout << "\n"; */
+  aws.deleteBackupData(1);
+  /* aws.restoreData(restoredChunks, 1); */
   return 0;
 }

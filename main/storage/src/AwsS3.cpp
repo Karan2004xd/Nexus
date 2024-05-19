@@ -1,6 +1,7 @@
 #include "../include/AwsS3.hpp"
 
 #include <aws/s3/S3ClientConfiguration.h>
+#include <aws/s3/S3Errors.h>
 #include <aws/s3/S3ServiceClientModel.h>
 
 #include <aws/s3/model/GetBucketLocationRequest.h>
@@ -78,9 +79,95 @@ MetaData::QueryResultMap AwsS3::getDataHelper(const size_t &fileId) {
 }
 
 std::unique_ptr<Chunk> AwsS3::getDataHelper2(MetaData::QueryResultMap &queryOutput,
-                                             int i) {
+                                             int i,
+                                             const BucketType &bucketType) {
   std::string chunkKey = queryOutput.at("chunk_key")[i];
+  std::string objectKey = queryOutput.at("object_key")[i];
+  std::string data;
 
+  if (bucketType == BucketType::PRIMARY) {
+    size_t primaryBucketId = std::stoi(queryOutput.at("primary_bucket_id")[i]) - 1;
+
+    std::string primaryBucketName = this->buckets.at(primaryBucketId).first;
+    std::string primaryBucketRegion = this->buckets.at(primaryBucketId).second;
+
+    auto primaryBucketConfig = getConfig(primaryBucketRegion);
+    try {
+      data = AwsCrudOperHandler::getData(primaryBucketConfig, primaryBucketName, objectKey);
+    } catch (const std::exception &error) {
+      std::string errorStr = error.what();
+      if (errorStr == "SERVICE FAILURE") {
+        getDataHelper2(queryOutput, i, BucketType::REPLICATION);
+      }
+    }
+  } else if (bucketType == BucketType::REPLICATION) {
+    size_t replicationBucketId = std::stoi(queryOutput.at("replicated_bucket_id")[i]) - 1;
+
+    std::string replicationBucketName = this->buckets.at(replicationBucketId).first;
+    std::string replicationBucketRegion = this->buckets.at(replicationBucketId).second;
+
+    auto replicationBucketConfig = getConfig(replicationBucketRegion);
+    data = AwsCrudOperHandler::getData(replicationBucketConfig, replicationBucketName, objectKey);
+  }
+  return std::make_unique<Chunk>(data, chunkKey);
+}
+
+std::vector<std::unique_ptr<Chunk>> AwsS3::getData(const size_t &fileId) {
+  std::vector<std::unique_ptr<Chunk>> result;
+  std::vector<std::future<std::unique_ptr<Chunk>>> activeThreads;
+
+  auto queryOutput = getDataHelper(fileId);
+  size_t lenghtOfColumn = queryOutput["chunk_key"].size();
+
+  std::cout << "Fetching Data" << std::endl;
+
+  for (int i = 0; i < lenghtOfColumn; i++) {
+    activeThreads.push_back(
+      std::async(&AwsS3::getDataHelper2, this,
+                 std::ref(queryOutput), i, BucketType::PRIMARY)
+    );
+  }
+
+  for (auto &thread : activeThreads) {
+    thread.wait();
+    result.push_back(thread.get());
+  }
+  return result;
+}
+
+std::vector<std::unique_ptr<Chunk>> AwsS3::getBackupData(const size_t &fileId) {
+  std::vector<std::unique_ptr<Chunk>> result;
+  std::vector<std::future<std::unique_ptr<Chunk>>> activeThreads;
+
+  auto queryOutput = getDataHelper(fileId);
+  size_t lenghtOfColumn = queryOutput["chunk_key"].size();
+
+  std::cout << "Fetching Data" << std::endl;
+
+  for (int i = 0; i < lenghtOfColumn; i++) {
+    activeThreads.push_back(
+      std::async(&AwsS3::getDataHelper2, this,
+                 std::ref(queryOutput), i, BucketType::REPLICATION)
+    );
+  }
+
+  for (auto &thread : activeThreads) {
+    thread.wait();
+    result.push_back(thread.get());
+  }
+  return result;
+}
+
+void AwsS3::restoreData(const std::vector<std::unique_ptr<Chunk>> &chunks, 
+                        const size_t &fileId) {
+  std::vector<std::future<std::unique_ptr<Chunk>>> activeThreads;
+  deleteBackupData(fileId);
+  storeData(chunks);
+}
+
+void AwsS3::deleteDataHelper(MetaData::QueryResultMap &queryOutput,
+                             int i,
+                             const BucketType &bucketType) {
   size_t primaryBucketId = std::stoi(queryOutput.at("primary_bucket_id")[i]) - 1;
   size_t replicationBucketId = std::stoi(queryOutput.at("replicated_bucket_id")[i]) - 1;
 
@@ -95,40 +182,65 @@ std::unique_ptr<Chunk> AwsS3::getDataHelper2(MetaData::QueryResultMap &queryOutp
   auto primaryBucketConfig = getConfig(primaryBucketRegion);
   auto replicationBucketConfig = getConfig(replicationBucketRegion);
 
-  std::string data;
-  data = AwsCrudOperHandler::getData(primaryBucketConfig, primaryBucketName, objectKey);
-  /* try { */
-  /* } catch (const std::exception &) { */
-  /*   data = AwsCrudOperHandler::getData(replicationBucketConfig, replicationBucketName, objectKey); */
-  /* } */
-  return std::make_unique<Chunk>(data, chunkKey);
+  if (bucketType == BucketType::PRIMARY) {
+    AwsCrudOperHandler::deleteData(primaryBucketConfig, primaryBucketName, objectKey);
+  } else if (bucketType == BucketType::REPLICATION) {
+    AwsCrudOperHandler::deleteData(replicationBucketId, replicationBucketName, objectKey);
+  }
 }
 
-std::vector<std::unique_ptr<Chunk>> AwsS3::getData(const size_t &fileId) {
-  std::vector<std::unique_ptr<Chunk>> result;
-  std::vector<std::future<std::unique_ptr<Chunk>>> activeThreads;
+void AwsS3::updateMetaDataFordeletedData(const BucketType &bucketType,
+                                         const size_t &fileId) {
+  std::string queryFile;
+  if (bucketType == BucketType::PRIMARY) {
+    queryFile = "UpdatePrimaryBucketNumber";
+  } else if (bucketType == BucketType::REPLICATION) {
+    queryFile = "DeleteDataQuery";
+  }
+  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
+    .singleData("file", queryFile)
+    .singleData("file_id", std::to_string(fileId))
+    .getJsonData();
+
+  auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
+  metadata.updateData(queryData);
+}
+
+void AwsS3::deleteData(const size_t &fileId) {
+  std::vector<std::future<void>> activeThreads;
 
   auto queryOutput = getDataHelper(fileId);
   size_t lenghtOfColumn = queryOutput["chunk_key"].size();
 
   for (int i = 0; i < lenghtOfColumn; i++) {
     activeThreads.push_back(
-      std::async(&AwsS3::getDataHelper2, this,
-                 std::ref(queryOutput), i)
+      std::async(&AwsS3::deleteDataHelper, this,
+                 std::ref(queryOutput), i, BucketType::PRIMARY)
     );
   }
-
   for (auto &thread : activeThreads) {
     thread.wait();
-    result.push_back(thread.get());
   }
-  return result;
+  updateMetaDataFordeletedData(BucketType::PRIMARY, fileId);
 }
 
-void AwsS3::deleteData(const size_t &fileId) {
+void AwsS3::deleteBackupData(const size_t &fileId) {
+  std::vector<std::future<void>> activeThreads;
 
+  auto queryOutput = getDataHelper(fileId);
+  size_t lenghtOfColumn = queryOutput["chunk_key"].size();
+
+  for (int i = 0; i < lenghtOfColumn; i++) {
+    activeThreads.push_back(
+      std::async(&AwsS3::deleteDataHelper, this,
+                 std::ref(queryOutput), i, BucketType::REPLICATION)
+    );
+  }
+  for (auto &thread : activeThreads) {
+    thread.wait();
+  }
+  updateMetaDataFordeletedData(BucketType::REPLICATION, fileId);
 }
-
 
 AwsS3::~AwsS3() {
   Aws::ShutdownAPI(options);
