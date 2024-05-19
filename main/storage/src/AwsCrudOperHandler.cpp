@@ -50,8 +50,8 @@ void AwsCrudOperHandler::deleteData(const Aws::S3::S3ClientConfiguration &config
     std::cout << "Bucket Name: " << bucketName << std::endl;
     std::cout << "Object Key: " << objectKey << std::endl;
   } else {
-    std::cerr << "Failed to delete the object: " << outcome.GetError() << std::endl;
-    throw std::runtime_error("AwsHandler Error (deleteData)");
+    std::cerr << "\nFailed to delete the object: " << outcome.GetError() << std::endl;
+    throw std::runtime_error("AwsHandler Error (deleteData)\n");
   }
 }
 

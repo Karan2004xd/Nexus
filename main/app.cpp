@@ -60,17 +60,8 @@ int main() {
   /* std::cout << "\n"; */
   /* std::cout << result << std::endl; */
   /* std::cout << "\n"; */
-
   /* aws.deleteData(1); */
-  /* auto restoredChunks = aws.getBackupData(1); */
-  /* std::string result; */
-  /* for (const auto &chunk : restoredChunks) { */
-  /*   result += chunk->getDecryptedData(); */
-  /* } */
-  /* std::cout << "\n"; */
-  /* std::cout << result << std::endl; */
-  /* std::cout << "\n"; */
-  aws.deleteBackupData(1);
-  /* aws.restoreData(restoredChunks, 1); */
+  /* aws.restoreData(1); */
+  /* aws.deleteBackupData(1); */
   return 0;
 }

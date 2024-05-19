@@ -1,1 +1,2 @@
-SELECT * FROM test;
+DROP TABLE File;
+DROP TABLE Chunk;

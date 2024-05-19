@@ -11,6 +11,12 @@ public:
   Chunk() = delete;
   Chunk(const std::string &rawchunk, const size_t &fileId);
   Chunk(const std::string &encryptedData, const std::string &chunkKey);
+
+  Chunk(const std::string &objectKey,
+        const std::string &chunkKey,
+        const std::string &data,
+        const size_t &fileId);
+
   Chunk(const Chunk &other);
 
   const std::string getDecryptedData();
@@ -22,7 +28,7 @@ public:
 private:
   const int DEFAULT_OBJECT_KEY_SIZE = 10;
 
-  std::unique_ptr<Nexus::MetaData> metaData;
+  Nexus::MetaData metaData;
 
   // (key, data)
   std::pair<std::string, std::string> data;

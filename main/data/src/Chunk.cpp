@@ -39,7 +39,7 @@ void Chunk::setChunkId() {
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
 
-  auto queryOutput = metaData->getQueryDataMap(queryData);
+  auto queryOutput = metaData.getQueryDataMap(queryData);
   if (queryOutput.size() > 0) {
     auto ids = queryOutput.at("id");
     this->chunkId = std::stoi(ids[ids.size() - 1]);
@@ -67,8 +67,8 @@ void Chunk::updateMetadata() {
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
-  /* std::cout << queryData.getParsedData() << std::endl; */
-  metaData->updateData(queryData);
+  std::cout << queryData.getParsedData() << std::endl;
+  metaData.updateData(queryData);
 }
 
 void Chunk::setupChunk(const std::string &rawChunkData,
@@ -86,10 +86,24 @@ void Chunk::setData(const std::string &encryptedData,
 }
 
 Chunk::Chunk(const std::string &rawchunk, const size_t &fileId) {
-  this->metaData = std::make_unique<MetaData>();
   setupChunk(rawchunk, fileId);
 }
 
 Chunk::Chunk(const std::string &encryptedData, const std::string &chunkKey) {
   setData(encryptedData, chunkKey);
+}
+
+Chunk::Chunk(const std::string &objectKey,
+             const std::string &chunkKey,
+             const std::string &data,
+             const size_t &fileId) {
+  this->objectKey = objectKey;
+
+  setData(data, chunkKey);
+  setFileId(fileId);
+
+  setChunkId();
+  setObjectKey();
+
+  updateMetadata();
 }
