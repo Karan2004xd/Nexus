@@ -27,6 +27,7 @@ public:
 
 private:
   const int DEFAULT_OBJECT_KEY_SIZE = 10;
+  enum ChunkIdType { NEW, OLD };
 
   Nexus::MetaData metaData;
 
@@ -37,11 +38,18 @@ private:
   size_t chunkId;
   size_t fileId;
 
+  size_t getFileIdUsingChunkKey(const std::string &chunkKey);
+  std::string getObjectKeyUsingChunkKey(const std::string &chunkKey,
+                                        const std::string &queryFileName = {});
+
   void setFileId(const size_t &fileId) { this->fileId = fileId; }
   void setRawData(const std::string &fileName);
 
   void setChunkId();
+
   void setObjectKey();
+  void setObjectKey(const std::string &objectKey) { this->objectKey = objectKey; };
+
   void updateMetadata();
 
   void setData(const std::string &encryptedData,

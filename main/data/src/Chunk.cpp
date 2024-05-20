@@ -67,8 +67,46 @@ void Chunk::updateMetadata() {
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
-  std::cout << queryData.getParsedData() << std::endl;
+  /* std::cout << queryData.getParsedData() << std::endl; */
   metaData.updateData(queryData);
+}
+
+std::string Chunk::getObjectKeyUsingChunkKey(const std::string &chunkKey,
+                                             const std::string &queryFileName) {
+  std::string fileName;
+  if (queryFileName.empty()) {
+    fileName = "GetObjectKeyFromChunk";
+  } else {
+    fileName = queryFileName;
+  }
+
+  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
+    .singleData("file", fileName)
+    .singleData("chunk_key", chunkKey)
+    .getJsonData();
+
+  auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
+
+  auto queryOutput = metaData.getQueryDataMap(queryData);
+  std::string result;
+
+  try {
+    result = queryOutput.at("object_key").at(0);
+  } catch (const std::exception &) {
+    result = getObjectKeyUsingChunkKey(chunkKey, "GetObjectKeyFromTrash");
+  }
+  return result;
+}
+
+size_t Chunk::getFileIdUsingChunkKey(const std::string &chunkKey) {
+  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
+    .singleData("file", "GetFileIdFromChunk")
+    .singleData("chunk_key", chunkKey)
+    .getJsonData();
+
+  auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
+  auto queryOutput = metaData.getQueryDataMap(queryData);
+  return std::stoi(queryOutput.at("file_id").at(0));
 }
 
 void Chunk::setupChunk(const std::string &rawChunkData,
@@ -91,6 +129,7 @@ Chunk::Chunk(const std::string &rawchunk, const size_t &fileId) {
 
 Chunk::Chunk(const std::string &encryptedData, const std::string &chunkKey) {
   setData(encryptedData, chunkKey);
+  setObjectKey(getObjectKeyUsingChunkKey(chunkKey));
 }
 
 Chunk::Chunk(const std::string &objectKey,

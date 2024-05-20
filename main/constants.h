@@ -8,7 +8,7 @@
 
 #define FILE_NAME "filename"
 #define FILE_CONTENT "content"
-#define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.cache"
+#define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.NexusCache"
 
 #define MAIN_DIR "/home/karan/Documents/Code/Nexus/main"
 

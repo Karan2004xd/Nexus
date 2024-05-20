@@ -83,6 +83,7 @@ void AwsS3SetupHandler::addNewBucketsToMetaData(BucketsParam &newBuckets) {
 void AwsS3SetupHandler::setupBuckets() {
   std::ostringstream oss;
 
+  std::cout << "\nChecking for any new buckets added..." << std::endl;
   auto existingBuckets = getExistingBuckets();
   BucketsParam newBuckets = {
     {"name", {}},
@@ -107,7 +108,10 @@ void AwsS3SetupHandler::setupBuckets() {
         std::string location = getBucketLocation(bucketName, s3Client);
         newBuckets["name"].push_back(bucketName);
         newBuckets["region"].push_back(location);
-        std::cout << bucketName << " " << location << std::endl;
+
+        std::cout << "\nNew bucket Found: " << std::endl;
+        std::cout << "Name : " << bucketName << std::endl;
+        std::cout << "Region : " << location << std::endl;
       }
     }
 
@@ -118,6 +122,8 @@ void AwsS3SetupHandler::setupBuckets() {
         existingBuckets["name"].push_back(newBuckets["name"][i]);
         existingBuckets["region"].push_back(newBuckets["region"][i]);
       }
+    } else {
+      std::cout << "No new buckets found. Everything is updated" << std::endl;
     }
 
     setBuckets(existingBuckets);

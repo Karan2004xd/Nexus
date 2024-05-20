@@ -78,6 +78,7 @@ MetaData::QueryResultMap AwsS3::getDataHelper(const size_t &fileId,
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
   auto queryOutput = metadata.getQueryDataMap(queryData);
+  metadata.printData(queryOutput);
 
   if (queryOutput["chunk_key"].size() <= 0) {
     throw std::runtime_error("(AwsS3) : No chunks found in getDataHelper, for the given file id");
@@ -90,6 +91,7 @@ std::unique_ptr<Chunk> AwsS3::getDataHelper2(MetaData::QueryResultMap &queryOutp
                                              const BucketType &bucketType) {
   std::string chunkKey = queryOutput.at("chunk_key")[i];
   std::string objectKey = queryOutput.at("object_key")[i];
+
   std::string data;
 
   if (bucketType == BucketType::PRIMARY) {
@@ -108,7 +110,7 @@ std::unique_ptr<Chunk> AwsS3::getDataHelper2(MetaData::QueryResultMap &queryOutp
       }
     }
   } else if (bucketType == BucketType::REPLICATION) {
-    size_t replicationBucketId = std::stoi(queryOutput.at("replicated_bucket_id")[i]) - 1;
+    size_t replicationBucketId = std::stoi(queryOutput.at("replicated_bucket_id").at(i)) - 1;
 
     std::string replicationBucketName = this->buckets.at(replicationBucketId).first;
     std::string replicationBucketRegion = this->buckets.at(replicationBucketId).second;
@@ -126,7 +128,7 @@ std::vector<std::unique_ptr<Chunk>> AwsS3::getData(const size_t &fileId) {
   auto queryOutput = getDataHelper(fileId, BucketType::PRIMARY);
   size_t lenghtOfColumn = queryOutput["chunk_key"].size();
 
-  std::cout << "Fetching Data" << std::endl;
+  std::cout << "\nFetching Data..." << std::endl;
 
   for (int i = 0; i < lenghtOfColumn; i++) {
     activeThreads.push_back(
@@ -139,6 +141,7 @@ std::vector<std::unique_ptr<Chunk>> AwsS3::getData(const size_t &fileId) {
     thread.wait();
     result.push_back(thread.get());
   }
+  std::cout << "Data fetched successfully" << std::endl;
   return result;
 }
 
@@ -149,7 +152,7 @@ std::vector<std::unique_ptr<Chunk>> AwsS3::getBackupData(const size_t &fileId) {
   auto queryOutput = getDataHelper(fileId, BucketType::REPLICATION);
   size_t lenghtOfColumn = queryOutput["chunk_key"].size();
 
-  std::cout << "Fetching Data" << std::endl;
+  std::cout << "\nFetching Backup Data..." << std::endl;
 
   for (int i = 0; i < lenghtOfColumn; i++) {
     activeThreads.push_back(
@@ -162,6 +165,8 @@ std::vector<std::unique_ptr<Chunk>> AwsS3::getBackupData(const size_t &fileId) {
     thread.wait();
     result.push_back(thread.get());
   }
+
+  std::cout << "Backup Data fetched successfully" << std::endl;
   return result;
 }
 
@@ -369,6 +374,7 @@ size_t AwsS3::getCurrentFileId() {
 
 void AwsS3::restoreData(const size_t &fileId) {
   auto chunks = getBackupData(fileId);
+  std::cout << "Reached" << std::endl;
 
   auto fileData = getFileFromTrash(fileId);
   updateFileMetaDataForRestore(fileData);
