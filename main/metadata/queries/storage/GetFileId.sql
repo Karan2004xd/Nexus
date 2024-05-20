@@ -1,0 +1,1 @@
+SELECT id FROM File ORDER BY id DESC;

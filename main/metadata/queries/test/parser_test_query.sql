@@ -1,0 +1,2 @@
+DROP TABLE File;
+DROP TABLE Chunk;
