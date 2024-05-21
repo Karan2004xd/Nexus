@@ -11,6 +11,7 @@ class Data::Contents {
 public:
   Contents() = delete;
   Contents(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams);
+  Contents(const std::string &fileName, const std::string &fileContent);
 
   const std::string getFileName() const { return this->fileName; }
   const std::string getFileType() const { return this->fileType; }
@@ -38,5 +39,6 @@ private:
   void setFileMemorySize();
 
   void setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams);
+  void setFileDetails(const std::string &fileName, const std::string &fileContent);
 };
 #endif // CONTENTS_HPP

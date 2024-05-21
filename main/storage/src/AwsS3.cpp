@@ -325,81 +325,81 @@ void AwsS3::deleteBackupData(const size_t &fileId) {
   updateMetaDataForDeletedFile(BucketType::REPLICATION, fileId);
 }
 
-std::vector<std::string> AwsS3::getChunkKeysFromTrash() {
-  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
-    .singleData("file", "GetTrashChunkKey")
-    .getJsonData();
+/* std::vector<std::string> AwsS3::getChunkKeysFromTrash() { */
+/*   auto jsonData = Utils::SimpleJsonParser::JsonBuilder() */
+/*     .singleData("file", "GetTrashChunkKey") */
+/*     .getJsonData(); */
 
-  auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
-  auto queryOutput = metadata.getQueryDataMap(queryData);
-  auto chunkKeys = queryOutput.at("chunk_key");
-  return chunkKeys;
-}
+/*   auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData); */
+/*   auto queryOutput = metadata.getQueryDataMap(queryData); */
+/*   auto chunkKeys = queryOutput.at("chunk_key"); */
+/*   return chunkKeys; */
+/* } */
 
-MetaData::QueryResultMap AwsS3::getFileFromTrash(const size_t &fileId) {
-  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
-    .singleData("file", "GetTrashFileName")
-    .singleData("id", std::to_string(fileId))
-    .getJsonData();
+/* MetaData::QueryResultMap AwsS3::getFileFromTrash(const size_t &fileId) { */
+/*   auto jsonData = Utils::SimpleJsonParser::JsonBuilder() */
+/*     .singleData("file", "GetTrashFileName") */
+/*     .singleData("id", std::to_string(fileId)) */
+/*     .getJsonData(); */
 
-  auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
-  auto queryOutput = metadata.getQueryDataMap(queryData);
-  return queryOutput;
-}
+/*   auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData); */
+/*   auto queryOutput = metadata.getQueryDataMap(queryData); */
+/*   return queryOutput; */
+/* } */
 
-void AwsS3::updateFileMetaDataForRestore(MetaData::QueryResultMap &queryResultMap) {
-  std::string fileName = queryResultMap.at("name").at(0);
-  std::string fileType = queryResultMap.at("type").at(0);
+/* void AwsS3::updateFileMetaDataForRestore(MetaData::QueryResultMap &queryResultMap) { */
+/*   std::string fileName = queryResultMap.at("name").at(0); */
+/*   std::string fileType = queryResultMap.at("type").at(0); */
 
-  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
-    .singleData("file", "InsertNewFile")
-    .singleData("name", fileName)
-    .singleData("type", fileType)
-    .getJsonData();
+/*   auto jsonData = Utils::SimpleJsonParser::JsonBuilder() */
+/*     .singleData("file", "InsertNewFile") */
+/*     .singleData("name", fileName) */
+/*     .singleData("type", fileType) */
+/*     .getJsonData(); */
 
-  auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
-  metadata.updateData(queryData);
-}
+/*   auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData); */
+/*   metadata.updateData(queryData); */
+/* } */
 
-size_t AwsS3::getCurrentFileId() {
-  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
-    .singleData("file", "GetFileId")
-    .getJsonData();
+/* size_t AwsS3::getCurrentFileId() { */
+/*   auto jsonData = Utils::SimpleJsonParser::JsonBuilder() */
+/*     .singleData("file", "GetFileId") */
+/*     .getJsonData(); */
 
-  auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
-  auto queryOutput = metadata.getQueryDataMap(queryData);
+/*   auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData); */
+/*   auto queryOutput = metadata.getQueryDataMap(queryData); */
 
-  return std::stoi(queryOutput.at("id").at(0));
-}
+/*   return std::stoi(queryOutput.at("id").at(0)); */
+/* } */
 
-void AwsS3::restoreData(const size_t &fileId) {
-  auto chunks = getBackupData(fileId);
-  std::cout << "Reached" << std::endl;
+/* void AwsS3::restoreData(const size_t &fileId) { */
+/*   auto chunks = getBackupData(fileId); */
+/*   std::cout << "Reached" << std::endl; */
 
-  auto fileData = getFileFromTrash(fileId);
-  updateFileMetaDataForRestore(fileData);
+/*   auto fileData = getFileFromTrash(fileId); */
+/*   updateFileMetaDataForRestore(fileData); */
 
-  size_t tempFileId = getCurrentFileId();
-  auto chunkKeys = getChunkKeysFromTrash();
+/*   size_t tempFileId = getCurrentFileId(); */
+/*   auto chunkKeys = getChunkKeysFromTrash(); */
 
-  std::vector<std::unique_ptr<Chunk>> tempChunks;
+/*   std::vector<std::unique_ptr<Chunk>> tempChunks; */
 
-  int i = 0;
+/*   int i = 0; */
 
-  for (const auto &chunk : chunks) {
-    tempChunks.push_back(std::make_unique<Chunk>(
-      chunk->getObjectKey(),
-      chunkKeys.at(i),
-      chunk->getEncryptedData(),
-      tempFileId
-    ));
-    i++;
-  }
+/*   for (const auto &chunk : chunks) { */
+/*     tempChunks.push_back(std::make_unique<Chunk>( */
+/*       chunk->getObjectKey(), */
+/*       chunkKeys.at(i), */
+/*       chunk->getEncryptedData(), */
+/*       tempFileId */
+/*     )); */
+/*     i++; */
+/*   } */
 
-  storeData(tempChunks);
-  updateMetaDataFordeletedChunk(BucketType::REPLICATION, fileId);
-  updateMetaDataForDeletedFile(BucketType::REPLICATION, fileId);
-}
+/*   storeData(tempChunks); */
+/*   updateMetaDataFordeletedChunk(BucketType::REPLICATION, fileId); */
+/*   updateMetaDataForDeletedFile(BucketType::REPLICATION, fileId); */
+/* } */
 
 AwsS3::~AwsS3() {
   Aws::ShutdownAPI(options);

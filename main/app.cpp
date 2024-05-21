@@ -53,8 +53,7 @@ int main() {
   /* aws.storeData(chunks); */
 
   /* aws.deleteData(1); */
-  /* aws.restoreData(1); */
-  /* auto resultChunks = aws.getData(2); */
+  /* auto resultChunks = aws.getBackupData(1); */
   /* std::string result; */
   /* for (const auto &chunk : resultChunks) { */
   /*   result += chunk->getDecryptedData(); */
@@ -63,9 +62,8 @@ int main() {
   /* std::cout << "\n"; */
   /* std::cout << result << std::endl; */
   /* std::cout << "\n"; */
-  /* aws.deleteBackupData(1); */
 
-  Nexus::Data::Cache cache;
+  /* Nexus::Data::Cache cache; */
   /* cache.storeData(resultChunks); */
 
   /* auto cachedChunks = cache.getData(1); */

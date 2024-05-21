@@ -12,7 +12,7 @@ protected:
   virtual void deleteData(const size_t &fileId) = 0;
   virtual void deleteBackupData(const size_t &fileId) = 0;
 
-  virtual void restoreData(const size_t &filedId) = 0;
+  /* virtual void restoreData(const size_t &filedId) = 0; */
 
   virtual ~StorageBase() = default;
 };

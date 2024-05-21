@@ -3,6 +3,7 @@ project(dfs)
 
 add_library(${PROJECT_NAME}
   "./src/Dfs.cpp"
+  "./src/DfsResult.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "./include")

@@ -34,6 +34,15 @@ void Contents::setFileMemorySize() {
   this->fileMemorySize = memoryAllocSize + baseSize;
 }
 
+void Contents::setFileDetails(const std::string &fileName, const std::string &fileContent) {
+  setFileName(fileName);
+  setFileContent(fileContent);
+
+  setFileType();
+  setFileLength();
+  setFileMemorySize();
+}
+
 void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams) {
   std::string fileName = std::get<std::string>(jsonDataParams.at(FILE_NAME));
   std::string fileContent = std::get<std::string>(jsonDataParams.at(FILE_CONTENT));
@@ -52,4 +61,8 @@ Contents::Contents(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams
   } else {
     throw std::runtime_error("(Contents) : insufficient json data fields");
   }
+}
+
+Contents::Contents(const std::string &fileName, const std::string &fileContent) {
+  setFileDetails(fileName, fileContent);
 }

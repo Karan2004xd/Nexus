@@ -3,6 +3,7 @@
 
 namespace Nexus {
   class Dfs;
+  class DfsResult;
   class Server;
 
   namespace Utils {
