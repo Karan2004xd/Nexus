@@ -26,8 +26,9 @@ std::string Cache::getDirName(const std::string &path,
   return dir;
 }
 
-std::string Cache::getDirName(const size_t &fileId) {
-  std::string tempFileName = getFileName(fileId);
+std::string Cache::getDirName(const size_t &fileId,
+                              const FileType &fileType) {
+  std::string tempFileName = getFileName(fileId, fileType);
   std::string fileName = tempFileName.substr(0, tempFileName.find("."));
 
   std::string dir = getDirName(CACHE_DIR, fileName);
@@ -112,9 +113,16 @@ size_t Cache::getFileId(const std::string &objectKey) {
   return std::stoi(queryOutput.at("file_id").at(0));
 }
 
-std::string Cache::getFileName(const size_t &fileId) {
+std::string Cache::getFileName(const size_t &fileId,
+                               const FileType &fileType) {
+  std::string queryFile;
+  if (fileType == FileType::NORMAL) {
+    queryFile = "GetFileName";
+  } else if (fileType == FileType::TRASH) {
+    queryFile = "GetTrashFileName";
+  }
   auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
-    .singleData("file", "GetFileName")
+    .singleData("file", queryFile)
     .singleData("id", std::to_string(fileId))
     .getJsonData();
 
@@ -130,7 +138,7 @@ bool Cache::checkIfDirectoryisEmpty(const std::string &path) {
 void Cache::storeData(const ChunkedData &chunks) {
   size_t fileId = getFileId(chunks.at(0)->getObjectKey());
 
-  std::string dir = getDirName(fileId);
+  std::string dir = getDirName(fileId, FileType::NORMAL);
 
   if (!checkDirectory(dir) || checkIfDirectoryisEmpty(dir)) {
     if (!checkDirectory(dir)) {
@@ -146,7 +154,7 @@ void Cache::storeData(const ChunkedData &chunks) {
 }
 
 void Cache::deleteData(const size_t &fileId) {
-  std::string dir = getDirName(fileId);
+  std::string dir = getDirName(fileId, FileType::TRASH);
 
   if (checkDirectory(dir)) {
     std::uintmax_t n = fs::remove_all(dir);
@@ -215,7 +223,7 @@ Cache::ChunkKeys Cache::getChunkIdsFromMetaData(const size_t &fileId) {
 
 Cache::ChunkedData Cache::getData(const size_t &fileId) {
   ChunkedData chunks;
-  std::string dir = getDirName(fileId);
+  std::string dir = getDirName(fileId, FileType::NORMAL);
 
   if (checkDirectory(dir)) {
     if (getNumberOfFilesInDir(dir) == getNumberOfChunksForFile(fileId)) {

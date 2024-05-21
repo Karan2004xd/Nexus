@@ -15,8 +15,11 @@
 // Queries Constants
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
 #define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"
+
 #define DATA_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/data"
 #define CACHE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/cache"
+
 #define STORAGE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/storage"
+#define DFS_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/dfs"
 
 #endif // CONSTANTS_H_IN

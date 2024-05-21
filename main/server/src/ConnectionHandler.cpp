@@ -4,6 +4,7 @@
 
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
+#include <iostream>
 
 namespace net = boost::asio;
 namespace beast = boost::beast;
@@ -18,8 +19,9 @@ void ConnectionHandler::handleResponse(T1 &socket, unsigned int requestVersion) 
 
 template <typename T1, typename T2>
 void ConnectionHandler::handleRequest(const T1 &request, T2 &socket) {
-  std::string requestTarget = request.target();
   std::string requestMethod = request.method_string();
+
+  std::cout << requestMethod << std::endl;
 
   /* handleResponse(socket, request.version()); */
 }
@@ -47,5 +49,6 @@ void ConnectionHandler::startListener() {
     }
   } catch (std::exception &e) {
     // Create a different response containing the error
+    std::cout << e.what() << std::endl;
   }
 }

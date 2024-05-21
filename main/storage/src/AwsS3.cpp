@@ -78,7 +78,6 @@ MetaData::QueryResultMap AwsS3::getDataHelper(const size_t &fileId,
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);
   auto queryOutput = metadata.getQueryDataMap(queryData);
-  metadata.printData(queryOutput);
 
   if (queryOutput["chunk_key"].size() <= 0) {
     throw std::runtime_error("(AwsS3) : No chunks found in getDataHelper, for the given file id");

@@ -5,7 +5,7 @@
 using namespace Nexus;
 
 class Data::Cache { 
-public:
+protected:
   typedef std::vector<std::unique_ptr<Chunk>> ChunkedData;
 
   Cache();
@@ -18,7 +18,10 @@ public:
 private:
   const char *EXT = ".txt";
   MetaData metaData;
-  std::string getDirName(const size_t &fileId);
+
+  enum FileType {NORMAL, TRASH};
+
+  std::string getDirName(const size_t &fileId, const FileType &fileType);
   std::string getDirName(const std::string &path,
                          const std::string &name = {});
 
@@ -41,7 +44,7 @@ private:
                          const std::string &name,
                          const std::string &fileContent);
   size_t getFileId(const std::string &objectKey);
-  std::string getFileName(const size_t &fileId);
+  std::string getFileName(const size_t &fileId, const FileType &fileType);
 
   // Get Data Helpers
   // (objectKey, ChunkId)
