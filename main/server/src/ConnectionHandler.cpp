@@ -12,18 +12,10 @@ namespace http = beast::http;
 
 using tcp = net::ip::tcp;
 
-template <typename T1>
-void ConnectionHandler::handleResponse(T1 &socket, unsigned int requestVersion) {
-
-}
-
-template <typename T1, typename T2>
-void ConnectionHandler::handleRequest(const T1 &request, T2 &socket) {
-  std::string requestMethod = request.method_string();
-
-  std::cout << requestMethod << std::endl;
-
-  /* handleResponse(socket, request.version()); */
+void ConnectionHandler::handleRequest(const http::request<http::string_body> &request,
+                                      tcp::socket &socket) {
+  std::string jsonRequest = RequestHandler::handleRequest(request);
+  ResponseHandler::handleResponse(jsonRequest, socket);
 }
 
 void ConnectionHandler::startListener() {
@@ -43,12 +35,9 @@ void ConnectionHandler::startListener() {
       http::request<http::string_body> request;
       http::read(socket, buffer, request);
       
-      std::thread([&]() mutable {
-        ConnectionHandler::handleRequest(request, socket);
-      }).detach();
+      ConnectionHandler::handleRequest(request, socket);
     }
   } catch (std::exception &e) {
-    // Create a different response containing the error
     std::cout << e.what() << std::endl;
   }
 }

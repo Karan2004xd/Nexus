@@ -5,14 +5,6 @@
 #include "../../constants.h"
 
 using namespace Nexus;
-  /* std::string output; */
-  /* DfsResult::ResultType resultType; */
-  /* try { */
-  /* } catch (std::exception &e) { */
-  /*   output = e.what(); */
-  /*   resultType = DfsResult::ResultType::FAILED; */
-  /* } */
-  /* return {output, resultType}; */
 
 DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) {
   std::string output, errorMsg;
@@ -135,6 +127,34 @@ DfsResult Dfs::deleteDataApi(const std::string &fileName) {
   return deleteDataApi(fileName, FileType::NORMAL);
 }
 
-DfsResult Dfs::deteteTrashDataApi(const std::string &fileName) {
+DfsResult Dfs::deleteTrashDataApi(const std::string &fileName) {
   return deleteDataApi(fileName, FileType::TRASH);
+}
+
+DfsResult Dfs::listDataApi(const FileType &fileType) {
+  std::string output, errorMsg;
+  DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
+
+  try {
+    std::string queryFile;
+    if (fileType == FileType::NORMAL) {
+      queryFile = "ListFileData";
+    } else if (fileType == FileType::TRASH) {
+      queryFile = "ListTrashFileData";
+    }
+    auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
+      .singleData("file", queryFile)
+      .getJsonData();
+
+    auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
+  } catch (const std::exception &e) {
+  
+  }
+}
+
+DfsResult Dfs::listDataApi() {
+}
+
+DfsResult Dfs::listTrashDataApi() {
+  
 }

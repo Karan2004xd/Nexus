@@ -22,14 +22,5 @@ std::string getFileContent(const std::string &fileName) {
 
 int main() {
   Nexus::Server::run();
-  /* std::string fileName = "nexus.txt"; */
-  /* std::string fileContent = getFileContent(fileName); */
-  /* Dfs dfs; */
-  /* auto result = dfs.deteteTrashDataApi(fileName); */
-  /* if (result.isSuccess()) { */
-  /*   std::cout << result.getOutput() << std::endl; */
-  /* } else { */
-  /*   std::cout << result.getErrorMsg() << std::endl; */
-  /* } */
   return 0;
 }

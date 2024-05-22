@@ -1,14 +1,15 @@
 #ifndef CONNECTION_HANDLER_HPP
 #define CONNECTION_HANDLER_HPP
 
-class ConnectionHandler {
+#include "RequestHandler.hpp"
+#include "ResponseHandler.hpp"
+#include <boost/asio/ip/tcp.hpp>
+
+class ConnectionHandler : protected RequestHandler, ResponseHandler {
 public:
   static void startListener();
 
-  template <typename T1, typename T2>
-  static void handleRequest(const T1 &request, T2 &socket);
-
-  template <typename T1>
-  static void handleResponse(T1 &socket, unsigned int requestVersion);
+  static void handleRequest(const http::request<http::string_body> &request,
+                            boost::asio::ip::tcp::socket &socket);
 };
 #endif // CONNECTION_HANDLER_HPP

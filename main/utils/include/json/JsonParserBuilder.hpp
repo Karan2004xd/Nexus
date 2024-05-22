@@ -21,7 +21,9 @@ public:
   JsonParserBuilder multipleData(const std::string &name,
                                  const std::initializer_list<std::string> &values);
   
-  JsonDataParams getJsonData() const { return this->jsonData; } private:
+  JsonDataParams getJsonData() const { return this->jsonData; }
+
+private:
   JsonDataParams jsonData;
   
   void checkIfKeyPresent(const std::string &key) const {

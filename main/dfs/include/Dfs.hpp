@@ -14,7 +14,10 @@ public:
   DfsResult getTrashDataApi(const std::string &fileName);
 
   DfsResult deleteDataApi(const std::string &fileName);
-  DfsResult deteteTrashDataApi(const std::string &fileName);
+  DfsResult deleteTrashDataApi(const std::string &fileName);
+
+  DfsResult listDataApi();
+  DfsResult listTrashDataApi();
 
 private:
   enum FileType { NORMAL, TRASH };
@@ -30,5 +33,7 @@ private:
 
   DfsResult deleteDataApi(const std::string &fileName,
                           const FileType &fileType);
+
+  DfsResult listDataApi(const FileType &fileType);
 };
 #endif // DFS_HPP

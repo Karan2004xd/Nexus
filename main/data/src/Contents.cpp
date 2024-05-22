@@ -20,7 +20,7 @@ void Contents::setFileContent(const std::string &fileContent) {
 }
 
 void Contents::setFileType() {
-  size_t pos = this->fileName.find(".");
+  size_t pos = this->fileName.rfind(".");
   this->fileType = this->fileName.substr(pos + 1, this->fileLength - (pos + 1));
 }
 
