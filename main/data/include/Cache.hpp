@@ -14,10 +14,9 @@ protected:
   virtual ChunkedData getData(const size_t &fileId);
   virtual void deleteData(const size_t &fileId);
 
-  virtual ~Cache() = default;
+  /* virtual ~Cache() = default; */
 private:
-  const char *EXT = ".txt";
-  MetaData metaData;
+  const std::string EXT = ".txt";
 
   enum FileType {NORMAL, TRASH};
 

@@ -21,6 +21,7 @@ public:
 
 private:
   enum FileType { NORMAL, TRASH };
+  MetaData metaData;
 
   size_t getFileId(const std::string &fileName,
                    const FileType &fileType);

@@ -49,6 +49,7 @@ std::string Dfs::getCacheData(const size_t &fileId) {
   std::string output;
   try {
     auto chunks = Data::Cache::getData(fileId);
+    std::cout << "Yes 3" << std::endl;
     for (const auto &chunk : chunks) {
       output += chunk->getDecryptedData();
     }
@@ -150,7 +151,6 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
       .getJsonData();
 
     auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
-    MetaData metaData;
     auto queryOutput = metaData.getQueryDataMap(queryData);
     
     for (const auto &key : queryOutput) {

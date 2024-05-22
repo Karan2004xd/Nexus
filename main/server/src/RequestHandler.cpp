@@ -111,7 +111,6 @@ std::string RequestHandler::getResponseData(const RequestMap &requestMap) {
     }
     auto jsonOutput = jsonData.getJsonData();
     body = Utils::SimpleJsonParser::encodeJson(jsonOutput);
-    std::cout << body << std::endl;
   }
   std::string contentType = std::get<std::string>(requestMap.at(RequestParams::CONTENT_TYPE));
   std::string status;

@@ -1,6 +1,7 @@
 #include "../../include/json/SimpleJsonParser.hpp"
 #include <sstream>
 #include <stdexcept>
+#include <iostream>
 
 using namespace rapidjson;
 using namespace Utils;
@@ -16,14 +17,17 @@ std::string SimpleJsonParser::encodeIntoJsonString(JsonDataParams &jsonDataparam
       valueParam.SetString(valueData.c_str(), document.GetAllocator());
 
     } else if (std::holds_alternative<std::vector<std::string>>(name.second)) {
-      valueParam = Value(kArrayType);
+      valueParam.SetArray();
       auto vec = std::get<std::vector<std::string>>(name.second);
 
       for (const auto &vectorValue : vec) {
-        valueParam.PushBack(GenericStringRef(vectorValue.c_str()), document.GetAllocator());
+        Value strValue;
+        strValue.SetString(vectorValue.c_str(), document.GetAllocator());
+        valueParam.PushBack(strValue, document.GetAllocator());
       }
     }
-    GenericStringRef nameValue(name.first.c_str());
+    Value nameValue;
+    nameValue.SetString(name.first.c_str(), document.GetAllocator());
     document.AddMember(nameValue, valueParam, document.GetAllocator());
   }
   StringBuffer buffer;

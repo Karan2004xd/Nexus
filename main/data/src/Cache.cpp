@@ -109,6 +109,7 @@ size_t Cache::getFileId(const std::string &objectKey) {
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
+  MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
   return std::stoi(queryOutput.at("file_id").at(0));
 }
@@ -127,6 +128,7 @@ std::string Cache::getFileName(const size_t &fileId,
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
+  MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
   return queryOutput.at("name").at(0);
 }
@@ -180,6 +182,7 @@ size_t Cache::getNumberOfChunksForFile(const size_t &fileId) {
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
+  MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
   return std::stoi(queryOutput.at("count").at(0));
 }
@@ -210,6 +213,7 @@ Cache::ChunkKeys Cache::getChunkIdsFromMetaData(const size_t &fileId) {
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
+  MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
   
   int lengthOfColumn = queryOutput.at("chunk_key").size();
