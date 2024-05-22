@@ -78,10 +78,16 @@ RequestHandler::RequestMap RequestHandler::getRequestMap(const JsonDataParams &j
     resultObj = Dfs::deleteDataApi(fileName);
   } else if (operation == DELETE_TRASH_DATA) {
     resultObj = Dfs::deleteTrashDataApi(fileName);
+  } else if (operation == LIST_DATA) {
+    resultObj = Dfs::listDataApi();
   }
 
   if (resultObj.isSuccess()) {
-    result.insert({RequestParams::BODY, resultObj.getOutput()});
+    if (resultObj.getOutput().empty()) {
+      result.insert({RequestParams::BODY, resultObj.getOutputList()});
+    } else {
+      result.insert({RequestParams::BODY, resultObj.getOutput()});
+    }
     result.insert({RequestParams::STATUS, StatusCode::ok});
   } else {
     result.insert({RequestParams::BODY, resultObj.getErrorMsg()});
@@ -91,7 +97,22 @@ RequestHandler::RequestMap RequestHandler::getRequestMap(const JsonDataParams &j
 }
 
 std::string RequestHandler::getResponseData(const RequestMap &requestMap) {
-  std::string body = std::get<std::string>(requestMap.at(RequestParams::BODY));
+  std::string body;
+  try {
+    body = std::get<std::string>(requestMap.at(RequestParams::BODY));
+  } catch (const std::exception &) {
+    auto jsonData = Utils::SimpleJsonParser::JsonBuilder();
+    auto tempBody = std::get<std::unordered_map<std::string, std::vector<std::string>>>(
+      requestMap.at(RequestParams::BODY)
+    );
+
+    for (const auto &key : tempBody) {
+      jsonData = jsonData.multipleData(key.first, key.second);
+    }
+    auto jsonOutput = jsonData.getJsonData();
+    body = Utils::SimpleJsonParser::encodeJson(jsonOutput);
+    std::cout << body << std::endl;
+  }
   std::string contentType = std::get<std::string>(requestMap.at(RequestParams::CONTENT_TYPE));
   std::string status;
 

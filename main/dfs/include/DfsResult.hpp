@@ -16,6 +16,10 @@ public:
             const std::string &errorMsg,
             const ResultType &resultType);
 
+  DfsResult(const MessageMap &messageMap,
+            const std::string &errorMsg,
+            const ResultType &resultType);
+
   const bool isSuccess() const { return resultType == ResultType::SUCCESS; }
   MessageMap getOutputList() const { return this->messageMap; }
 

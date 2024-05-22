@@ -10,6 +10,14 @@ DfsResult::DfsResult(const std::string &msg,
   setMessage(msg);
 }
 
+DfsResult::DfsResult(const MessageMap &messageMap,
+                     const std::string &errorMsg,
+                     const ResultType &resultType) {
+  this->messageMap = messageMap;
+  this->errorMsg = errorMsg;
+  this->resultType = resultType;
+}
+
 void DfsResult::clearMessage() {
   message.clear();
   message.str({});

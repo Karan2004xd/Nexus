@@ -21,7 +21,8 @@ protected:
     VERSION,
     STATUS
   };
-  typedef std::unordered_map<RequestParams, std::variant<std::string, unsigned int, StatusCode>> RequestMap;
+  typedef std::unordered_map<RequestParams, std::variant<std::string, unsigned int, StatusCode, 
+  std::unordered_map<std::string, std::vector<std::string>>>> RequestMap;
   
   static std::string handleRequest(const http::request<http::string_body> &request,
                                    RequestHandler *reqObj = {}) {

@@ -19,7 +19,7 @@ public:
                                const std::string &value);
 
   JsonParserBuilder multipleData(const std::string &name,
-                                 const std::initializer_list<std::string> &values);
+                                 const std::vector<std::string> &values);
   
   JsonDataParams getJsonData() const { return this->jsonData; }
 
@@ -40,6 +40,6 @@ private:
                    const std::string &value);
 
   void addJsonData(const std::string &name,
-                   const std::initializer_list<std::string> &values);
+                   const std::vector<std::string> &values);
 };
 #endif // JSON_PARSER_BUILDER_HPP

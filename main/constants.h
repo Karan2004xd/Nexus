@@ -27,7 +27,7 @@
 #define PATH_TO_ASSETS "/home/karan/Documents/Code/Nexus/main/interface/assets"
 #define PATH_TO_STYLES "/home/karan/Documents/Code/Nexus/main/interface/styles"
 
-#define OPERATION "OPERATION"
+#define OPERATION "operation"
 
 // Request operations
 #define PUT_DATA "put-data"

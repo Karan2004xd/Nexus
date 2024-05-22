@@ -1,9 +1,9 @@
 body {
   background: black;
   /* margin: 0; */
+  color: white;
 }
 
 h1 {
-  color: white;
   font-family: "Anton", sans-serif;
 }

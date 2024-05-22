@@ -40,6 +40,7 @@ size_t Dfs::getFileId(const std::string &fileName,
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
+  MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
   return std::stoi(queryOutput.at("id").at(0));
 }
@@ -132,6 +133,8 @@ DfsResult Dfs::deleteTrashDataApi(const std::string &fileName) {
 }
 
 DfsResult Dfs::listDataApi(const FileType &fileType) {
+  DfsResult::MessageMap messageMap;
+
   std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
 
@@ -147,14 +150,25 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
       .getJsonData();
 
     auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
+    MetaData metaData;
+    auto queryOutput = metaData.getQueryDataMap(queryData);
+    
+    for (const auto &key : queryOutput) {
+      messageMap.insert({key.first, key.second});
+    }
   } catch (const std::exception &e) {
-  
+    errorMsg = e.what();
+    output = "Failed to fetch the data";
+    resultType = DfsResult::ResultType::FAILED;
+    return {output, errorMsg, resultType};
   }
+  return {messageMap, errorMsg, resultType};
 }
 
 DfsResult Dfs::listDataApi() {
+  return listDataApi(FileType::NORMAL);
 }
 
 DfsResult Dfs::listTrashDataApi() {
-  
+  return listDataApi(FileType::TRASH);
 }

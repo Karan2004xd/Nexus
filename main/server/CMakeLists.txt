@@ -13,16 +13,6 @@ set(DEFAULT_HOST "localhost" PARENT_SCOPE)
 set(POST "POST" PARENT_SCOPE)
 set(GET "GET" PARENT_SCOPE)
 
-set(OPERATION "OPERATION" PARENT_SCOPE)
-set(PUT_DATA "put-data" PARENT_SCOPE)
-set(GET_DATA "get-data" PARENT_SCOPE)
-
-set(GET_TRASH_DATA "get-trash-data" PARENT_SCOPE)
-set(DELETE_DATA "delete-data" PARENT_SCOPE)
-
-set(DELETE_TRASH_DATA "delete-trash-data" PARENT_SCOPE)
-set(LIST_DATA "list-data" PARENT_SCOPE)
-
 add_library(${PROJECT_NAME}
   "./src/Server.cpp"
   "./src/Logging.cpp"
