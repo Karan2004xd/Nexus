@@ -40,5 +40,6 @@
 #define DELETE_TRASH_DATA "delete-trash-data"
 
 #define LIST_DATA "list-data"
+#define LIST_TRASH_DATA "list-trash-data"
 
 #endif // CONSTANTS_H_IN

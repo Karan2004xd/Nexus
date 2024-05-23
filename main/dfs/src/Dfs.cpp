@@ -3,10 +3,14 @@
 #include "../../data/include/Chunker.hpp"
 #include "../../utils/include/query/SimpleQueryParser.hpp"
 #include "../../constants.h"
+#include <algorithm>
+#include <boost/beast.hpp>
+#include <boost/beast/core/detail/base64.hpp>
 
 using namespace Nexus;
 
-DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) { std::string output, errorMsg;
+DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) { 
+  std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
 
   try {
@@ -14,7 +18,9 @@ DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &file
     Data::Chunker chunker {contents};
     auto &chunks = chunker.getChunks();
 
-    Storage::AwsS3::storeData(chunks);
+    Storage::AwsS3 awsS3;
+    awsS3.storeData(chunks);
+    output = "Successfully stored data";
   } catch (std::exception &e) {
     errorMsg = e.what();
     output = "Failed to create new file";
@@ -57,6 +63,32 @@ std::string Dfs::getCacheData(const size_t &fileId) {
   return output;
 }
 
+const bool Dfs::checkIfVideoOrImage(const std::string &fileName) const {
+  const std::vector<std::string> imageExtensions = {
+    "jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp", "svg"
+  };
+  const std::vector<std::string> videoExtensions = {
+    "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm", "3gp", "mpeg"
+  };
+
+  size_t extPos = fileName.rfind(".");
+  std::string ext = fileName.substr(extPos + 1);
+  auto itOne = std::find(imageExtensions.begin(), imageExtensions.end(), ext);
+  auto itTwo = std::find(videoExtensions.begin(), videoExtensions.end(), ext);
+
+  return (itOne != imageExtensions.end()) || (itTwo != videoExtensions.end());
+}
+
+std::string Dfs::base64Encode(const std::string &data) {
+  using namespace boost::beast::detail;
+
+  std::string output;
+  output.resize(base64::encoded_size(data.size()));
+  base64::encode(&output[0], data.data(), data.size());
+
+  return output;
+}
+
 DfsResult Dfs::getDataApi(const std::string &fileName,
                           const FileType &fileType) {
   std::string output, errorMsg;
@@ -65,25 +97,30 @@ DfsResult Dfs::getDataApi(const std::string &fileName,
 
   try {
     size_t fileId = getFileId(fileName, fileType);
-
+    bool isVideoOrImage = checkIfVideoOrImage(fileName);
     try {
       output = getCacheData(fileId);
     } catch (const std::exception &) {
+      Storage::AwsS3 awsS3;
       if (fileType == FileType::NORMAL) {
-        auto chunks = Storage::AwsS3::getData(fileId);
+        auto chunks = awsS3.getData(fileId);
 
         for (const auto &chunk : chunks) {
           output += chunk->getDecryptedData();
         }
         Data::Cache::storeData(chunks);
       } else if (fileType == FileType::TRASH) {
-        auto chunks = Storage::AwsS3::getBackupData(fileId);
+        auto chunks = awsS3.getBackupData(fileId);
 
         for (const auto &chunk : chunks) {
           output += chunk->getDecryptedData();
         }
       }
     }
+
+    if (isVideoOrImage) {
+      output = base64Encode(output);
+    } 
   } catch (std::exception &e) {
     errorMsg = e.what();
     output = "Failed to fetch data";
@@ -108,12 +145,14 @@ DfsResult Dfs::deleteDataApi(const std::string &fileName,
 
   try {
     size_t fileId = getFileId(fileName, fileType);
+    Storage::AwsS3 awsS3;
     if (fileType == FileType::NORMAL) {
-      Storage::AwsS3::deleteData(fileId);
+      awsS3.deleteData(fileId);
     } else if (fileType == FileType::TRASH) {
       Data::Cache::deleteData(fileId);
-      Storage::AwsS3::deleteBackupData(fileId);
+      awsS3.deleteBackupData(fileId);
     }
+    output = "Data deleted successfully";
 
   } catch (std::exception &e) {
     errorMsg = e.what();
@@ -149,8 +188,9 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
       .getJsonData();
 
     auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
+    MetaData metaData;
     auto queryOutput = metaData.getQueryDataMap(queryData);
-    
+
     for (const auto &key : queryOutput) {
       messageMap.insert({key.first, key.second});
     }

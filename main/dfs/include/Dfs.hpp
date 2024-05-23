@@ -5,8 +5,8 @@
 #include "../../storage/include/AwsS3.hpp"
 #include "../../data/include/Cache.hpp"
 
-class Nexus::Dfs : protected Storage::AwsS3, Data::Cache {
-public:
+class Nexus::Dfs : protected Data::Cache {
+protected:
   DfsResult storeDataApi(const std::string &fileName,
                          const std::string &fileContent);
 
@@ -21,11 +21,13 @@ public:
 
 private:
   enum FileType { NORMAL, TRASH };
-  MetaData metaData;
 
   size_t getFileId(const std::string &fileName,
                    const FileType &fileType);
   size_t getTrashFileId(const std::string &fileName);
+
+  const bool checkIfVideoOrImage(const std::string &fileName) const;
+  std::string base64Encode(const std::string &data);
 
   std::string getCacheData(const size_t &fileId);
   DfsResult getDataApi(const std::string &fileName,

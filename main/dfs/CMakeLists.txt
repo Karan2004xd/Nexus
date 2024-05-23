@@ -10,7 +10,7 @@ set(DELETE_DATA "delete-data" PARENT_SCOPE)
 
 set(DELETE_TRASH_DATA "delete-trash-data" PARENT_SCOPE)
 set(LIST_DATA "list-data" PARENT_SCOPE)
-
+set(LIST_TRASH_DATA "list-trash-data" PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}
   "./src/Dfs.cpp"

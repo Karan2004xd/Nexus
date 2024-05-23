@@ -8,7 +8,7 @@ using namespace Nexus;
 
 class Storage::AwsS3 : protected StorageBase, AwsCrudOperHandler,
                                  AwsS3SetupHandler {
-protected:
+public:
   AwsS3();
 
   void storeData(const std::vector<std::unique_ptr<Chunk>> &chunks) override;

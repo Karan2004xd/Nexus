@@ -14,7 +14,7 @@ public:
   virtual ChunkedData getData(const size_t &fileId);
   virtual void deleteData(const size_t &fileId);
 
-  virtual ~Cache() = default;
+  /* virtual ~Cache() = default; */
 private:
   enum FileType {NORMAL, TRASH};
 
