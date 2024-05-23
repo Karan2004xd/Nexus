@@ -122,6 +122,7 @@ std::string Cache::getFileName(const size_t &fileId,
   } else if (fileType == FileType::TRASH) {
     queryFile = "GetTrashFileName";
   }
+
   auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
     .singleData("file", queryFile)
     .singleData("id", std::to_string(fileId))
@@ -192,7 +193,7 @@ std::string Cache::readDataFromFile(const std::string &dirPath,
   std::ostringstream oss;
   std::string dir = getDirName(dirPath, fileName);
   if (checkFile(dir)) {
-    std::ifstream file {dir};
+    std::ifstream file {dir, std::ios::binary};
     if (file.is_open()) {
       oss << file.rdbuf();
       file.close();
@@ -215,7 +216,6 @@ Cache::ChunkKeys Cache::getChunkIdsFromMetaData(const size_t &fileId) {
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
   MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
-  metaData.printData(queryOutput);
   
   int lengthOfColumn = queryOutput.at("chunk_key").size();
   for (int i = 0; i < lengthOfColumn; i++) {

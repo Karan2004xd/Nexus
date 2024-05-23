@@ -25,8 +25,9 @@ std::string getFileContent(const std::string &fileName) {
 }
 
 int main() {
-  /* std::string fileName = "2wallpaperflare.com_wallpaper.jpg"; */
-  /* std::string fileContent = getFileContent("1wallpaperflare.com_wallpaper.jpg"); */
+  /* std::string fileName = "1wallpaperflare.com_wallpaper.jpg"; */
+  /* std::string fileName = "nexus.txt"; */
+  /* std::string fileContent = getFileContent(fileName); */
   /* Nexus::Data::Contents contents {fileName, fileContent}; */
   /* Nexus::Data::Chunker chunker {contents}; */
   /* auto &chunks = chunker.getChunks(); */

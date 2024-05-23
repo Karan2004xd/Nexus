@@ -11,6 +11,7 @@
 #define CACHE_DIR "@CACHE_DIR@"
 
 #define MAIN_DIR "@MAIN_DIR@"
+#define EXT "@EXT@"
 
 // Queries Constants
 #define QUERIES_DIR "@QUERIES_DIR@"

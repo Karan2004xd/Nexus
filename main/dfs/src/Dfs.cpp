@@ -48,7 +48,6 @@ std::string Dfs::getCacheData(const size_t &fileId) {
   std::string output;
   try {
     auto chunks = Data::Cache::getData(fileId);
-    std::cout << "Yes 3" << std::endl;
     for (const auto &chunk : chunks) {
       output += chunk->getDecryptedData();
     }

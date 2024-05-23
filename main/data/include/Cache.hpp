@@ -5,7 +5,7 @@
 using namespace Nexus;
 
 class Data::Cache { 
-protected:
+public:
   typedef std::vector<std::unique_ptr<Chunk>> ChunkedData;
 
   Cache();
@@ -14,10 +14,8 @@ protected:
   virtual ChunkedData getData(const size_t &fileId);
   virtual void deleteData(const size_t &fileId);
 
-  /* virtual ~Cache() = default; */
+  virtual ~Cache() = default;
 private:
-  const std::string EXT = ".txt";
-
   enum FileType {NORMAL, TRASH};
 
   std::string getDirName(const size_t &fileId, const FileType &fileType);

@@ -101,6 +101,7 @@ std::string RequestHandler::getResponseData(const RequestMap &requestMap) {
   std::string body;
   try {
     body = std::get<std::string>(requestMap.at(RequestParams::BODY));
+    std::cout << body << std::endl;
   } catch (const std::exception &) {
     auto jsonData = Utils::SimpleJsonParser::JsonBuilder();
     auto tempBody = std::get<std::unordered_map<std::string, std::vector<std::string>>>(
@@ -182,6 +183,7 @@ std::string RequestHandler::handleRequestHelper(const http::request<http::string
       auto jsonData = Utils::SimpleJsonParser::decodeJson(body);
       if (checkJsonData({OPERATION}, jsonData)) {
         response = getResponseData(getRequestMap(jsonData, contentType, version));
+        std::cout << response << std::endl;
       }
     }
   } else {

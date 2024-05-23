@@ -11,6 +11,7 @@
 #define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.NexusCache"
 
 #define MAIN_DIR "/home/karan/Documents/Code/Nexus/main"
+#define EXT ".txt"
 
 // Queries Constants
 #define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
