@@ -215,6 +215,7 @@ Cache::ChunkKeys Cache::getChunkIdsFromMetaData(const size_t &fileId) {
   auto queryData = Utils::SimpleQueryParser::parseQuery(CACHE_QUERIES_DIR, jsonData);
   MetaData metaData;
   auto queryOutput = metaData.getQueryDataMap(queryData);
+  metaData.printData(queryOutput);
   
   int lengthOfColumn = queryOutput.at("chunk_key").size();
   for (int i = 0; i < lengthOfColumn; i++) {

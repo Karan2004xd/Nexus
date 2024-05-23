@@ -6,8 +6,7 @@
 
 using namespace Nexus;
 
-DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) {
-  std::string output, errorMsg;
+DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) { std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
 
   try {

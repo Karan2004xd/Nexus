@@ -29,6 +29,7 @@ std::string RequestHandler::getStaticFileContent(const std::string &fileName) {
     BOOST_LOG_TRIVIAL(warning) << "File at path " << path << " was not found";
     throw std::runtime_error("File Not found");
   } else {
+    BOOST_LOG_TRIVIAL(info) << "Loading static data from : " << path;
     fileContent = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
   }
   return fileContent;

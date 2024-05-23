@@ -9,7 +9,7 @@ const fileData = {
 
 function sendRequest(fileName, fileContent) {
   const url = 'http://localhost:8082';
-  fileName = "2wallpaperflare.com_wallpaper.jpg";
+  fileName = "1wallpaperflare.com_wallpaper.jpg";
   const data = {
     request: 'get',
     filename: fileName,
