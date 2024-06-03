@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iterator>
 #include <iostream>
+#include <sstream>
 
 std::string RequestHandler::getRequestTarget(const std::string &requestTarget) {
   std::string target;
@@ -23,7 +24,7 @@ bool RequestHandler::endsWith(const std::string &str, const std::string &suffix)
 std::string RequestHandler::getStaticFileContent(const std::string &fileName) {
   std::string path = std::string(PATH_TO_INTERFACES) + fileName;
 
-  std::string fileContent;
+  std::ostringstream oss;
   std::ifstream file {path, std::ios::binary};
 
   if (!file.is_open()) {
@@ -31,15 +32,36 @@ std::string RequestHandler::getStaticFileContent(const std::string &fileName) {
     throw std::runtime_error("File Not found");
   } else {
     BOOST_LOG_TRIVIAL(info) << "Loading static data from : " << path;
-    fileContent = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    oss << file.rdbuf();
   }
-  return fileContent;
+  return oss.str();
 }
 
 std::string RequestHandler::getMimeType(const std::string &arg) {
-  if (endsWith(arg, ".html")) return "text/html";
-  if (endsWith(arg, ".css")) return "text/css";
-  if (endsWith(arg, ".js")) return "text/javascript";
+  const std::vector<std::pair<std::string, std::string>> mimeTypes = {
+    {".html", "text/html"},
+    {".json", "application/json"},
+    {".css", "text/css"},
+    {".js", "text/javascript"},
+    {".jpg", "image/jpeg"},
+    {".jpeg", "image/jpeg"},
+    {".png", "image/png"},
+    {".gif", "image/gif"},
+    {".bmp", "image/bmp"},
+    {".svg", "image/svg+xml"},
+    {".webp", "image/webp"},
+    {".mp4", "video/mp4"},
+    {".webm", "video/webm"},
+    {".ogv", "video/ogg"},
+    {".mov", "video/quicktime"},
+    {".avi", "video/x-msvideo"}, // Consider using a more specific type if possible
+  };
+  
+  for (const auto &type : mimeTypes) {
+    if (endsWith(arg, type.first)) {
+      return type.second;
+    }
+  }
   return "application/octet_stream"; // Default MIME Type
 }
 

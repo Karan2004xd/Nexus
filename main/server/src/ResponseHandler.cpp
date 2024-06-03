@@ -2,6 +2,7 @@
 #include "../../utils/include/json/SimpleJsonParser.hpp"
 
 #include <boost/beast.hpp>
+#include <boost/beast/version.hpp>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
@@ -28,9 +29,8 @@ void ResponseHandler::handleResponse(std::string &jsonData,
   http::response<http::string_body> response;
   response.version(version);
   response.result(status);
-  response.set(http::field::server, "Nexus Server");
+  response.set(http::field::server, BOOST_BEAST_VERSION_STRING);
   response.set(http::field::content_type, contentType);
-
   response.body() = std::move(body);
   response.prepare_payload();
   http::write(socket, response);

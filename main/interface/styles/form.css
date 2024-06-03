@@ -1,0 +1,30 @@
+/* body { */
+/*   background: url("../images/nexus_logo_4x.jpg"); */
+/* } */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: white;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  background: #111826;
+  padding: 10rem;
+  position: absolute;
+  margin: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  /* margin-top: 3rem; */
+}
+
+svg {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}

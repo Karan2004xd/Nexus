@@ -29,6 +29,9 @@ protected:
   DfsResult checkUser(const std::string &username,
                       const std::string &password);
 
+  const bool checkIfVideoOrImage(const std::string &fileName) const;
+  std::string base64Encode(const std::string &data);
+
 private:
   enum FileType { NORMAL, TRASH };
 
@@ -39,9 +42,6 @@ private:
                    const size_t &userId);
 
   size_t getTrashFileId(const std::string &fileName);
-
-  const bool checkIfVideoOrImage(const std::string &fileName) const;
-  std::string base64Encode(const std::string &data);
 
   std::string getCacheData(const size_t &fileId);
   DfsResult getDataApi(const std::string &fileName,
