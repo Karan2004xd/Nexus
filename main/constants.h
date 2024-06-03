@@ -23,6 +23,8 @@
 #define STORAGE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/storage"
 #define DFS_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/dfs"
 
+#define USER_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/queries/user"
+
 // Interface 
 #define PATH_TO_INTERFACES "/home/karan/Documents/Code/Nexus/main/interface"
 #define PATH_TO_ASSETS "/home/karan/Documents/Code/Nexus/main/interface/assets"

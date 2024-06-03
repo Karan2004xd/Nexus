@@ -1,3 +1,3 @@
 INSERT INTO File (
-  name, type
-) VALUES ( $name, $type );
+  name, type, user_id
+) VALUES ( $name, $type, $user_id );

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <boost/beast.hpp>
 #include <boost/beast/core/detail/base64.hpp>
+#include "../../storage/include/AwsS3.hpp"
 
 using namespace Nexus;
 

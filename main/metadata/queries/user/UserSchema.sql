@@ -1,0 +1,6 @@
+CREATE TABLE User (
+  id INT AUTO_INCREMENT,
+  PRIMARY KEY(id),
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(40) NOT NULL,
+);

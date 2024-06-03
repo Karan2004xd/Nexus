@@ -25,7 +25,8 @@ private:
   void setChunks(const std::string &fileData);
 
   void setNewFileInMetadata(const std::string &fileName,
-                            const std::string &fileType);
+                            const std::string &fileType,
+                            const size_t &userId);
 
   void setFileId();
   void setupChunker(const Contents &contents);

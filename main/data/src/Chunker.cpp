@@ -25,11 +25,13 @@ void Chunker::setChunks(const std::string &fileData) {
 }
 
 void Chunker::setNewFileInMetadata(const std::string &fileName,
-                                   const std::string &fileType) {
+                                   const std::string &fileType,
+                                   const size_t &userId) {
   auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
     .singleData("file", "InsertNewFile")
     .singleData("name", fileName)
     .singleData("type", fileType)
+    .singleData("user_id", std::to_string(userId))
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DATA_QUERIES_DIR, jsonData);
@@ -49,7 +51,7 @@ void Chunker::setFileId() {
 }
 
 void Chunker::setupChunker(const Contents &contents) {
-  setNewFileInMetadata(contents.getFileName(), contents.getFileType());
+  setNewFileInMetadata(contents.getFileName(), contents.getFileType(), contents.getUserId());
   setFileId();
   setFileSize(contents.getfileLength());
   setChunks(contents.getFileContent());

@@ -1,6 +1,5 @@
 #include "../include/Contents.hpp"
 #include "../../constants.h"
-#include <iostream>
 
 using namespace Data;
 
@@ -34,7 +33,13 @@ void Contents::setFileMemorySize() {
   this->fileMemorySize = memoryAllocSize + baseSize;
 }
 
-void Contents::setFileDetails(const std::string &fileName, const std::string &fileContent) {
+void Contents::setUserId(const size_t &userId) {
+  this->userId = userId;
+}
+
+void Contents::setFileDetails(const std::string &fileName,
+                              const std::string &fileContent,
+                              const size_t &userId) {
   setFileName(fileName);
   setFileContent(fileContent);
 
@@ -43,7 +48,8 @@ void Contents::setFileDetails(const std::string &fileName, const std::string &fi
   setFileMemorySize();
 }
 
-void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams) {
+void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams,
+                              const size_t &userId) {
   std::string fileName = std::get<std::string>(jsonDataParams.at(FILE_NAME));
   std::string fileContent = std::get<std::string>(jsonDataParams.at(FILE_CONTENT));
 
@@ -55,14 +61,17 @@ void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jso
   setFileMemorySize();
 }
 
-Contents::Contents(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams) {
+Contents::Contents(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams,
+                   const size_t &userId) {
   if (jsonDataParams.size() > 1) {
-    setFileDetails(jsonDataParams);
+    setFileDetails(jsonDataParams, userId);
   } else {
     throw std::runtime_error("(Contents) : insufficient json data fields");
   }
 }
 
-Contents::Contents(const std::string &fileName, const std::string &fileContent) {
-  setFileDetails(fileName, fileContent);
+Contents::Contents(const std::string &fileName,
+                   const std::string &fileContent,
+                   const size_t &userId) {
+  setFileDetails(fileName, fileContent, userId);
 }

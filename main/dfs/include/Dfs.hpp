@@ -2,7 +2,6 @@
 #define DFS_HPP
 #include "Nexus.hpp"
 #include "DfsResult.hpp"
-#include "../../storage/include/AwsS3.hpp"
 #include "../../data/include/Cache.hpp"
 
 class Nexus::Dfs : protected Data::Cache {

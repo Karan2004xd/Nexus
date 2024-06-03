@@ -6,6 +6,7 @@ add_subdirectory("./metadata")
 add_subdirectory("./utils")
 add_subdirectory("./dfs")
 add_subdirectory("./storage")
+add_subdirectory("./user")
 add_subdirectory("./server")
 
 configure_file("./constants.h.in" ${CMAKE_SOURCE_DIR}/constants.h @ONLY)

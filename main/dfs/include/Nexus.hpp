@@ -22,5 +22,7 @@ namespace Nexus {
   namespace Storage {
     class AwsS3;
   }
+
+  class User;
 }
 #endif // NEXUX_HPP
