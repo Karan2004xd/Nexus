@@ -11,9 +11,10 @@ function sendRequest(fileName, fileContent) {
   const url = 'http://localhost:8082';
   // fileName = "2wallpaperflare.com_wallpaper.jpg";
   const data = {
-    request: 'get',
+    request: 'post',
     // filename: fileName,
     // content: fileContent,
+    username: 'user_1',
     operation: 'list-data'
   };
 

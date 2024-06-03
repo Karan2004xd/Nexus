@@ -3,6 +3,7 @@
 #include "../include/Logging.hpp"
 #include <fstream>
 #include <iterator>
+#include <iostream>
 
 std::string RequestHandler::getRequestTarget(const std::string &requestTarget) {
   std::string target;
@@ -56,38 +57,55 @@ bool RequestHandler::checkJsonData(const std::initializer_list<std::string> &jso
   return true;
 }
 
-RequestHandler::RequestMap RequestHandler::getRequestMap(const JsonDataParams &jsonParams,
-                                                         const std::string &contentType,
-                                                         const unsigned int &version) {
+DfsResult RequestHandler::getOperationResult(const JsonDataParams &jsonParams) {
   std::string operation = std::get<std::string>(jsonParams.at(OPERATION));
-  std::string fileName;
+  std::string username = std::get<std::string>(jsonParams.at(CLIENT_USERNAME));
+
+  std::string fileName, password;
   try {
     fileName = std::get<std::string>(jsonParams.at(FILE_NAME));
   } catch (const std::exception &) {}
 
+  try {
+    password = std::get<std::string>(jsonParams.at(CLIENT_PASSWORD));
+  } catch (const std::exception &) {}
+
+  BOOST_LOG_TRIVIAL(info) << "Performing operation: " << operation;
+
+  DfsResult resultObj;
+  if (operation == PUT_DATA) {
+    std::string fileContent = std::get<std::string>(jsonParams.at(FILE_CONTENT));
+    resultObj = Dfs::storeDataApi(fileName, fileContent, username);
+  } else if (operation == GET_DATA) {
+    resultObj = Dfs::getDataApi(fileName, username);
+  } else if (operation == GET_TRASH_DATA) {
+    resultObj = Dfs::getTrashDataApi(fileName, username);
+  } else if (operation == DELETE_DATA) {
+    resultObj = Dfs::deleteDataApi(fileName, username);
+  } else if (operation == DELETE_TRASH_DATA) {
+    resultObj = Dfs::deleteTrashDataApi(fileName, username);
+  } else if (operation == LIST_DATA) {
+    resultObj = Dfs::listDataApi(username);
+  } else if (operation == LIST_TRASH_DATA) {
+    resultObj = Dfs::listTrashDataApi(username);
+  } else if (operation == ADD_USER) {
+    resultObj = Dfs::addUser(username, password);
+  } else if (operation == CHECK_USER) {
+    resultObj = Dfs::checkUser(username, password);
+  }
+
+  return resultObj;
+}
+
+RequestHandler::RequestMap RequestHandler::getRequestMap(const JsonDataParams &jsonParams,
+                                                         const std::string &contentType,
+                                                         const unsigned int &version) {
   RequestMap result {
     {RequestParams::CONTENT_TYPE, contentType},
     {RequestParams::VERSION, version}
   };
 
-  DfsResult resultObj;
-  if (operation == PUT_DATA) {
-    std::string fileContent = std::get<std::string>(jsonParams.at(FILE_CONTENT));
-    resultObj = Dfs::storeDataApi(fileName, fileContent);
-  } else if (operation == GET_DATA) {
-    resultObj = Dfs::getDataApi(fileName);
-  } else if (operation == GET_TRASH_DATA) {
-    resultObj = Dfs::getTrashDataApi(fileName);
-  } else if (operation == DELETE_DATA) {
-    resultObj = Dfs::deleteDataApi(fileName);
-  } else if (operation == DELETE_TRASH_DATA) {
-    resultObj = Dfs::deleteTrashDataApi(fileName);
-  } else if (operation == LIST_DATA) {
-    resultObj = Dfs::listDataApi();
-  } else if (operation == LIST_TRASH_DATA) {
-    resultObj = Dfs::listTrashDataApi();
-  }
-
+  auto resultObj = getOperationResult(jsonParams);
   if (resultObj.isSuccess()) {
     if (resultObj.getOutput().empty()) {
       result.insert({RequestParams::BODY, resultObj.getOutputList()});

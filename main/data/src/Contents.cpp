@@ -46,6 +46,7 @@ void Contents::setFileDetails(const std::string &fileName,
   setFileType();
   setFileLength();
   setFileMemorySize();
+  setUserId(userId);
 }
 
 void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams,
@@ -59,6 +60,7 @@ void Contents::setFileDetails(const Utils::SimpleJsonParser::JsonDataParams &jso
   setFileType();
   setFileLength();
   setFileMemorySize();
+  setUserId(userId);
 }
 
 Contents::Contents(const Utils::SimpleJsonParser::JsonDataParams &jsonDataParams,

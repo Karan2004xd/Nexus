@@ -1,30 +1,47 @@
 #include "../include/Dfs.hpp"
 #include "../../data/include/Contents.hpp"
 #include "../../data/include/Chunker.hpp"
+
 #include "../../utils/include/query/SimpleQueryParser.hpp"
+#include "../../storage/include/AwsS3.hpp"
 #include "../../constants.h"
+
 #include <algorithm>
 #include <boost/beast.hpp>
 #include <boost/beast/core/detail/base64.hpp>
-#include "../../storage/include/AwsS3.hpp"
 
 using namespace Nexus;
 
-DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &fileContent) { 
+size_t Dfs::getUserId(const std::string &username) {
+  auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
+    .singleData("file", "GetUserId")
+    .singleData("username", username)
+    .getJsonData();
+
+  auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
+  MetaData metaData;
+  auto queryOutput = metaData.getQueryDataMap(queryData);
+  return std::stoi(queryOutput.at("id").at(0));
+}
+
+DfsResult Dfs::storeDataApi(const std::string &fileName,
+                            const std::string &fileContent,
+                            const std::string &username) { 
   std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
 
   try {
-    Data::Contents contents {fileName, fileContent};
+    size_t userId = getUserId(username);
+    Data::Contents contents {fileName, fileContent, userId};
     Data::Chunker chunker {contents};
     auto &chunks = chunker.getChunks();
 
     Storage::AwsS3 awsS3;
     awsS3.storeData(chunks);
-    output = "Successfully stored data";
+    output = "true";
   } catch (std::exception &e) {
     errorMsg = e.what();
-    output = "Failed to create new file";
+    output = "false";
     resultType = DfsResult::ResultType::FAILED;
   }
 
@@ -32,7 +49,8 @@ DfsResult Dfs::storeDataApi(const std::string &fileName, const std::string &file
 }
 
 size_t Dfs::getFileId(const std::string &fileName,
-                      const FileType &fileType) {
+                      const FileType &fileType,
+                      const size_t &userId) {
   std::string queryFileName;
 
   if (fileType == FileType::NORMAL) {
@@ -43,6 +61,7 @@ size_t Dfs::getFileId(const std::string &fileName,
   auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
     .singleData("file", queryFileName)
     .singleData("name", fileName)
+    .singleData("user_id", std::to_string(userId))
     .getJsonData();
 
   auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
@@ -91,13 +110,15 @@ std::string Dfs::base64Encode(const std::string &data) {
 }
 
 DfsResult Dfs::getDataApi(const std::string &fileName,
-                          const FileType &fileType) {
+                          const FileType &fileType,
+                          const std::string &username) {
   std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
   std::future<void> cacheThread;
 
   try {
-    size_t fileId = getFileId(fileName, fileType);
+    size_t userId = getUserId(username);
+    size_t fileId = getFileId(fileName, fileType, userId);
     bool isVideoOrImage = checkIfVideoOrImage(fileName);
     try {
       output = getCacheData(fileId);
@@ -131,21 +152,25 @@ DfsResult Dfs::getDataApi(const std::string &fileName,
   return {output, errorMsg, resultType};
 }
 
-DfsResult Dfs::getDataApi(const std::string &fileName) {
-  return getDataApi(fileName, FileType::NORMAL);
+DfsResult Dfs::getDataApi(const std::string &fileName,
+                          const std::string &username) {
+  return getDataApi(fileName, FileType::NORMAL, username);
 }
 
-DfsResult Dfs::getTrashDataApi(const std::string &fileName) {
-  return getDataApi(fileName, FileType::TRASH);
+DfsResult Dfs::getTrashDataApi(const std::string &fileName,
+                               const std::string &username) {
+  return getDataApi(fileName, FileType::TRASH, username);
 }
 
 DfsResult Dfs::deleteDataApi(const std::string &fileName,
-                             const FileType &fileType) {
+                             const FileType &fileType,
+                             const std::string &username) {
   std::string output, errorMsg;
   DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
 
   try {
-    size_t fileId = getFileId(fileName, fileType);
+    size_t userId = getUserId(username);
+    size_t fileId = getFileId(fileName, fileType, userId);
     Storage::AwsS3 awsS3;
     if (fileType == FileType::NORMAL) {
       awsS3.deleteData(fileId);
@@ -163,15 +188,18 @@ DfsResult Dfs::deleteDataApi(const std::string &fileName,
   return {output, errorMsg, resultType};
 }
 
-DfsResult Dfs::deleteDataApi(const std::string &fileName) {
-  return deleteDataApi(fileName, FileType::NORMAL);
+DfsResult Dfs::deleteDataApi(const std::string &fileName,
+                             const std::string &username) {
+  return deleteDataApi(fileName, FileType::NORMAL, username);
 }
 
-DfsResult Dfs::deleteTrashDataApi(const std::string &fileName) {
-  return deleteDataApi(fileName, FileType::TRASH);
+DfsResult Dfs::deleteTrashDataApi(const std::string &fileName,
+                                  const std::string &username) {
+  return deleteDataApi(fileName, FileType::TRASH, username);
 }
 
-DfsResult Dfs::listDataApi(const FileType &fileType) {
+DfsResult Dfs::listDataApi(const FileType &fileType,
+                           const std::string &username) {
   DfsResult::MessageMap messageMap;
 
   std::string output, errorMsg;
@@ -179,6 +207,7 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
 
   try {
     std::string queryFile;
+    size_t userId = getUserId(username);
     if (fileType == FileType::NORMAL) {
       queryFile = "ListFileData";
     } else if (fileType == FileType::TRASH) {
@@ -186,6 +215,7 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
     }
     auto jsonData = Utils::SimpleJsonParser::JsonBuilder()
       .singleData("file", queryFile)
+      .singleData("user_id", std::to_string(userId))
       .getJsonData();
 
     auto queryData = Utils::SimpleQueryParser::parseQuery(DFS_QUERIES_DIR, jsonData);
@@ -204,10 +234,46 @@ DfsResult Dfs::listDataApi(const FileType &fileType) {
   return {messageMap, errorMsg, resultType};
 }
 
-DfsResult Dfs::listDataApi() {
-  return listDataApi(FileType::NORMAL);
+DfsResult Dfs::listDataApi(const std::string &username) {
+  return listDataApi(FileType::NORMAL, username);
 }
 
-DfsResult Dfs::listTrashDataApi() {
-  return listDataApi(FileType::TRASH);
+DfsResult Dfs::listTrashDataApi(const std::string &username) {
+  return listDataApi(FileType::TRASH, username);
+}
+
+DfsResult Dfs::addUser(const std::string &username,
+                       const std::string &password) {
+  std::string output, errorMsg;
+  DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
+
+  try {
+    User::addUser(username, password);
+    output = "New user was added successfully";
+  } catch (const std::exception &e) {
+    errorMsg = e.what();
+    output = "Unable to add user";
+    resultType = DfsResult::ResultType::FAILED;
+  }
+  return {output, errorMsg, resultType};
+}
+
+DfsResult Dfs::checkUser(const std::string &username,
+                    const std::string &password) {
+  std::string output, errorMsg;
+  DfsResult::ResultType resultType = DfsResult::ResultType::SUCCESS;
+
+  try {
+    bool result = User::checkUser(username, password);
+    if (result) {
+      output = "true";
+    } else {
+      output = "false";
+    }
+  } catch (const std::exception &e) {
+    errorMsg = e.what();
+    output = "Unable to check user";
+    resultType = DfsResult::ResultType::FAILED;
+  }
+  return {output, errorMsg, resultType};
 }

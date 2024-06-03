@@ -28,14 +28,19 @@ void ConnectionHandler::startListener() {
     BOOST_LOG_TRIVIAL(info) << "Running on port: " << DEFAULT_PORT;
 
     while (true) {
-      tcp::socket socket {ioContext};
-      acceptor.accept(socket);
+      try {
+        tcp::socket socket {ioContext};
+        acceptor.accept(socket);
 
-      beast::flat_buffer buffer;
-      http::request<http::string_body> request;
-      http::read(socket, buffer, request);
-      
-      ConnectionHandler::handleRequest(request, socket);
+        beast::flat_buffer buffer;
+        http::request<http::string_body> request;
+        http::read(socket, buffer, request);
+
+        ConnectionHandler::handleRequest(request, socket);
+      } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
+        continue;
+      }
     }
   } catch (std::exception &e) {
     std::cout << e.what() << std::endl;

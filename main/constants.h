@@ -31,6 +31,8 @@
 #define PATH_TO_STYLES "/home/karan/Documents/Code/Nexus/main/interface/styles"
 
 #define OPERATION "operation"
+#define CLIENT_USERNAME "username"
+#define CLIENT_PASSWORD "password"
 
 // Request operations
 #define PUT_DATA "put-data"
@@ -43,5 +45,9 @@
 
 #define LIST_DATA "list-data"
 #define LIST_TRASH_DATA "list-trash-data"
+
+#define ADD_USER "add-user"
+#define DELETE_USER "delete-user"
+#define CHECK_USER "check-user"
 
 #endif // CONSTANTS_H_IN

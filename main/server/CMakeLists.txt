@@ -13,6 +13,9 @@ set(DEFAULT_HOST "localhost" PARENT_SCOPE)
 set(POST "POST" PARENT_SCOPE)
 set(GET "GET" PARENT_SCOPE)
 
+set(CLIENT_USERNAME "username" PARENT_SCOPE)
+set(CLIENT_PASSWORD "password" PARENT_SCOPE)
+
 add_library(${PROJECT_NAME}
   "./src/Server.cpp"
   "./src/Logging.cpp"

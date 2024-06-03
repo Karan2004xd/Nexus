@@ -1,8 +1,5 @@
-#include "data/include/Cache.hpp"
 #include "dfs/include/Nexus.hpp"
 #include "server/include/Server.hpp"
-#include "data/include/Contents.hpp"
-#include "data/include/Chunker.hpp"
 #include "constants.h"
 #include <fstream>
 #include <sstream>
@@ -25,18 +22,6 @@ std::string getFileContent(const std::string &fileName) {
 }
 
 int main() {
-  /* std::string fileName = "1wallpaperflare.com_wallpaper.jpg"; */
-  /* std::string fileName = "nexus.txt"; */
-  /* std::string fileContent = getFileContent(fileName); */
-  /* Nexus::Data::Contents contents {fileName, fileContent}; */
-  /* Nexus::Data::Chunker chunker {contents}; */
-  /* auto &chunks = chunker.getChunks(); */
-  /* Nexus::Data::Cache cache; */
-  /* cache.storeData(chunks); */
   Nexus::Server::run();
-
-  /* for (const auto &chunk : chunks) { */
-    
-  /* } */
   return 0;
 }

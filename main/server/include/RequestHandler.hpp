@@ -43,6 +43,8 @@ private:
   bool checkJsonData(const std::initializer_list<std::string> &jsonArgs,
                      const JsonDataParams &jsonParams);
 
+  DfsResult getOperationResult(const JsonDataParams &jsonParams);
+
   RequestMap getRequestMap(const JsonDataParams &jsonParams,
                            const std::string &contentType,
                            const unsigned int &version);

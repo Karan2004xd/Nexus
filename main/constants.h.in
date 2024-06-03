@@ -31,6 +31,8 @@
 #define PATH_TO_STYLES "@PATH_TO_STYLES@"
 
 #define OPERATION "@OPERATION@"
+#define CLIENT_USERNAME "@CLIENT_USERNAME@"
+#define CLIENT_PASSWORD "@CLIENT_PASSWORD@"
 
 // Request operations
 #define PUT_DATA "@PUT_DATA@"
@@ -43,5 +45,9 @@
 
 #define LIST_DATA "@LIST_DATA@"
 #define LIST_TRASH_DATA "@LIST_TRASH_DATA@"
+
+#define ADD_USER "@ADD_USER@"
+#define DELETE_USER "@DELETE_USER@"
+#define CHECK_USER "@CHECK_USER@"
 
 #endif // CONSTANTS_H_IN
