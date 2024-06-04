@@ -1,0 +1,31 @@
+The communication method is quite simple in this application.
+
+Main Logic : The front-end (javaScript in our case) read the data from the user and will send the whole file data to the backend
+             (C++ in our case), the backend will process the request and for it to process the request there certain rules to follow
+             while making request to the backend, like the case in which the operation has to be requested, parameters required with
+             the particular operation.
+
+             This way the backend can process the operation and send back the request (if request any) or even perform a process.
+             In case if a bad request is made then the error response of the same will be send back to the frontend containing with
+             the status code of 500 (bad_request) and also will send the common status code for certain errors such as 400, 404 etc.
+            
+             So the whole communication relies of making request following the guidelines strictly.
+
+             **Note** : The whole communication is done through JSON.
+
+Rules:
+
+  (1) Naming Rules: The requested operation parameter must be of type string and should be in kabab-case (example: hello-world),
+                    no capital letter should be used.
+
+  (2) Request Parameters: Compulsary parameters = request (Only 'post' method should be passed),
+                                                  operation (Take a look at the available operations with their parameters)
+                                                  headers (should be equal to "application/json")
+                                                  body (must be in JSON format)
+
+                                                  (other are the parameter specified my the specific operation)
+
+  (3) Response: The response will be in string format, which will only contain two type of output that is "true" or "false",
+                simply due which the frontend can have more flexibility and can easily understand where the operation was
+                executed successfully or not. In case of some issue in parameters or request then the neccessary error message
+                with status code will be provided.

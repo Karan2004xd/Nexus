@@ -3,22 +3,51 @@
 
 #define DEFAULT_PORT 8082
 #define DEFAULT_HOST "localhost"
+#define POST "POST"
+#define GET "GET"
 
-#define PATH_TO_INTERFACES "/home/karan/Documents/Code/Nexus/main/dfs/interface"
-#define PATH_TO_ASSETS "/home/karan/Documents/Code/Nexus/main/dfs/interface/assets"
-#define PATH_TO_STYLES "/home/karan/Documents/Code/Nexus/main/dfs/interface/styles"
+#define FILE_NAME "filename"
+#define FILE_CONTENT "content"
+#define CACHE_DIR "/home/karan/Documents/Code/Nexus/main/.NexusCache"
 
-#define FORM_BOUNDRY "------WebKitFormBoundary"
-#define FILENAME "filename"
-#define CONTENT_TYPE "Content-Type"
+#define MAIN_DIR "/home/karan/Documents/Code/Nexus/main"
+#define EXT ".txt"
 
-#define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/dfs/database/queries"
+// Queries Constants
+#define QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries"
+#define TEST_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/test"
 
-#define BUCKET_MAIN_AP_SOUTH_1 "main-ap-south-1"
-#define BUCKET_MAIN_AP_SOUTHEAST_1 "main-ap-southeast-1"
-#define BUCKET_MAIN_US_EAST_1_BUCKET "main-us-east-1-bucket"
-#define BUCKET_MAIN_US_EAST_2_BUCKET "main-us-east-2-bucket"
-#define BUCKET_MAIN_EU_NORTH_1 "main-eu-north-1"
+#define DATA_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/data"
+#define CACHE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/cache"
 
-#define BUCKET_BACKUP_EU_WEST_2 "backup-eu-west-2"
+#define STORAGE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/storage"
+#define DFS_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/dfs"
+
+#define USER_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/queries/user"
+
+// Interface 
+#define PATH_TO_INTERFACES "/home/karan/Documents/Code/Nexus/main/interface"
+#define PATH_TO_ASSETS "/home/karan/Documents/Code/Nexus/main/interface/assets"
+#define PATH_TO_STYLES "/home/karan/Documents/Code/Nexus/main/interface/styles"
+
+#define OPERATION "operation"
+#define CLIENT_USERNAME "username"
+#define CLIENT_PASSWORD "password"
+
+// Request operations
+#define PUT_DATA "put-data"
+
+#define GET_DATA "get-data"
+#define GET_TRASH_DATA "get-trash-data"
+
+#define DELETE_DATA "delete-data"
+#define DELETE_TRASH_DATA "delete-trash-data"
+
+#define LIST_DATA "list-data"
+#define LIST_TRASH_DATA "list-trash-data"
+
+#define ADD_USER "add-user"
+#define DELETE_USER "delete-user"
+#define CHECK_USER "check-user"
+
 #endif // CONSTANTS_H_IN
