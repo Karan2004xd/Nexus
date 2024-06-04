@@ -7,6 +7,9 @@ set(KAFKA_NEXUS_BACKEND_GROUP_ID "nexus-backend-group" PARENT_SCOPE)
 set(KAFKA_NEXUS_FRONTEND_GROUP_ID "nexus-frontend-group" PARENT_SCOPE)
 set(KAFKA_NEXUS_FRONTEND_TOPIC "nexus-frontend-topic" PARENT_SCOPE)
 
+find_package(Boost REQUIRED COMPONENTS log log_setup)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME}
   "./src/Consumer.cpp"
   "./src/Producer.cpp"
@@ -15,4 +18,4 @@ add_library(${PROJECT_NAME}
 )
 
 target_link_directories(${PROJECT_NAME} PRIVATE "./include")
-target_link_libraries(${PROJECT_NAME} PRIVATE cppkafka)
+target_link_libraries(${PROJECT_NAME} PRIVATE cppkafka Boost::log Boost::log_setup dfs)
