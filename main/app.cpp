@@ -1,5 +1,6 @@
 #include "dfs/include/Nexus.hpp"
 #include "server/include/Server.hpp"
+#include "data-transfer/include/KafkaApi.hpp"
 #include "constants.h"
 #include <fstream>
 #include <sstream>
@@ -22,6 +23,8 @@ std::string getFileContent(const std::string &fileName) {
 }
 
 int main() {
-  Nexus::Server::run();
+  /* Nexus::Server::run(); */
+  KafkaApi api;
+  api.startKafkaApi();
   return 0;
 }

@@ -50,4 +50,11 @@
 #define DELETE_USER "delete-user"
 #define CHECK_USER "check-user"
 
+// Data-Transfer
+#define KAFKA_BROKER "localhost:9092"
+#define KAFKA_NEXUS_BACKEND_TOPIC "nexus-backend-topic"
+#define KAFKA_NEXUS_BACKEND_GROUP_ID "nexus-backend-group"
+#define KAFKA_NEXUS_FRONTEND_GROUP_ID "nexus-frontend-group"
+#define KAFKA_NEXUS_FRONTEND_TOPIC "nexus-frontend-topic"
+
 #endif // CONSTANTS_H_IN

@@ -24,5 +24,6 @@ namespace Nexus {
   }
 
   class User;
+  class DataTransfer;
 }
 #endif // NEXUX_HPP
