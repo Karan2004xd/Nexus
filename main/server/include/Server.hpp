@@ -6,7 +6,7 @@
 
 class Nexus::Server {
 public:
-  void start();
+  void start(); 
 private:
   ServerHandler serverHandler;
 };

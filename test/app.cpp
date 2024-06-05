@@ -2,14 +2,8 @@
 #include <crow/app.h>
 #include <crow/http_request.h>
 #include <crow/http_response.h>
+#include <crow/multipart.h>
 #include <crow/mustache.h>
-#include <httplib.h>
-
-std::string getFieldValue(const std::string &body,
-                          const std::string &fieldValue) {
-  httplib::Request req {body};
-  return req.get_header_value(fieldValue);
-}
 
 int main() {
   crow::SimpleApp app;
@@ -34,10 +28,20 @@ int main() {
     res.end();
   });
 
-  CROW_ROUTE(app, "/submitForm").methods("POST"_method)
+  CROW_ROUTE(app, "/submitForm").methods(crow::HTTPMethod::POST)
     ([](const crow::request &req) {
-      std::cout << req.body << std::endl;
-      std::cout << getFieldValue(req.body, "Content-Type") << std::endl;
+      /* std::cout << req.body << std::endl; */
+
+      /* std::cout << req.url_params.get("username") << std::endl; */
+      /* std::cout << req.url_params.get("password") << std::endl; */
+
+      crow::multipart::message msg {req};
+      auto result = msg.parts;
+      std::cout << result.size() << std::endl;
+
+      for (const auto &i : result) {
+        std::cout << i.body << std::endl;
+      }
 
       auto res = crow::response(302);
       res.set_header("Location", "/logout");
