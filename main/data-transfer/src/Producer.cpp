@@ -80,6 +80,7 @@ void Producer::sendResponse(const std::string &requestData) {
     cppkafka::Producer producer {producerConfig};
     std::string responseData = getJsonResposne(requestData);
     producer.produce(cppkafka::MessageBuilder(KAFKA_NEXUS_FRONTEND_TOPIC).partition(0).payload(responseData));
+    BOOST_LOG_TRIVIAL(info) << "Data sent";
     producer.flush();
   } catch (const std::exception &e) {
     std::cout << e.what() << std::endl;

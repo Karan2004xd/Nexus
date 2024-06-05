@@ -5,6 +5,9 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 
+const responseMap = new Map();
+const responseList = [];
+
 // Enable CORS
 app.use(cors());
 app.use(express.json());
@@ -13,20 +16,45 @@ app.use(express.json());
 const kafka = new Kafka({
   clientId: 'Nexus Client',
   brokers: ['localhost:9092'],
+  connectionTimeout: 6000
 });
 
-const producer = kafka.producer();
-const consumer = kafka.consumer({ groupId: 'nexus-frontend-group' });
+const consumerConfig = {
+  groupId: 'nexus-frontend-group',
+  sessionTimeout: 6000,
+  autoCommitInterval: 100,
+  autoOffsetReset: 'earliest',
+  maxPollInterval: 60000
+};
+
+const producerConfig = {
+  idempotent: true
+};
+
+const producer = kafka.producer(producerConfig);
+const consumer = kafka.consumer(consumerConfig);
 
 // Connect the producer and consumer
 const run = async () => {
   await producer.connect();
   await consumer.connect();
-  await consumer.subscribe({ topic: 'nexus-frontend-topic', fromBeginning: false });
+  await consumer.subscribe({ topic: 'nexus-frontend-topic', fromBeginning: true });
 
-  consumer.run({
+  await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log(`Received message: ${message.value.toString()}`);
+      const response = message.value.toString();
+
+      console.log(`Received message: ${response}`);
+      console.log(responseList.length);
+      let res;
+      while (responseList.length > 0) {
+        res = responseList.shift();
+        res.status(200).send(response);
+      }
+      
+      // if (responseMap.has(requestId)) {
+      //   res.status(200).send(responseMap.get(requestId));
+      // }
     },
   });
 };
@@ -38,11 +66,16 @@ app.post('/dfs', async (req, res) => {
   const { requestId, payload } = req.body;
 
   try {
-    await producer.send({
+    const requestData = JSON.stringify(payload);
+    producer.send({
       topic: 'nexus-backend-topic',
-      messages: [{ key: requestId, value: JSON.stringify(payload) }],
+      messages: [{ key: requestId, value: requestData }],
     });
-    res.status(200).send(JSON.stringify(payload));
+    
+    // responseMap.set(requestId, res);
+    responseList.push(res);
+    // await producer.flush();
+    // res.status(200).send(response);
   } catch (error) {
     res.status(500).send('Failed to send request to DFS');
   }
