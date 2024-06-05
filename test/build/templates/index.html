@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Using Crow REST API</title>
+    <link href="../static/css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <!-- <h2>Hello, {{person}}</h2> -->
+    <img src="../static/nexus_logo_4x.jpg" alt="Logo Image" width="200px" height="200px">
+    <a href="/logout">Logout</a>
+
+    <form method="post" enctype="multipart/form-data" action="/submitForm">
+      <label for="file_upload">Select a file to upload</label>
+      <input type="file" name="uploaded_file" id="file-upload"><br>
+      <button type="submit" id="upload-btn">Upload</button>
+    </form>
+
+  </body>
+  <script src="../static/js/app.js" defer></script>
+</html>

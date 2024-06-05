@@ -1,9 +1,13 @@
 #ifndef SERVER_HANDLER_HPP
 #define SERVER_HANDLER_HPP
 
+#include <crow/app.h>
+
 class ServerHandler {
-protected:
-  static void startListeningForRequests();
-  static void startLogging();
+public:
+
+private:
+  crow::SimpleApp app;
 };
 #endif // SERVER_HANDLER_HPP
+

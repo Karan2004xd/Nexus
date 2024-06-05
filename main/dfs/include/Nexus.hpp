@@ -9,6 +9,7 @@ namespace Nexus {
   namespace Utils {
     class SimpleJsonParser;
     class SimpleQueryParser;
+    class RequestParser;
   }
   
   class MetaData;
