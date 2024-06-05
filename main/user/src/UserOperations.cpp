@@ -2,7 +2,6 @@
 #include "../../utils/include/json/SimpleJsonParser.hpp"
 #include "../../utils/include/query/SimpleQueryParser.hpp"
 #include "../../constants.h"
-#include <stdexcept>
 
 using namespace Nexus;
 

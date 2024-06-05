@@ -3,8 +3,6 @@
 
 #define DEFAULT_PORT @DEFAULT_PORT@
 #define DEFAULT_HOST "@DEFAULT_HOST@"
-#define POST "@POST@"
-#define GET "@GET@"
 
 #define FILE_NAME "@FILE_NAME@"
 #define FILE_CONTENT "@FILE_CONTENT@"

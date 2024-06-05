@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "server/include/Server.hpp"
 
 std::string getFileContent(const std::string &fileName) {
   std::ostringstream oss;
@@ -21,5 +22,7 @@ std::string getFileContent(const std::string &fileName) {
 }
 
 int main() {
+  Nexus::Server server;
+  server.start();
   return 0;
 }

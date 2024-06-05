@@ -249,10 +249,10 @@ DfsResult Dfs::addUser(const std::string &username,
 
   try {
     User::addUser(username, password);
-    output = "New user was added successfully";
+    output = "true";
   } catch (const std::exception &e) {
     errorMsg = e.what();
-    output = "Unable to add user";
+    output = "false";
     resultType = DfsResult::ResultType::FAILED;
   }
   return {output, errorMsg, resultType};

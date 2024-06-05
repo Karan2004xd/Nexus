@@ -3,8 +3,6 @@
 
 #define DEFAULT_PORT 8082
 #define DEFAULT_HOST "localhost"
-#define POST "POST"
-#define GET "GET"
 
 #define FILE_NAME "filename"
 #define FILE_CONTENT "content"
@@ -23,12 +21,12 @@
 #define STORAGE_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/storage"
 #define DFS_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/dfs"
 
-#define USER_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/queries/user"
+#define USER_QUERIES_DIR "/home/karan/Documents/Code/Nexus/main/metadata/queries/user"
 
 // Interface 
-#define PATH_TO_INTERFACES "/home/karan/Documents/Code/Nexus/main/interface"
-#define PATH_TO_ASSETS "/home/karan/Documents/Code/Nexus/main/interface/assets"
-#define PATH_TO_STYLES "/home/karan/Documents/Code/Nexus/main/interface/styles"
+#define PATH_TO_INTERFACES ""
+#define PATH_TO_ASSETS ""
+#define PATH_TO_STYLES ""
 
 #define OPERATION "operation"
 #define CLIENT_USERNAME "username"
@@ -51,10 +49,10 @@
 #define CHECK_USER "check-user"
 
 // Data-Transfer
-#define KAFKA_BROKER "localhost:9092"
-#define KAFKA_NEXUS_BACKEND_TOPIC "nexus-backend-topic"
-#define KAFKA_NEXUS_BACKEND_GROUP_ID "nexus-backend-group"
-#define KAFKA_NEXUS_FRONTEND_GROUP_ID "nexus-frontend-group"
-#define KAFKA_NEXUS_FRONTEND_TOPIC "nexus-frontend-topic"
+#define KAFKA_BROKER ""
+#define KAFKA_NEXUS_BACKEND_TOPIC ""
+#define KAFKA_NEXUS_BACKEND_GROUP_ID ""
+#define KAFKA_NEXUS_FRONTEND_GROUP_ID ""
+#define KAFKA_NEXUS_FRONTEND_TOPIC ""
 
 #endif // CONSTANTS_H_IN

@@ -43,7 +43,7 @@ int main() {
         std::cout << i.body << std::endl;
       }
 
-      auto res = crow::response(302);
+      auto res = crow::response(302, "{hello : world}");
       res.set_header("Location", "/logout");
       return res;
     });

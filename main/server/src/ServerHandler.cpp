@@ -3,5 +3,5 @@
 
 void ServerHandler::startServer() {
   routes.mapRoutes(app);
-  app.port(DEFAULT_PORT);
+  app.port(DEFAULT_PORT).multithreaded().run();
 }

@@ -1,1 +1,1 @@
-SELECT * FROM User WHERE username = $name AND password = $password;
+SELECT * FROM User WHERE username = $username AND password = $password;

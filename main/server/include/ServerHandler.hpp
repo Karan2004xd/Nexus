@@ -6,7 +6,7 @@
 
 class ServerHandler {
 public:
-  ServerHandler();
+  ServerHandler() {}
   void startServer();
 private:
   crow::SimpleApp app;
