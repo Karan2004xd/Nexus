@@ -1,3 +1,3 @@
 INSERT INTO TrashFile (
-  id, name, type
-) VALUES ( $id, $name, $type );
+  id, name, type, user_id
+) VALUES ( $id, $name, $type, $user_id );

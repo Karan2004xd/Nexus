@@ -215,12 +215,14 @@ void AwsS3::addMetaDataToTrashFile(const size_t &fileId) {
 
   std::string fileName = queryOutput.at("name").at(0);
   std::string fileType = queryOutput.at("type").at(0);
+  std::string userId = queryOutput.at("user_id").at(0);
 
   jsonData = Utils::SimpleJsonParser::JsonBuilder()
     .singleData("file", "AddTrashFileQuery")
     .singleData("id", std::to_string(fileId))
     .singleData("name", fileName)
     .singleData("type", fileType)
+    .singleData("user_id", userId)
     .getJsonData();
 
   auto queryDataTwo = Utils::SimpleQueryParser::parseQuery(STORAGE_QUERIES_DIR, jsonData);

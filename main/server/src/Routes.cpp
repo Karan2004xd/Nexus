@@ -83,4 +83,11 @@ void Routes::mapRoutes(crow::SimpleApp &app) {
       }
       return response;
     });
+
+  CROW_ROUTE(app, "/logout")
+    ([&](const crow::request &req, crow::response &res){
+      currentUsername.clear();
+      res.redirect("/");
+      res.end();
+    });
 }

@@ -119,7 +119,7 @@ DfsResult Dfs::getDataApi(const std::string &fileName,
   try {
     size_t userId = getUserId(username);
     size_t fileId = getFileId(fileName, fileType, userId);
-    bool isVideoOrImage = checkIfVideoOrImage(fileName);
+    /* bool isVideoOrImage = checkIfVideoOrImage(fileName); */
     try {
       output = getCacheData(fileId);
     } catch (const std::exception &) {
@@ -140,9 +140,9 @@ DfsResult Dfs::getDataApi(const std::string &fileName,
       }
     }
 
-    if (isVideoOrImage) {
-      output = base64Encode(output);
-    } 
+    /* if (isVideoOrImage) { */
+    /*   output = base64Encode(output); */
+    /* } */ 
   } catch (std::exception &e) {
     errorMsg = e.what();
     output = "Failed to fetch data";

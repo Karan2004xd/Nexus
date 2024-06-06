@@ -10,8 +10,8 @@ const fileData = {
 uploadBtn.addEventListener('click', (event) => {
   event.preventDefault();
   const postData = {
-    operation: "delete-data",
-    filename: fileData.fileName,
+    operation: "list-data",
+    // filename: fileData.fileName,
     // content: fileData.fileContent
   };
   console.log(postData);
