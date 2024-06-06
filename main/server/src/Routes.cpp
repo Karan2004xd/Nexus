@@ -28,15 +28,27 @@ void Routes::mapRoutes(crow::SimpleApp &app) {
   });
   
   // Login Page
-  CROW_ROUTE(app, "/login")([](){
-    auto page = crow::mustache::load("login.html");
-    return page.render();
+  CROW_ROUTE(app, "/login")([&](const crow::request &req){
+    if (currentUsername.empty()) {
+      auto page = crow::mustache::load("login.html");
+      return crow::response(page.render());
+    } else {
+      auto res = crow::response(302);
+      res.set_header("Location", "/");
+      return res;
+    }
   });
 
   // SignUp Page
-  CROW_ROUTE(app, "/sign-up")([](){
-    auto page = crow::mustache::load("sign-up.html");
-    return page.render();
+  CROW_ROUTE(app, "/sign-up")([&](){
+    if (currentUsername.empty()) {
+      auto page = crow::mustache::load("sign-up.html");
+      return crow::response(page.render());
+    } else {
+      auto res = crow::response(302);
+      res.set_header("Location", "/");
+      return res;
+    }
   });
 
   // User Data Handling Endpoint
@@ -66,7 +78,7 @@ void Routes::mapRoutes(crow::SimpleApp &app) {
     });
 
   // DFS Operations Endpoint
-  CROW_ROUTE(app, "/dfs-operations").methods(crow::HTTPMethod::POST)
+  CROW_ROUTE(app, "/dfs").methods(crow::HTTPMethod::POST)
     ([&](const crow::request &request){
       std::string requestBody = request.body;
       crow::response response;

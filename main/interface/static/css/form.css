@@ -8,6 +8,17 @@ body {
   margin: 0;
   font-family: "Poopins", sans-serif;
   font-style: normal;
+  background: #1F2833;
+}
+
+.main-block {
+  display: block;
+  position: absolute;
+  width: 65%;
+  height: 85%;
+  top: 8%;
+  left: 17%;
+  border-radius: 15px;
 }
 
 #right-section {
@@ -24,37 +35,42 @@ body {
 }
 
 #left-section {
-  background: black;
+  background: #0B0C10;
   width: 35%;
   height: 100%;
   left: 0;
   position: absolute;
-  color: white;
+  color: #66FCF1;
 }
 
 #left-section .title {
+  margin-top: 3rem;
   font-size: 34px;
   text-align: center;
 }
 
-@media (max-width: 60rem) {
+@media (max-width: 80rem) {
+  .main-block {
+    height: 100vh;
+  }
+
   #right-section {
     width: 100%;
-    height: 40%;
+    height: 35%;
     top: 5;
     position: absolute;
   }
 
   #left-section {
     width: 100%;
-    height: 60%;
+    height: 65%;
     bottom: 0;
   }
 }
 
 .login-form {
   margin: 1rem 1rem;
-  margin-top: 5rem;
+  margin-top: 2rem;
   font-size: 20px;
   padding: 1rem;
 }
@@ -72,8 +88,60 @@ body {
 
 .login-form input {
   width: 95%;
-  padding: 0.2rem 0.5rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 0.2rem;
-  border: 1px solid yellow;
+  border: 1px solid #66FCF1;
   font-size: 20px;
+  background: #C5C6C7;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #66FCF1;
+}
+
+.login-form #submit-btn {
+  width: 40%;
+  margin-top: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border: 2px solid #66FCF1;
+  color: white;
+  background: transparent;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.login-form #submit-btn:hover,
+.login-form #submit-btn:active {
+  cursor: pointer;
+  background: #45A29E;
+  transition: 0.2s ease-in-out;
+}
+
+.login-footer {
+  margin-top: 3rem;
+}
+
+.login-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-footer__link a {
+  color: #45A29E;
+}
+
+.login-footer__link a:hover,
+.login-footer__link a:active {
+  color: #66FCF1;
+  cursor: pointer;
+  transition: 0.1s;
 }
