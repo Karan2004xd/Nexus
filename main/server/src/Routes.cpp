@@ -75,7 +75,8 @@ void Routes::mapRoutes(crow::SimpleApp &app) {
                                                                  OperationsHandler::OperationType::DFS,
                                                                  currentUsername);
         response = crow::response(200, responseBody);
-      } catch (const OperationException &) {
+      } catch (const OperationException &e) {
+        std::cout << e.what() << std::endl;
         response = crow::response(400, "Bad Request");
       } catch (const std::exception &) {
         response = crow::response(500, "Internal Error, some exception occured");

@@ -46,6 +46,7 @@ void AwsS3::storeDataHelper(const std::string &objectKey,
 }
 
 void AwsS3::storeData(const std::vector<std::unique_ptr<Chunk>> &chunks) {
+  std::cout << chunks.size() << std::endl;
   storageSetup(chunks);
   std::vector<std::future<void>> activeThreads;
 

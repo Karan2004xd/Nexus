@@ -12,7 +12,7 @@ CREATE TABLE File (
   type CHAR(10) NOT NULL,
   date_created DATE DEFAULT CURRENT_DATE(),
   time_created TIME DEFAULT CURRENT_TIME(),
-  user_id INT NOT NULL,
+  user_id INT,
   FOREIGN KEY(user_id) REFERENCES User(id)
 );
 
