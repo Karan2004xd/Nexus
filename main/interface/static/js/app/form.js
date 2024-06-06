@@ -37,14 +37,20 @@ async function getUserOperationsResult() {
   return flag;
 }
 
+function storeDataInSessionStorage(key, value) {
+  sessionStorage.setItem(key, value);
+}
+
 submitBtn.addEventListener('click', async (event) => {
   event.preventDefault();
   
   const outputResult = await getUserOperationsResult();
   if (outputResult) {
     if (formType === LOGIN) {
+      storeDataInSessionStorage('username', usernameValue.value);
       redirectToPage('/');
     } else if (formType == SIGN_UP) {
+      storeDataInSessionStorage('username', usernameValue.value);
       redirectToPage('/login');
     }
   } 
