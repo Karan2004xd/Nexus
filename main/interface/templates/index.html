@@ -10,119 +10,110 @@
   </head>
   <body>
     <main>
-      <div>
-        <section id="main-sidebar">
-          <div class="main-sidebar__avatar">
-            <img src="../static/images/user-avtar.jpg" alt="User Avatar">
-            <h1></h1>
+      <div class="backdrop"></div>
+      <section id="main-sidebar">
+        <div class="main-sidebar__avatar">
+          <img src="../static/images/user-avtar.jpg" alt="User Avatar">
+          <h1></h1>
+        </div>
+
+        <ul class="main-sidebar__items">
+          <form method="post" enctype="multipart/form-data" class="file-upload__form">
+            <input type="file" id="uploaded_file">
+          </form>
+
+          <button type="button" class="file-upload-btn main-sidebar__avatar">
+            <span class="material-symbols-outlined">upload_file</span>
+            <p>Upload File</p>
+          </button>
+
+          <a href="/">
+            <li class="main-sidebar__item">
+              <span class="material-symbols-outlined">home</span>
+              <p>Home</p>
+            </li>
+          </a>
+
+          <a href="/">
+            <li class="main-sidebar__item">
+              <span class="material-symbols-outlined">delete</span>
+              <p>Deleted Items</p>
+            </li>
+          </a>
+
+          <a href="/logout">
+            <li class="main-sidebar__item">
+              <span class="material-symbols-outlined">logout</span>
+              <p>Logout</p>
+            </li>
+          </a>
+        </ul>
+      </section>
+
+      <section id="main-dfs">
+        <div class="main-dfs__blocks">
+
+          <div class="main-dfs__search-bar">
+            <form>
+              <div class="main-dfs__search-bar__field">
+                <span class="material-symbols-outlined" >search</span>
+                <input type="search" placeholder="Search" name="Nexus Search">
+              </div>
+              <input type="submit" id="main-dfs__search-bar__submit-btn">
+            </form>
           </div>
 
-          <ul class="main-sidebar__items">
-            <button type="button" class="file-upload-btn main-sidebar__avatar">
-              <span class="material-symbols-outlined">add</span>
-              <p>Upload File</p>
-            </button>
-
-            <a href="/">
-              <li class="main-sidebar__item">
-                <span class="material-symbols-outlined">home</span>
-                <p>Home</p>
+          <div class="main-dfs__categories">
+            <ul>
+              <li>
+                <button type="button" class="main-dfs__categories__btn">
+                  <span class="material-symbols-outlined">image</span>
+                  <p>Images</p>
+                  <p></p>
+                </button>
               </li>
-            </a>
 
-            <a href="/">
-              <li class="main-sidebar__item">
+              <li>
+                <button type="button" class="main-dfs__categories__btn">
+                  <span class="material-symbols-outlined" >draft</span>
+                  <p>Documents</p>
+                  <p></p>
+                </button>
+              </li>
+
+              <li>
+                <button type="button" class="main-dfs__categories__btn">
+                  <span class="material-symbols-outlined" >music_note</span>
+                  <p>Audio</p>
+                  <p></p>
+                </button>
+              </li>
+
+              <li>
+                <button type="button" class="main-dfs__categories__btn">
+                  <span class="material-symbols-outlined" >videocam</span>
+                  <p>Video</p>
+                  <p></p>
+                </button>
+              </li>
+          </div>
+
+          <ul class="main-files__list">
+
+            <li class="main-files__list-item" id="list-item__prototype">
+              <span class="material-symbols-outlined" id="list-item__icon">draft</span>
+              <p class="main-files__list-item__filename">File Name</p>
+              <p class="main-files__list-item__filetype">File type</p>
+              <button type="button" class="main-files__list-item__btn main-files__list-item__delete-btn">
                 <span class="material-symbols-outlined">delete</span>
-                <p>Deleted Items</p>
-              </li>
-            </a>
+              </button>
 
-            <a href="/">
-              <li class="main-sidebar__item">
-                <span class="material-symbols-outlined">logout</span>
-                <p>Logout</p>
-              </li>
-            </a>
+              <button type="button" class="main-files__list-item__btn main-files__list-item__download-btn">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+            </li>
           </ul>
-        </section>
-
-        <section id="main-dfs">
-          <div class="main-dfs__blocks">
-
-            <div class="main-dfs__search-bar">
-              <form>
-                <div class="main-dfs__search-bar__field">
-                  <span class="material-symbols-outlined" >search</span>
-                  <input type="search" placeholder="Search" name="Nexus Search">
-                </div>
-                <input type="submit" id="main-dfs__search-bar__submit-btn">
-              </form>
-            </div>
-
-            <div class="main-dfs__categories">
-              <ul>
-                <li>
-                  <button type="button" class="main-dfs__categories__btn">
-                    <span class="material-symbols-outlined">image</span>
-                    <p>Images</p>
-                    <p></p>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" class="main-dfs__categories__btn">
-                    <span class="material-symbols-outlined" >draft</span>
-                    <p>Documents</p>
-                    <p></p>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" class="main-dfs__categories__btn">
-                    <span class="material-symbols-outlined" >music_note</span>
-                    <p>Audio</p>
-                    <p></p>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" class="main-dfs__categories__btn">
-                    <span class="material-symbols-outlined" >videocam</span>
-                    <p>Video</p>
-                    <p></p>
-                  </button>
-                </li>
-            </div>
-
-            <ul class="main-files__list">
-
-              <li class="main-files__list-item">
-                <span class="material-symbols-outlined">draft</span>
-                <p class="main-files__list-item__filename">File Name</p>
-                <p class="main-files__list-item__filetype">File type</p>
-                <div class="main-files__list-item__dropdown">
-                  <button type="button">
-                    <span class="material-symbols-outlined">more_horiz</span>
-                  </button>
-                  <div class="main-files__list-item__dropdown-content">
-                    <button type="button">Delete</button>
-                    <button type="button">Open</button>
-                  </div>
-                </div>
-              </li>
-
-              <li class="main-files__list-item">
-                <span class="material-symbols-outlined">draft</span>
-                <p class="main-files__list-item__filename">File Name</p>
-                <p class="main-files__list-item__filetype">File type</p>
-                <div class="main-files__list-item__dropdown">
-                  <button type="button">
-                    <span class="material-symbols-outlined">more_horiz</span>
-                  </button>
-                </div>
-              </li>
-            </ul>
-        </section>
+      </section>
       </div>
     </main>
   </body>

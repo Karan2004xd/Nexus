@@ -1,4 +1,4 @@
-const sideBarLogo = document.querySelector(".main-sidebar__avatar h1");
-const userName = sessionStorage.getItem('username');
+import { DfsListeners } from "./DfsListeners.js";
 
-sideBarLogo.textContent = userName;
+const dfsListeners = new DfsListeners();
+dfsListeners.setEventListeners();

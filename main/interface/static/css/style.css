@@ -11,6 +11,21 @@ body {
   color: #66fcf1;
 }
 
+.backdrop {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.open {
+  display: block !important;
+}
+
 #main-sidebar {
   background: #0B0C10;
   position: fixed;
@@ -45,8 +60,16 @@ body {
   margin-right: 4rem;
 }
 
+.main-sidebar__items span {
+  margin-right: 10px;
+}
+
 .main-sidebar__items a {
   text-decoration: none;
+}
+
+.file-upload__form {
+  display: none;
 }
 
 .file-upload-btn {
@@ -239,13 +262,12 @@ body {
 
 .main-files__list-item:hover,
 .main-files__list-item:active {
-  cursor: pointer;
   background: #45A29E;
   transition: 0.2s ease-in-out;
 }
 
 .main-files__list-item > span {
-  margin-left: 10px;
+  margin-left: 20px;
   margin-right: 1rem;
   margin-top: 0.9rem;
 }
@@ -258,13 +280,20 @@ body {
   margin-left: 30rem;
 }
 
-.main-files__list-item__dropdown {
-  margin-top: 0.8rem;
-  margin-left: 40rem;
+.main-files__list-item__btn {
+  background: transparent;
+  color: white;
+  border: none;
 }
 
-.main-files__list-item__dropdown-content {
-  display: none;
-  flex-direction: column;
-  margin-left: 2.5rem;
+.main-files__list-item__delete-btn {
+  margin-left: 35rem;
+  margin-right: 2rem;
 }
+
+.main-files__list-item__btn:hover,
+.main-files__list-item__btn:active {
+  color: black;
+  cursor: pointer;
+}
+
