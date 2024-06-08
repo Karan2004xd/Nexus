@@ -97,6 +97,13 @@ export class DfsListeners {
     return this.#audioExtensions.includes(fileType.toLowerCase());
   }
 
+  #removeChildNodes(list, childNodes) {
+    const nodeLength = childNodes.length;
+    for (let i = 1; i < nodeLength; i++) {
+      list.remove(list.children[i]);
+    }
+  }
+
   #listDataListenerHelper(filename, fileType) {
     const listElement = document.getElementById('list-item__prototype');
     const newListElement = listElement.cloneNode(true);
@@ -104,31 +111,67 @@ export class DfsListeners {
     const itemIcon = newListElement.querySelector('#list-item__icon');
     const fileNameField = newListElement.querySelector('.main-files__list-item__filename');
     const fileTypeField = newListElement.querySelector('.main-files__list-item__filetype');
+
+    let fileTypeContent;
     
     if (this.#isImage(fileType)) {
       itemIcon.textContent = "image";
+      fileTypeContent = "Image";
     } else if (this.#isVideo(fileType)) {
       itemIcon.textContent = "videocam";
+      fileTypeContent = "Video";
     } else if (this.#isAudio(fileType)) {
       itemIcon.textContent = "music_note";
+      fileTypeContent = "Audio";
     } else {
       itemIcon.textContent = "draft";
+      fileTypeContent = "Document";
     }
 
     fileNameField.textContent = filename;
-    fileTypeField.textContent = fileType;
+    fileTypeField.textContent = fileTypeContent;
     newListElement.id = "";
+
     return newListElement;
+  }
+
+  #setMargin(element, margin, value) {
+    let currentMargin = window.getComputedStyle(element);
+
+    if (margin === 'top') {
+      currentMargin = currentMargin.marginTop;
+    } else if (margin === 'left') {
+      currentMargin = currentMargin.marginLeft;
+    } else if (margin === 'right') {
+      currentMargin = currentMargin.marginRight;
+    } else {
+      currentMargin = currentMargin.marginBottom;
+    }
+
+    currentMargin = parseInt(currentMargin, 10);
+    const newMargin = currentMargin + value;
+    console.log(newMargin);
+    return `${newMargin}px`;
   }
 
   async #listDataListener() {
     const list = document.querySelector('.main-files__list');
+    const childNodes = document.querySelectorAll('main-files__list');
+    this.#removeChildNodes(list, childNodes);
+
     const fileDataMap = await this.#dfsListenersOperations.getFileData();
 
     for (const [filename, fileType] of fileDataMap) {
       const listItem = this.#listDataListenerHelper(filename, fileType);
       list.appendChild(listItem);
+
+      const newMargin = this.#setMargin(list, 'top', 10);
+      list.style.marginTop = newMargin;
     }
+  }
+
+  #setFileCount(fileDataMap) {
+
   }
 
   setEventListeners() {

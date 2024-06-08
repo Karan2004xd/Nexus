@@ -250,6 +250,10 @@ body {
   overflow: auto;
 }
 
+#list-item__prototype {
+  display: none;
+}
+
 .main-files__list-item {
   display: flex;
   flex-direction: row;
@@ -258,6 +262,7 @@ body {
   color: white;
   border-bottom: 1px solid #66fcf1;
   border-radius: 1rem;
+  padding-bottom: 1rem;
 }
 
 .main-files__list-item:hover,
@@ -273,22 +278,27 @@ body {
 }
 
 .main-files__list-item__filename {
-  margin-left: 3rem;
+  position: absolute;
+  left: 8%;
 }
 
 .main-files__list-item__filetype {
-  margin-left: 30rem;
+  position: absolute;
+  left: 50%;
 }
 
 .main-files__list-item__btn {
+  position: absolute;
   background: transparent;
   color: white;
   border: none;
+  left: 85%;
+  padding-top: 1rem;
 }
 
-.main-files__list-item__delete-btn {
-  margin-left: 35rem;
-  margin-right: 2rem;
+.main-files__list-item__download-btn {
+  position: absolute;
+  left: 90%;
 }
 
 .main-files__list-item__btn:hover,
