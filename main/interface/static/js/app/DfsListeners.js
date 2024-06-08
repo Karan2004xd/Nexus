@@ -150,16 +150,13 @@ export class DfsListeners {
 
     currentMargin = parseInt(currentMargin, 10);
     const newMargin = currentMargin + value;
-    console.log(newMargin);
     return `${newMargin}px`;
   }
 
-  async #listDataListener() {
+  async #listDataListener(fileDataMap) {
     const list = document.querySelector('.main-files__list');
     const childNodes = document.querySelectorAll('main-files__list');
     this.#removeChildNodes(list, childNodes);
-
-    const fileDataMap = await this.#dfsListenersOperations.getFileData();
 
     for (const [filename, fileType] of fileDataMap) {
       const listItem = this.#listDataListenerHelper(filename, fileType);
@@ -170,13 +167,118 @@ export class DfsListeners {
     }
   }
 
-  #setFileCount(fileDataMap) {
-
+  #getFilteredData(conditionMethod, fileDataMap) {
+    const filteredDataMap = new Map();
+    for (const [filename, fileType] of fileDataMap) {
+      if (conditionMethod(fileType)) {
+        filteredDataMap.set(filename, fileType);
+      }
+    }
+    return filteredDataMap;
   }
 
-  setEventListeners() {
+  #filterData(fileType, fileDataMap) {
+    let resultDataMap;
+    switch (fileType) {
+      case 'image':
+        resultDataMap = this.#getFilteredData(this.#isImage, fileDataMap);
+        break;
+      case 'video':
+        resultDataMap = this.#getFilteredData(this.#isVideo, fileDataMap);
+        break;
+      case 'audio':
+        resultDataMap = this.#getFilteredData(this.#isAudio, fileDataMap);
+      default:
+        break;
+    }
+    return resultDataMap;
+  }
+
+  async #getMainDataMap() {
+    const mainData = sessionStorage.getItem('mainData');
+    let mainDataMap;
+    if (mainData === 'home') {
+      mainDataMap = await this.#dfsListenersOperations.getFileData();
+    } else if (mainData === 'trash') {
+      mainDataMap = await this.#dfsListenersOperations.getTrashFileData();
+    }
+    return mainDataMap;
+  }
+
+  async #listData() {
+    let type = sessionStorage.getItem('listData');
+    if (type === undefined) {
+      type = 'home';
+      this.#setListDataCacheVariable('home');
+    }
+    let fileDataMap;
+    switch (type) {
+      case 'home':
+        fileDataMap = await this.#dfsListenersOperations.getFileData();
+        break;
+      
+      case 'trash':
+        fileDataMap = await this.#dfsListenersOperations.getTrashFileData();
+        sessionStorage.setItem('mainData', 'trash');
+        break;
+
+      case 'image':
+        fileDataMap = this.#filterData('image', await this.#getMainDataMap());
+      default:
+        break;
+    }
+    return fileDataMap;
+  }
+
+  #setListDataCacheVariable(varValue) {
+    sessionStorage.setItem('listData', varValue);
+  }
+
+  #listTrashDataListener() {
+    const deletedItemsBtn = document.getElementById('deleted-items__btn');
+
+    deletedItemsBtn.addEventListener('click', () => {
+      window.location.reload();
+      this.#setListDataCacheVariable('trash');
+      sessionStorage.setItem('mainData', 'trash');
+    });
+  }
+
+  #listHomeItemsListener() {
+    const homeBtn = document.getElementById('home-btn');
+
+    homeBtn.addEventListener('click', () => {
+      window.location.reload();
+      this.#setListDataCacheVariable('home');
+      sessionStorage.setItem('mainData', 'home');
+    });
+  }
+
+  async #setFilterButtonsListeners() {
+    const filterButtons = querySelectorAll('.main-dfs__categories__btn');
+    const fileDataMap = await this.#listData();
+
+    for (const buttons of filterButtons) {
+      switch (buttons.id) {
+        case 'image-category':
+          break;
+        case 'document-category':
+          break;
+        case 'audio-category':
+          break;
+        case 'video-category':
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  async setEventListeners() {
     this.#setUserName();
     this.#putFileListener();
-    this.#listDataListener();
+    this.#listDataListener(await this.#listData());
+    this.#listHomeItemsListener();
+    this.#listTrashDataListener();
   }
 }
