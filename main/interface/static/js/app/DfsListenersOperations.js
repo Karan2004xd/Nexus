@@ -38,17 +38,30 @@ export class DfsListenersOperations {
     }
   }
 
+  #arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
   putDataOperation(listenerEvent) {
     const file = listenerEvent.target.files[0];
     const reader = new FileReader();
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
     reader.onload = async (event) => {
-      const content = event.target.result;
+      const arrayBuffer = event.target.result;
+      const base64String = this.#arrayBufferToBase64(arrayBuffer);
+
       const fileData = {
         filename: file.name,
-        content: content
+        content: base64String 
       };
+
       try {
         const result = await this.#dfsRequestOperations.putData(fileData.filename, fileData.content);
         return result;
@@ -73,36 +86,44 @@ export class DfsListenersOperations {
   }
 
   async getDataOperation(filename) {
-    let result = this.#fileData.get(filename);
-    if (result !== undefined) {
-      return result;
-    }
+    // let result = this.#fileData.get(filename);
+    // if (result !== undefined) {
+    //   return result;
+    // }
     try {
-      result = await this.#dfsRequestOperations.getData(filename);
+      const result = await this.#dfsRequestOperations.getData(filename);
       return result;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getTrashDataOperation(filename) {
-    let result = this.#trashFileData.get(filename);
-    if (result !== undefined) {
-      return result;
-    }
     try {
-      result = await this.#dfsRequestOperations.getData(filename);
+      const result = await this.#dfsRequestOperations.getTrashData(filename);
       return result;
     } catch (error) {}
   }
 
-  async deleteDataOperation(filename) {
+  async #deleteDataOperation(filename) {
     try {
       return await this.#dfsRequestOperations.deleteData(filename);
     } catch (error) {}
   }
 
-  async deleteTrashDataOperation(filename) {
+  async #deleteTrashDataOperation(filename) {
     try {
       return await this.#dfsRequestOperations.deleteTrashData(filename);
     } catch (error) {}
+  }
+
+  async deleteFileData(filename) {
+    await this.#deleteDataOperation(filename);
+    this.#fileData.delete(filename);
+  }
+
+  async deleteTrashFileData(filename) {
+    await this.#deleteTrashDataOperation(filename);
+    this.#trashFileData.delete(filename);
   }
 }

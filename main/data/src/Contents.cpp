@@ -1,5 +1,6 @@
 #include "../include/Contents.hpp"
 #include "../../constants.h"
+#include <iostream>
 
 using namespace Data;
 

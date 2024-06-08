@@ -2,65 +2,9 @@ import { DfsListenersOperations } from "./DfsListenersOperations.js";
 
 export class DfsListeners {
   #dfsListenersOperations;
-  #imageExtensions
-  #videoExtensions
-  #audioExtensions
 
   constructor() {
     this.#dfsListenersOperations = new DfsListenersOperations();
-
-    this.#imageExtensions = [
-      "jpg",
-      "jpeg",
-      "png",
-      "gif",
-      "bmp",
-      "tiff",
-      "tif",
-      "webp",
-      "svg",
-      "ico",
-      "heic",
-      "heif",
-      "raw",
-      "psd"
-    ];
-
-    this.#videoExtensions = [
-      "mp4",
-      "m4v",
-      "mkv",
-      "mov",
-      "avi",
-      "wmv",
-      "flv",
-      "webm",
-      "vob",
-      "ogv",
-      "ogg",
-      "3gp",
-      "3g2",
-      "m2ts",
-      "mts",
-      "ts",
-      "mxf",
-      "m4v"
-    ];
-
-    this.#audioExtensions = [
-      "mp3",
-      "wav",
-      "aac",
-      "flac",
-      "alac",
-      "wma",
-      "ogg",
-      "oga",
-      "m4a",
-      "aiff",
-      "opus",
-      "amr"
-    ];
   }
 
   #setUserName() {
@@ -86,15 +30,46 @@ export class DfsListeners {
   }
 
   #isImage(fileType) {
-    return this.#imageExtensions.includes(fileType.toLowerCase());
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp",
+      "tiff", "tif", "webp", "svg", "ico", "heic", "heif","raw",
+      "psd"
+    ];
+    return imageExtensions.includes(fileType.toLowerCase());
   }
 
   #isVideo(fileType) {
-    return this.#videoExtensions.includes(fileType.toLowerCase());
+    const videoExtensions = ["mp4", "m4v", "mkv", "mov", "avi", "wmv",
+      "flv", "webm", "vob", "ogv", "ogg", "3gp", "3g2", "m2ts",
+      "mts", "ts", "mxf","m4v"
+    ];
+    return videoExtensions.includes(fileType.toLowerCase());
   }
 
   #isAudio(fileType) {
-    return this.#audioExtensions.includes(fileType.toLowerCase());
+    const audioExtensions = ["mp3", "wav", "aac", "flac", "alac",
+      "wma", "ogg", "oga", "m4a", "aiff", "opus", "amr"
+    ];
+    return audioExtensions.includes(fileType.toLowerCase());
+  }
+
+  #isDocument(fileType) {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp",
+      "tiff", "tif", "webp", "svg", "ico", "heic", "heif","raw",
+      "psd"
+    ];
+
+    const videoExtensions = ["mp4", "m4v", "mkv", "mov", "avi", "wmv",
+      "flv", "webm", "vob", "ogv", "ogg", "3gp", "3g2", "m2ts",
+      "mts", "ts", "mxf","m4v"
+    ];
+
+    const audioExtensions = ["mp3", "wav", "aac", "flac", "alac",
+      "wma", "ogg", "oga", "m4a", "aiff", "opus", "amr"
+    ];
+
+    return !imageExtensions.includes(fileType.toLowerCase()) &&
+           !videoExtensions.includes(fileType.toLowerCase()) &&
+           !audioExtensions.includes(fileType.toLowerCase());
   }
 
   #removeChildNodes(list, childNodes) {
@@ -113,7 +88,7 @@ export class DfsListeners {
     const fileTypeField = newListElement.querySelector('.main-files__list-item__filetype');
 
     let fileTypeContent;
-    
+
     if (this.#isImage(fileType)) {
       itemIcon.textContent = "image";
       fileTypeContent = "Image";
@@ -162,7 +137,7 @@ export class DfsListeners {
       const listItem = this.#listDataListenerHelper(filename, fileType);
       list.appendChild(listItem);
 
-      const newMargin = this.#setMargin(list, 'top', 10);
+      const newMargin = this.#setMargin(list, 'top', 30);
       list.style.marginTop = newMargin;
     }
   }
@@ -188,6 +163,10 @@ export class DfsListeners {
         break;
       case 'audio':
         resultDataMap = this.#getFilteredData(this.#isAudio, fileDataMap);
+        break;
+      case 'document':
+        resultDataMap = this.#getFilteredData(this.#isDocument, fileDataMap);
+        break;
       default:
         break;
     }
@@ -207,7 +186,7 @@ export class DfsListeners {
 
   async #listData() {
     let type = sessionStorage.getItem('listData');
-    if (type === undefined) {
+    if (!type) {
       type = 'home';
       this.#setListDataCacheVariable('home');
     }
@@ -216,7 +195,7 @@ export class DfsListeners {
       case 'home':
         fileDataMap = await this.#dfsListenersOperations.getFileData();
         break;
-      
+
       case 'trash':
         fileDataMap = await this.#dfsListenersOperations.getTrashFileData();
         sessionStorage.setItem('mainData', 'trash');
@@ -224,6 +203,20 @@ export class DfsListeners {
 
       case 'image':
         fileDataMap = this.#filterData('image', await this.#getMainDataMap());
+        break;
+
+      case 'video':
+        fileDataMap = this.#filterData('video', await this.#getMainDataMap());
+        break;
+
+      case 'audio':
+        fileDataMap = this.#filterData('audio', await this.#getMainDataMap());
+        break;
+
+      case 'document':
+        fileDataMap = this.#filterData('document', await this.#getMainDataMap());
+        break;
+
       default:
         break;
     }
@@ -254,23 +247,125 @@ export class DfsListeners {
     });
   }
 
-  async #setFilterButtonsListeners() {
-    const filterButtons = querySelectorAll('.main-dfs__categories__btn');
-    const fileDataMap = await this.#listData();
+  #setFilterButtonsListeners() {
+    const filterButtons = document.querySelectorAll('.main-dfs__categories__btn');
 
     for (const buttons of filterButtons) {
-      switch (buttons.id) {
-        case 'image-category':
-          break;
-        case 'document-category':
-          break;
-        case 'audio-category':
-          break;
-        case 'video-category':
-          break;
-        default:
-          break;
-      }
+      buttons.addEventListener('click', () => {
+        switch (buttons.id) {
+          case 'image-category':
+            this.#setListDataCacheVariable('image');
+            break;
+          case 'document-category':
+            this.#setListDataCacheVariable('document');
+            break;
+          case 'audio-category':
+            this.#setListDataCacheVariable('audio');
+            break;
+          case 'video-category':
+            this.#setListDataCacheVariable('video');
+            break;
+          default:
+            break;
+        }
+        window.location.reload();
+      });
+    }
+  }
+
+  #loadDashboardUi() {
+    if (!sessionStorage.getItem('mainData')) {
+      const homeBtn = document.getElementById('home-btn');
+      homeBtn.click();
+    }
+  }
+
+  #deleteDataListener() {
+    const listElement = document.querySelectorAll('.main-files__list-item');
+    for (const element of listElement) {
+      const filename = element.querySelector('.main-files__list-item__filename').textContent;
+      const deleteFileBtn = element.querySelector('.main-files__list-item__delete-btn');
+
+      deleteFileBtn.addEventListener('click', async () => {
+        const currentData = sessionStorage.getItem('mainData');
+        if (currentData === 'home') {
+          await this.#dfsListenersOperations.deleteFileData(filename);
+        } else if (currentData === 'trash') {
+          await this.#dfsListenersOperations.deleteTrashFileData(filename);
+        }
+        window.location.reload();
+      });
+    }
+  }
+
+  async #getFileTypeFromUrl(filename) {
+    const currentData = sessionStorage.getItem('mainData');
+
+    let fileDataMap;
+    if (currentData === 'home') {
+      fileDataMap = await this.#dfsListenersOperations.getFileData(filename);
+    } else if (currentData === 'trash') {
+      fileDataMap = await this.#dfsListenersOperations.getTrashFileData(filename);
+    }
+
+    const fileType = fileDataMap.get(filename);
+    const downloadFilename = `${filename}`;
+
+    let mainFileType;
+    if (this.#isImage(filename)) {
+      mainFileType = 'image';
+    } else if (this.#isVideo(filename)) {
+      mainFileType = 'video';
+    } else if (this.#isAudio(filename)) {
+      mainFileType = 'audio';
+    } else {
+      mainFileType = 'text';
+    }
+
+    const mimeType = `${mainFileType}/${fileType}`;
+    return {downloadFilename : downloadFilename, mimeType: mimeType};
+  }
+
+  #downloadDataListener() {
+    const listElement = document.querySelectorAll('.main-files__list-item');
+    for (const element of listElement) {
+      const filename = element.querySelector('.main-files__list-item__filename').textContent;
+      const downloadFileBtn = element.querySelector('.main-files__list-item__download-btn');
+
+      downloadFileBtn.addEventListener('click', async () => {
+        let fileData;
+        const currentData = sessionStorage.getItem('mainData');
+        if (currentData === 'home') {
+          fileData = await this.#dfsListenersOperations.getDataOperation(filename);
+        } else if (currentData === 'trash') {
+          fileData = await this.#dfsListenersOperations.getTrashDataOperation(filename);
+        }
+
+        const downloadFileDetails = await this.#getFileTypeFromUrl(filename);
+
+        let byteCharacters = atob(fileData.output);
+        let byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        let byteArray = new Uint8Array(byteNumbers);
+        let blob = new Blob([byteArray], { type: 'application/octet-stream' });
+        
+        let blobUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = downloadFileDetails.downloadFilename; 
+        document.body.appendChild(a);
+        a.click();
+
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+        }, 0);
+      });
     }
   }
 
@@ -278,7 +373,11 @@ export class DfsListeners {
     this.#setUserName();
     this.#putFileListener();
     this.#listDataListener(await this.#listData());
+    this.#setFilterButtonsListeners();
     this.#listHomeItemsListener();
     this.#listTrashDataListener();
+    this.#deleteDataListener();
+    this.#downloadDataListener();
+    this.#loadDashboardUi();
   }
 }

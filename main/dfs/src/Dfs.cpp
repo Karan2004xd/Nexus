@@ -142,6 +142,7 @@ DfsResult Dfs::getDataApi(const std::string &fileName,
 
     /* if (isVideoOrImage) { */
     /*   output = base64Encode(output); */
+    /*   std::cout << output << std::endl; */
     /* } */ 
   } catch (std::exception &e) {
     errorMsg = e.what();
