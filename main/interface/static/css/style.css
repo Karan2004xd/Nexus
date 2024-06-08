@@ -142,6 +142,7 @@ body {
 }
 
 .main-dfs__search-bar {
+  display: none;
   position: absolute;
   background: #0B0C10;
   top: 0;
@@ -192,7 +193,7 @@ body {
   justify-content: initial;
   position: absolute;
   background: #0B0C10;
-  top: 7rem;
+  top: 1rem;
   width: 97%;
   right: 0;
   height: 35%;
@@ -244,7 +245,7 @@ body {
   flex-direction: column;
   background: #0B0C10;
   width: 97%;
-  margin-top: 10rem;
+  margin-top: 5rem;
   padding: 2rem;
   border-radius: 1rem;
   overflow: auto;
