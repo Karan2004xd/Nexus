@@ -1,11 +1,7 @@
 #include "../include/ServerHandler.hpp"
-#include "../include/Logging.hpp"
-#include "../include/ConnectionHandler.hpp"
+#include "../../constants.h"
 
-void ServerHandler::startListeningForRequests() {
-  ConnectionHandler::startListener();
-}
-
-void ServerHandler::startLogging() {
-  Logging::init();
+void ServerHandler::startServer() {
+  routes.mapRoutes(app);
+  app.port(DEFAULT_PORT).multithreaded().run();
 }

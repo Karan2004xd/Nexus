@@ -2,6 +2,7 @@
 #include <iostream>
 
 void DbConnHandler::setupConnection() {
+  closeConnection();
   connection = mysql_init(NULL);
   struct ConnectionDetails connDetails;
   auto conn = mysql_real_connect(connection,

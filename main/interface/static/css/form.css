@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Poopins", sans-serif;
+  font-style: normal;
+  background: #1F2833;
+}
+
+.main-block {
+  display: block;
+  position: absolute;
+  width: 65%;
+  height: 85%;
+  top: 8%;
+  left: 17%;
+  border-radius: 15px;
+}
+
+#right-section {
+  background: url("../images/nexus_logo_4x.jpg");
+  width: 65%;
+  height: 100%;
+  right: 0;
+  background-size: cover;
+  background-position: center;
+  background-origin: border-box;
+  background-clip: border-box;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
+#left-section {
+  background: #0B0C10;
+  width: 35%;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  color: #66FCF1;
+}
+
+#left-section .title {
+  margin-top: 3rem;
+  font-size: 34px;
+  text-align: center;
+}
+
+@media (max-width: 80rem) {
+  .main-block {
+    height: 100vh;
+  }
+
+  #right-section {
+    width: 100%;
+    height: 35%;
+    top: 5;
+    position: absolute;
+  }
+
+  #left-section {
+    width: 100%;
+    height: 65%;
+    bottom: 0;
+  }
+}
+
+.login-form {
+  margin: 1rem 1rem;
+  margin-top: 2rem;
+  font-size: 20px;
+  padding: 1rem;
+}
+
+.login-form input,
+.login-form label {
+  display: block;
+  margin: 10px;
+}
+
+.login-form label {
+  font-weight: bold;
+  margin-top: 3rem;
+}
+
+.login-form input {
+  width: 95%;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.2rem;
+  border: 1px solid #66FCF1;
+  font-size: 20px;
+  background: #C5C6C7;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #66FCF1;
+}
+
+.login-form #submit-btn {
+  width: 40%;
+  margin-top: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border: 2px solid #66FCF1;
+  color: white;
+  background: transparent;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.login-form #submit-btn:hover,
+.login-form #submit-btn:active {
+  cursor: pointer;
+  background: #45A29E;
+  transition: 0.2s ease-in-out;
+}
+
+.login-footer {
+  margin-top: 3rem;
+}
+
+.login-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-footer__link a {
+  color: #45A29E;
+}
+
+.login-footer__link a:hover,
+.login-footer__link a:active {
+  color: #66FCF1;
+  cursor: pointer;
+  transition: 0.1s;
+}

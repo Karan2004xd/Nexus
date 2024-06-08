@@ -8,10 +8,12 @@ CREATE TABLE Bucket (
 CREATE TABLE File (
   id INT AUTO_INCREMENT,
   PRIMARY KEY(id),
-  name VARCHAR(40) NOT NULL UNIQUE,
+  name VARCHAR(40) NOT NULL,
   type CHAR(10) NOT NULL,
   date_created DATE DEFAULT CURRENT_DATE(),
-  time_created TIME DEFAULT CURRENT_TIME()
+  time_created TIME DEFAULT CURRENT_TIME(),
+  user_id INT,
+  FOREIGN KEY(user_id) REFERENCES User(id)
 );
 
 CREATE TABLE Chunk (
@@ -33,7 +35,9 @@ CREATE TABLE TrashFile (
   name VARCHAR(40) NOT NULL UNIQUE,
   type CHAR(10) NOT NULL,
   date_created DATE DEFAULT CURRENT_DATE(),
-  time_created TIME DEFAULT CURRENT_TIME()
+  time_created TIME DEFAULT CURRENT_TIME(),
+  user_id INT NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES User(id)
 );
 
 CREATE TABLE TrashChunk (

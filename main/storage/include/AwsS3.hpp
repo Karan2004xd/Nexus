@@ -17,7 +17,7 @@ public:
   std::vector<std::unique_ptr<Chunk>> getBackupData(const size_t &fileId) override;
 
   void deleteData(const size_t &fileId) override;
-  void restoreData(const size_t &filedId) override;
+  /* void restoreData(const size_t &filedId) override; */
 
   void deleteBackupData(const size_t &fileId) override;
 
@@ -52,10 +52,10 @@ private:
   void addMetaDataToTrash(const size_t &fileId);
 
   // Restore Helper
-  std::vector<std::string> getChunkKeysFromTrash();
-  MetaData::QueryResultMap getFileFromTrash(const size_t &fileId);
+  /* std::vector<std::string> getChunkKeysFromTrash(); */
+  /* MetaData::QueryResultMap getFileFromTrash(const size_t &fileId); */
 
-  void updateFileMetaDataForRestore(MetaData::QueryResultMap &queryResultMap);
-  size_t getCurrentFileId();
+  /* void updateFileMetaDataForRestore(MetaData::QueryResultMap &queryResultMap); */
+  /* size_t getCurrentFileId(); */
 };
 #endif // AWS_S3_HPP

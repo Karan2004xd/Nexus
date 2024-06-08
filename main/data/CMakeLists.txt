@@ -3,6 +3,7 @@ project(data)
 
 set(FILE_NAME "filename" PARENT_SCOPE)
 set(FILE_CONTENT "content" PARENT_SCOPE)
+set(EXT ".txt" PARENT_SCOPE)
 set(CACHE_DIR ${CMAKE_SOURCE_DIR}/.NexusCache PARENT_SCOPE)
 
 add_library(${PROJECT_NAME}

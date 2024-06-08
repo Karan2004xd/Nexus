@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <link href="../static/css/form.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../static/images/nexus_logo_4x.jpg">
+  </head>
+  <body>
+    <main>
+      <div class="main-block">
+        <section id="right-section">
+        </section>
+
+        <section id="left-section">
+          <h1 class="title">Sign Up Now!</h1>
+          <form class="login-form" method="post">
+            <label for="username-field">Username</label>
+            <input type="text" name="username" id="username-field">
+
+            <label for="password-field">Password</label>
+            <input type="password" name="password" id="password-field">
+            <input type="hidden" id="form-type" value="sign-up">
+
+            <input type="submit" name="sumbitBtn" id="submit-btn" value="Sign Up">
+          </form>
+
+          <footer class="login-footer">
+            <nav>
+              <ul class="login-footer__links">
+                <li class="login-footer__link">
+                  <a href="/login">Already a User? Click here to login</a>
+                </li>
+              </ul>
+            </nav>
+          </footer>
+        </section>
+      </div>
+    </main>
+  </body>
+  <script src="../static/js/app/form.js" defer type="module"></script>
+</html>

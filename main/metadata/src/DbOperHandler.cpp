@@ -1,5 +1,4 @@
 #include "../include/DbOperHandler.hpp"
-#include <iostream>
 #include <stdexcept>
 
 MYSQL_RES *DbOperHandler::executeQuery(const std::string &query) {

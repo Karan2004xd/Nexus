@@ -21,11 +21,13 @@ void MetaData::printData(DbOperHandler::QueryResultMap &data) const {
 }
 
 void MetaData::updateData(Nexus::Utils::SimpleQueryParser &queryParser) {
+  /* checkConnection(); */
   runQuery(queryParser.getParsedData());
   std::cout << "Data updated successfully" << std::endl;
 }
 
 const MetaData::QueryResultMap MetaData::getQueryDataMap(Utils::SimpleQueryParser &queryParser) {
+  /* checkConnection(); */
   return getData(queryParser.getParsedData());
 }
 

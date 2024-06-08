@@ -13,7 +13,7 @@ void JsonParserBuilder::addJsonData(const std::string &name,
 }
 
 void JsonParserBuilder::addJsonData(const std::string &name,
-                                    const std::initializer_list<std::string> &values) {
+                                    const std::vector<std::string> &values) {
   addJsonDataHelper(name, values);
 }
 
@@ -24,7 +24,7 @@ JsonParserBuilder JsonParserBuilder::singleData(const std::string &name,
 }
 
 JsonParserBuilder JsonParserBuilder::multipleData(const std::string &name,
-                                                  const std::initializer_list<std::string> &values) {
+                                                  const std::vector<std::string> &values) {
   addJsonData(name, values);
   return *this;
 }

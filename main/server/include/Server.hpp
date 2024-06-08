@@ -4,9 +4,10 @@
 #include "../../dfs/include/Nexus.hpp"
 #include "ServerHandler.hpp"
 
-class Nexus::Server : protected ServerHandler {
+class Nexus::Server {
 public:
-  static void run();
+  void start() { serverHandler.startServer(); }
+private:
+  ServerHandler serverHandler;
 };
-
 #endif // SERVER_HPP

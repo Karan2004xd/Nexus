@@ -3,6 +3,7 @@
 
 namespace Nexus {
   class Dfs;
+  class DfsResult;
   class Server;
 
   namespace Utils {
@@ -21,5 +22,8 @@ namespace Nexus {
   namespace Storage {
     class AwsS3;
   }
+
+  class User;
+  class DataTransfer;
 }
 #endif // NEXUX_HPP
