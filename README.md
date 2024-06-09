@@ -22,6 +22,12 @@ efficient retrieval.
 
 - User-Friendly: Provides a user-friendly web interface powered by a C++ backend using the [Crow](https://crowcpp.org/maste)                 REST API library.
 
+Images
+------
+![Login Page](./docs/login.png)
+
+![DashBoard Page](./docs/dashboard.png)
+
 ## Getting Started
 
 ### Dependencies 
