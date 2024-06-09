@@ -24,7 +24,7 @@ export class DfsListeners {
 
     uploadedFileBtn.addEventListener('change', async (event) => {
       event.preventDefault();
-      this.#showLoading('upload', event.target.files[0]);
+      this.#showLoadingForUpload();
       result = await this.#dfsListenersOperations.putDataOperation(event);
     });
     return result;
@@ -395,6 +395,14 @@ export class DfsListeners {
     return iconId;
   }
 
+  #showLoadingForUpload() {
+    const uploadBtn = document.getElementById('upload-icon');
+    const icon = uploadBtn.querySelector('span');
+    const spinner = document.querySelector('#loading-spinner');
+
+    icon.style.display = 'none';
+    spinner.style.display = 'block';
+  }
   #showLoading(icon, filename) {
     const listElements = document.querySelectorAll(".main-files__list-item");
 
