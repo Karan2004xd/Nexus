@@ -22,9 +22,10 @@ export class DfsListeners {
       uploadedFileBtn.click();
     });
 
-    uploadedFileBtn.addEventListener('change', (event) => {
+    uploadedFileBtn.addEventListener('change', async (event) => {
       event.preventDefault();
-      result = this.#dfsListenersOperations.putDataOperation(event);
+      this.#showLoading('upload', event.target.files[0]);
+      result = await this.#dfsListenersOperations.putDataOperation(event);
     });
     return result;
   }
@@ -287,6 +288,7 @@ export class DfsListeners {
       const deleteFileBtn = element.querySelector('.main-files__list-item__delete-btn');
 
       deleteFileBtn.addEventListener('click', async () => {
+        this.#showLoading('delete', filename);
         const currentData = sessionStorage.getItem('mainData');
         if (currentData === 'home') {
           await this.#dfsListenersOperations.deleteFileData(filename);
@@ -333,6 +335,7 @@ export class DfsListeners {
       const downloadFileBtn = element.querySelector('.main-files__list-item__download-btn');
 
       downloadFileBtn.addEventListener('click', async () => {
+        this.#showLoading('download', filename);
         let fileData;
         const currentData = sessionStorage.getItem('mainData');
         if (currentData === 'home') {
@@ -364,14 +367,61 @@ export class DfsListeners {
         setTimeout(() => {
           document.body.removeChild(a);
           URL.revokeObjectURL(blobUrl);
+          window.location.reload();
         }, 0);
       });
+    }
+  }
+
+  #getIconTag(icon) {
+    let iconId;
+    switch (icon) {
+      case 'upload':
+        iconId = 'upload-icon'
+        break;
+
+      case 'delete':
+        iconId = 'delete-icon'
+        break;
+
+      case 'download':
+        iconId = 'download-icon'
+        break;
+
+      default:
+        break;
+    }
+
+    return iconId;
+  }
+
+  #showLoading(icon, filename) {
+    const listElements = document.querySelectorAll(".main-files__list-item");
+
+    for (const element of listElements) {
+      const fileNameField = element.querySelector('.main-files__list-item__filename');
+
+      if (fileNameField.textContent === filename) {
+        const iconTag = element.querySelector(`#${this.#getIconTag(icon)}`);
+        const iconSpan = iconTag.querySelector('span');
+        const spinner = iconTag.querySelector('#loading-spinner');
+        iconSpan.style.display = 'none';
+        spinner.style.display = 'block';
+      }
+    }
+  }
+
+  #hideLoading() {
+    const spinners = document.querySelectorAll('#loading-spinner');
+    for (const spinner of spinners) {
+      spinner.style.display = 'none';
     }
   }
 
   async setEventListeners() {
     this.#setUserName();
     this.#putFileListener();
+    this.#hideLoading();
     this.#listDataListener(await this.#listData());
     this.#setFilterButtonsListeners();
     this.#listHomeItemsListener();
