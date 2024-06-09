@@ -10,7 +10,6 @@
   </head>
   <body>
     <main>
-      <div class="backdrop"></div>
       <section id="main-sidebar">
         <div class="main-sidebar__avatar">
           <img src="../static/images/user-avtar.jpg" alt="User Avatar">
@@ -22,8 +21,9 @@
             <input type="file" id="uploaded_file">
           </form>
 
-          <button type="button" class="file-upload-btn main-sidebar__avatar">
+          <button type="button" class="file-upload-btn main-sidebar__avatar" id="upload-icon">
             <span class="material-symbols-outlined">upload_file</span>
+            <div id="loading-spinner"></div>
             <p>Upload File</p>
           </button>
 
@@ -100,12 +100,14 @@
               <span class="material-symbols-outlined" id="list-item__icon">draft</span>
               <p class="main-files__list-item__filename">File Name</p>
               <p class="main-files__list-item__filetype">File type</p>
-              <button type="button" class="main-files__list-item__btn main-files__list-item__delete-btn">
+              <button type="button" class="main-files__list-item__btn main-files__list-item__delete-btn" id="delete-icon">
                 <span class="material-symbols-outlined">delete</span>
+                <div id="loading-spinner"></div>
               </button>
 
-              <button type="button" class="main-files__list-item__btn main-files__list-item__download-btn">
+              <button type="button" class="main-files__list-item__btn main-files__list-item__download-btn" id="download-icon">
                 <span class="material-symbols-outlined">download</span>
+                <div id="loading-spinner"></div>
               </button>
             </li>
           </ul>

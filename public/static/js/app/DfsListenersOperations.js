@@ -48,7 +48,7 @@ export class DfsListenersOperations {
     return btoa(binary);
   }
 
-  putDataOperation(listenerEvent) {
+  async putDataOperation(listenerEvent) {
     const file = listenerEvent.target.files[0];
     const reader = new FileReader();
 
@@ -64,6 +64,7 @@ export class DfsListenersOperations {
 
       try {
         const result = await this.#dfsRequestOperations.putData(fileData.filename, fileData.content);
+        window.location.reload();
         return result;
       } catch (error) {
         throw Error("false");
@@ -86,10 +87,6 @@ export class DfsListenersOperations {
   }
 
   async getDataOperation(filename) {
-    // let result = this.#fileData.get(filename);
-    // if (result !== undefined) {
-    //   return result;
-    // }
     try {
       const result = await this.#dfsRequestOperations.getData(filename);
       return result;

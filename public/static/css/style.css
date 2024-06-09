@@ -228,6 +228,25 @@ body {
   font-weight: bold;
 }
 
+#loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  width: 24px;
+  height: 24px;
+  margin: 10px;
+  border-radius: 50%;
+  border-left-color: #fff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .main-dfs__categories__btn span {
   font-size: 40px;
 }
@@ -294,7 +313,7 @@ body {
   color: white;
   border: none;
   left: 85%;
-  padding-top: 1rem;
+  padding-top: 0.7rem;
 }
 
 .main-files__list-item__download-btn {
